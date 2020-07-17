@@ -1,6 +1,0 @@
-C:/Users/stone/source/repos/TargetOptimizer/dlib/out/build/x64-Debug/CMakeFiles/dlib.dir
-C:/Users/stone/source/repos/TargetOptimizer/dlib/out/build/x64-Debug/CMakeFiles/install/local.dir
-C:/Users/stone/source/repos/TargetOptimizer/dlib/out/build/x64-Debug/CMakeFiles/install.dir
-C:/Users/stone/source/repos/TargetOptimizer/dlib/out/build/x64-Debug/CMakeFiles/edit_cache.dir
-C:/Users/stone/source/repos/TargetOptimizer/dlib/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
-C:/Users/stone/source/repos/TargetOptimizer/dlib/out/build/x64-Debug/CMakeFiles/list_install_components.dir
