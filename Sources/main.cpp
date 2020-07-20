@@ -1,8 +1,10 @@
 #include <iostream>
 #include <string>
 #include <dlib/cmd_line_parser.h>
-#include "model.h"
-#include "dataio.h"
+#include "gui.h"
+#include "BobyqaOptimizer.h"
+#include "TextGridReader.h"
+
 
 int main(int argc, char* argv[])
 {
@@ -82,7 +84,7 @@ int main(int argc, char* argv[])
 
 			// process TextGrid input
 			TextGridReader tgreader (parser[0]);
-			BoundVector bounds = tgreader.getBounds();
+			BoundaryVector bounds = tgreader.getBounds();
 
 			// process PitchTier input
 			PitchTierReader ptreader (parser[1]);

@@ -1,34 +1,99 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Ressourcendateien">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="Backend">
+      <UniqueIdentifier>{4e179bfd-6e63-4b86-b0c9-929de72465e9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Sources">
-      <UniqueIdentifier>{81776baf-1e8a-4a9e-a8e9-9a780f75f5b8}</UniqueIdentifier>
+    <Filter Include="Frontend">
+      <UniqueIdentifier>{4b2f09af-ab58-4020-8d84-5c3f266d6b70}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dlib">
+      <UniqueIdentifier>{51420587-1cf7-433a-a092-d43a21aac24b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Sources\dataio.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="Sources\CdlpFilter.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\CsvWriter.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\GestureWriter.cpp">
+      <Filter>Backend</Filter>
     </ClCompile>
     <ClCompile Include="Sources\main.cpp">
-      <Filter>Sources</Filter>
+      <Filter>Frontend</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\model.cpp">
-      <Filter>Sources</Filter>
+    <ClCompile Include="Sources\MainWindow.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\OptimizationProblem.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\PitchTierReader.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\PitchTierWriter.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TextGridReader.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TamModelF0.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\BobyqaOptimizer.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\PlotRegion.cpp">
+      <Filter>Frontend</Filter>
     </ClCompile>
     <ClCompile Include="dlib\all\source.cpp">
-      <Filter>Sources</Filter>
+      <Filter>dlib</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sources\dataio.h">
-      <Filter>Sources</Filter>
+    <ClInclude Include="Sources\BobyqaOptimizer.h">
+      <Filter>Backend</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\model.h">
-      <Filter>Sources</Filter>
+    <ClInclude Include="Sources\CdlpFilter.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\CsvWriter.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Data.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\dataio.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\GestureWriter.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\gui.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\MainWindow.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\OptimizationProblem.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\PitchTierReader.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\PitchTierWriter.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\TextGridReader.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\TamModelF0.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\PlotRegion.h">
+      <Filter>Frontend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
