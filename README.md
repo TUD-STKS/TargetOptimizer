@@ -2,10 +2,10 @@
 TargetOptimizer is a free and open-source PC software in C++ originally written by Patrick Schmager to estimate pitch targets according to the Target Approximation Model by Yi Xu. 
 
 Hence, it is similar to PENTAtrainer, but differs in the following ways:
-[*] A 5th-order linear system is uses as the filter to approximate the targets instead of a 3rd-order system.
-[*] The target parameters are jointly optimized instead of for one target after another.
-[*] The optimization includes a regularization term to penalize extreme target parameters, e.g., extreme positive or negative target slopes or time constants.
-[*] The estimated targets can be written to a gestural score file for VocalTractLab. This simplifies the copy-synthesis of natural utterances using the articulatory speech synthesizer.
+- A 5th-order linear system is uses as the filter to approximate the targets instead of a 3rd-order system.
+- The target parameters are jointly optimized instead of for one target after another.
+- The optimization includes a regularization term to penalize extreme target parameters, e.g., extreme positive or negative target slopes or time constants.
+- The estimated targets can be written to a gestural score file for VocalTractLab. This simplifies the copy-synthesis of natural utterances using the articulatory speech synthesizer.
 
 The motivation for these differences are described in Birkholz P, Schmager P, Xu Y (2018). Estimation of Pitch Targets from Speech Signals by Joint Regularized Optimization. In: Proc. of the 26th European Signal Processing Conference (EUSIPCO 2018), pp. 2089-2093, Rome, Italy. [pdf](http://www.vocaltractlab.de/publications/birkholz-2018-eusipco.pdf)
 
