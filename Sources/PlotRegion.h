@@ -1,5 +1,4 @@
 #pragma once
-
 #include <dlib/gui_widgets.h>
 #include "dataio.h"
 
@@ -25,4 +24,3 @@ private:
     const BoundaryVector& m_boundaries;
     const TargetVector& m_targets;
 };
-

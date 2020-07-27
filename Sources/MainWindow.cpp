@@ -1,6 +1,4 @@
 #include "MainWindow.h"
-
-
 MainWindow::MainWindow() :
     graph(*this, Data::getInstance().syllableBoundaries, Data::getInstance().pitchTargets,
         Data::getInstance().optimalF0, Data::getInstance().originalF0),
@@ -462,3 +460,4 @@ void MainWindow::onMenuFileAbout()
         "Version 1.0\n\n"
         "by Patrick Schmager");
 }
+

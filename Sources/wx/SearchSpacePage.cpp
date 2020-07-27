@@ -1,0 +1,34 @@
+#include <wx/spinctrl.h>
+#include "SearchSpacePage.h"
+
+
+SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
+{
+	// A sizer to organize the option labels and values
+	wxFlexGridSizer* optionsSizer{ new wxFlexGridSizer(3) };
+	wxSizerFlags labelFlags;
+	labelFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Border(wxRIGHT, 5);
+	wxStaticText* plusMinus{ new wxStaticText(this, wxID_ANY, wxT("+/-")) };
+	wxSizerFlags plusMinusFlags;
+	plusMinusFlags.Align(wxRIGHT | wxALIGN_CENTER_VERTICAL).Border(wxLEFT, 5);
+	wxSizerFlags valueFlags;
+	valueFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Expand().Proportion(1).Border(wxALL, 5);
+	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("slope 0.0 [st/s]")) };
+	optionsSizer->Add(label, labelFlags);
+	optionsSizer->Add(plusMinus, plusMinusFlags);
+	wxSpinCtrlDouble* value{ new wxSpinCtrlDouble(this, wxID_ANY, wxT("50.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT) };
+	optionsSizer->Add(value, valueFlags);
+	label = new wxStaticText(this, wxID_ANY, wxT("offset f0-mean [st]"));
+	optionsSizer->Add(label, labelFlags);
+	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
+	optionsSizer->Add(plusMinus, plusMinusFlags);
+	value = new wxSpinCtrlDouble(this, wxID_ANY, wxT("20.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	optionsSizer->Add(value, valueFlags);
+	label = new wxStaticText(this, wxID_ANY, wxT("tau 15.0 [ms]"));
+	optionsSizer->Add(label, labelFlags);
+	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
+	optionsSizer->Add(plusMinus, plusMinusFlags);
+	value = new wxSpinCtrlDouble(this, wxID_ANY, wxT("5.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	optionsSizer->Add(value, valueFlags);
+	this->SetSizer(optionsSizer);
+}

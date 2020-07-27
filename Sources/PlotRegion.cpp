@@ -1,5 +1,4 @@
 #include "PlotRegion.h"
-
 PlotRegion::PlotRegion(drawable_window& w, const BoundaryVector& boundaries,
 	const TargetVector& targets, const TimeSignal& optimalF0, const TimeSignal& originalF0) :
 	m_boundaries(boundaries), m_targets(targets), m_optF0(optimalF0), m_origF0(originalF0),

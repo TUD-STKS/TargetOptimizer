@@ -10,6 +10,12 @@
     <Filter Include="dlib">
       <UniqueIdentifier>{51420587-1cf7-433a-a092-d43a21aac24b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Frontend\dlib GUI">
+      <UniqueIdentifier>{14f404a4-aca2-46f1-b8f3-a10dfbd2f5b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Frontend\wxWidgets GUI">
+      <UniqueIdentifier>{582dc382-9200-4958-ae06-b721f6be12ba}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Sources\CdlpFilter.cpp">
@@ -22,9 +28,6 @@
       <Filter>Backend</Filter>
     </ClCompile>
     <ClCompile Include="Sources\main.cpp">
-      <Filter>Frontend</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\MainWindow.cpp">
       <Filter>Frontend</Filter>
     </ClCompile>
     <ClCompile Include="Sources\OptimizationProblem.cpp">
@@ -45,11 +48,32 @@
     <ClCompile Include="Sources\BobyqaOptimizer.cpp">
       <Filter>Backend</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\PlotRegion.cpp">
-      <Filter>Frontend</Filter>
-    </ClCompile>
     <ClCompile Include="dlib\all\source.cpp">
       <Filter>dlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\MainWindow.cpp">
+      <Filter>Frontend\dlib GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\PlotRegion.cpp">
+      <Filter>Frontend\dlib GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\wx\wxMainWindow.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\wx\Graph.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\wx\BasicPicture.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\wx\wxPlotRegion.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\wx\SearchSpacePage.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\wx\RegularizationPage.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +98,6 @@
     <ClInclude Include="Sources\gui.h">
       <Filter>Frontend</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\MainWindow.h">
-      <Filter>Frontend</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\OptimizationProblem.h">
       <Filter>Backend</Filter>
     </ClInclude>
@@ -92,8 +113,29 @@
     <ClInclude Include="Sources\TamModelF0.h">
       <Filter>Backend</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\MainWindow.h">
+      <Filter>Frontend\dlib GUI</Filter>
+    </ClInclude>
     <ClInclude Include="Sources\PlotRegion.h">
-      <Filter>Frontend</Filter>
+      <Filter>Frontend\dlib GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\wxMainWindow.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\Graph.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\BasicPicture.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\wxPlotRegion.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\SearchSpacePage.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\RegularizationPage.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
