@@ -1,3 +1,5 @@
+#ifdef USE_WXWIDGETS
+
 #include <iostream>
 #include <wx/notebook.h>
 #include <wx/spinctrl.h>
@@ -31,10 +33,17 @@ static const int IDB_CLEAR = wxNewId();
 /* Control IDs */
 static const int IDC_TARGET_DISPLAY = wxNewId();
 
+/* */
+static const int IDP_SEARCH_OPTIONS = wxNewId();
+static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
+
 wxBEGIN_EVENT_TABLE(wxMainWindow, wxFrame)
 EVT_MENU(IDM_CLEAR, OnClear)
 EVT_MENU(IDM_OPEN_TEXTGRID, OnOpenTextGrid)
 EVT_MENU(IDM_OPEN_PITCHTIER, OnOpenPitchTier)
+EVT_MENU(wxID_HELP, OnHelp)
+EVT_MENU(wxID_EXIT, OnQuit)
+EVT_MENU(wxID_ABOUT, OnAbout)
 
 EVT_BUTTON(IDB_CLEAR, OnClear)
 EVT_BUTTON(IDB_OPEN_TEXTGRID, OnOpenTextGrid)
@@ -82,15 +91,16 @@ wxMainWindow::wxMainWindow(const wxString& title, const wxPoint& pos, const wxSi
 
 	/* Create controls in the bottom area */
 
+	//TODO: Create class OptimizationOptions derived from wxNotebook
 	// Options
 	wxStaticBoxSizer* optionsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Options"));
 	// The notebook with optimization options
 	wxNotebook* notebook{ new wxNotebook(this, wxID_ANY) };
 	// The first page of the notebook with search space options
-	SearchSpacePage* searchSpacePage{ new SearchSpacePage(notebook, wxID_ANY) };
+	SearchSpacePage* searchSpacePage{ new SearchSpacePage(notebook, IDP_SEARCH_OPTIONS) };
 	notebook->AddPage(searchSpacePage, wxT("Search Space"));
 	// The second page of the notebook with regularization options
-	RegularizationPage* regularizationPage{ new RegularizationPage(notebook, wxID_ANY) };
+	RegularizationPage* regularizationPage{ new RegularizationPage(notebook, IDP_REGULARIZATION_OPTIONS) };
 	notebook->AddPage(regularizationPage, wxT("Regularization"));
 	optionsSizer->Add(notebook, wxSizerFlags().Align(wxCENTER).Border(wxALL, 5).Expand());
 
@@ -130,6 +140,21 @@ wxMainWindow::wxMainWindow(const wxString& title, const wxPoint& pos, const wxSi
 	this->SetSizerAndFit(topLevelSizer);
 }
 
+void wxMainWindow::OnAbout(wxCommandEvent& event)
+{
+	wxAboutDialogInfo info;
+	info.SetName(wxT("Target Optimizer"));
+	info.SetVersion(wxT("2.0"));
+	info.SetDescription(wxT("TargetOptimizer is a free and open-source PC software to estimate pitch targets according to the Target Approximation Model by Yi Xu. "));
+	info.SetCopyright(wxT("(C) 2020 TU Dresden, IAS"));
+	info.SetWebSite(wxT("https://github.com/TUD-STKS/TargetOptimizer"));
+	info.AddDeveloper(wxT("Paul Krug"));
+	info.AddDeveloper(wxT("Patrick Schmager"));
+	info.AddDeveloper(wxT("Simon Stone"));	
+	info.AddDeveloper(wxT("Alexander Wilbrandt"));
+	wxAboutBox(info);
+}
+
 void wxMainWindow::OnClear(wxCommandEvent& event)
 {
 	// Reset data
@@ -139,6 +164,20 @@ void wxMainWindow::OnClear(wxCommandEvent& event)
 	isOptimized = false;
 
 	updateWidgets();
+}
+
+void wxMainWindow::OnHelp(wxCommandEvent& event)
+{
+	wxMessageBox(wxT(
+		"(1) Load Praat-TextGrid file (Praat -> Save as short text file...).\n"
+		"(2) Load Praat-PitchTier file (Praat -> Save as PitchTier spreadsheet file...).\n"
+		"(3) Choose options and start optimization.\n"
+		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
+}
+
+void wxMainWindow::OnQuit(wxCommandEvent& event)
+{
+	Close(true);
 }
 
 void wxMainWindow::OnOpenTextGrid(wxCommandEvent& event)
@@ -214,3 +253,17 @@ void wxMainWindow::updateWidgets()
 	plotRegion->Refresh();
 
 }
+
+ParameterSet wxMainWindow::collectParameters()
+{
+	auto searchParams = static_cast<SearchSpacePage*>(wxWindow::FindWindowById(IDP_SEARCH_OPTIONS))->getParameters();
+
+	ParameterSet optimizationParameters;
+	optimizationParameters.deltaSlope = searchParams.slopeDelta;
+	optimizationParameters.deltaOffset = searchParams.offsetDelta;
+	optimizationParameters.deltaTau = searchParams.tauDelta;
+
+	return optimizationParameters;
+}
+
+#endif // USE_WXWIDGETS

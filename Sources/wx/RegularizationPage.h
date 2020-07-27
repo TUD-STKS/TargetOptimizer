@@ -1,4 +1,6 @@
 #pragma once
+#ifdef USE_WXWIDGETS
+
 #include <wx/wx.h>
 
 class RegularizationPage :
@@ -10,3 +12,4 @@ public:
 
 };
 
+#endif

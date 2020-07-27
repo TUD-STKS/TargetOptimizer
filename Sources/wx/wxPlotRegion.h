@@ -1,4 +1,6 @@
 #pragma once
+#ifdef USE_WXWIDGETS
+
 #include "BasicPicture.h"
 #include "Graph.h"
 #include "../dataio.h"
@@ -20,3 +22,4 @@ private:
 	Graph plot;
 };
 
+#endif // USE_WXWIDGETS

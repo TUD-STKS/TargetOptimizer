@@ -1,9 +1,4 @@
-// ****************************************************************************
-// This file is part of VocalTractLab.
-// Copyright (C) 2008, Peter Birkholz, Hamburg, Germany
-// www.vocaltractlab.de
-// author: Peter Birkholz
-// ****************************************************************************
+#ifdef USE_WXWIDGETS
 
 #include "graph.h"
 #include <cmath>
@@ -1059,3 +1054,5 @@ void Graph::getZoomFactors(LinearDomain *domain, double& positiveZoomFactor, dou
 }
 
 // ****************************************************************************
+
+#endif // USE_WXWIDGETS

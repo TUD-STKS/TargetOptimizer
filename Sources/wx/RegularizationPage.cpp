@@ -1,3 +1,5 @@
+#ifdef USE_WXWIDGETS
+
 #include <wx/spinctrl.h>
 #include "RegularizationPage.h"
 
@@ -34,3 +36,5 @@ RegularizationPage::RegularizationPage(wxWindow* parent, wxWindowID id) : wxPane
 	
 	this->SetSizer(optionsSizer);
 }
+
+#endif

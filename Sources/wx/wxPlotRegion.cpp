@@ -1,3 +1,5 @@
+#ifdef USE_WXWIDGETS
+
 #include "wxPlotRegion.h"
 
 wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0) : 
@@ -5,7 +7,7 @@ wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const
     m_boundaries(bounds), m_origF0(originalF0)
 {
     // Plot needs some margin to paint the axes and labels
-    plot.init(this, 40, 0, 0, 25);
+    plot.init(this, 60, 0, 0, 40);
     plot.initAbscissa(PQ_TIME, 0.0, 0.01,
         0.0, 0.0, 0.0, 0.1, 0.1, 0.1,
         1, 1, true, true, true);
@@ -17,21 +19,16 @@ wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const
 
 void wxPlotRegion::draw(wxDC& dc)
 {
-    // ****************************************************************
-    // Fill the background.
-    // ****************************************************************
+    // Fill the background
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
 
-
+    // Draw the syllable boundaries
     drawBoundaries(dc);
-
+    // Draw the F0 pitch marks
     drawOriginalF0(dc);
 
-
-    // ****************************************************************
-    // Paint the axes.
-    // ****************************************************************
+    // Paint the axes
     plot.paintAbscissa(dc);
     plot.paintOrdinate(dc);
 
@@ -100,3 +97,4 @@ void wxPlotRegion::drawOriginalF0(wxDC& dc)
     
 }
 
+#endif // USE_WXWIDGETS
