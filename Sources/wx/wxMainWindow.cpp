@@ -159,6 +159,7 @@ void wxMainWindow::clear()
 	isOptimized = false;
 
 	resultsTable->ClearGrid();
+	this->SetTitle("Target Optimizer");
 }
 
 void wxMainWindow::OnAbout(wxCommandEvent& event)

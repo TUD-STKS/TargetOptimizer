@@ -10,9 +10,6 @@
     <Filter Include="dlib">
       <UniqueIdentifier>{51420587-1cf7-433a-a092-d43a21aac24b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Frontend\dlib GUI">
-      <UniqueIdentifier>{14f404a4-aca2-46f1-b8f3-a10dfbd2f5b7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Frontend\wxWidgets GUI">
       <UniqueIdentifier>{582dc382-9200-4958-ae06-b721f6be12ba}</UniqueIdentifier>
     </Filter>
@@ -50,12 +47,6 @@
     </ClCompile>
     <ClCompile Include="dlib\all\source.cpp">
       <Filter>dlib</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\MainWindow.cpp">
-      <Filter>Frontend\dlib GUI</Filter>
-    </ClCompile>
-    <ClCompile Include="Sources\PlotRegion.cpp">
-      <Filter>Frontend\dlib GUI</Filter>
     </ClCompile>
     <ClCompile Include="Sources\wx\wxMainWindow.cpp">
       <Filter>Frontend\wxWidgets GUI</Filter>
@@ -115,12 +106,6 @@
     </ClInclude>
     <ClInclude Include="Sources\TamModelF0.h">
       <Filter>Backend</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\MainWindow.h">
-      <Filter>Frontend\dlib GUI</Filter>
-    </ClInclude>
-    <ClInclude Include="Sources\PlotRegion.h">
-      <Filter>Frontend\dlib GUI</Filter>
     </ClInclude>
     <ClInclude Include="Sources\wx\wxMainWindow.h">
       <Filter>Frontend\wxWidgets GUI</Filter>
