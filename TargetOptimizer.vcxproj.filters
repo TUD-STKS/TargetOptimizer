@@ -51,6 +51,21 @@
     <ClCompile Include="dlib\all\source.cpp">
       <Filter>dlib</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Interval.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\IntervalTier.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TextGrid.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Point.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\PointTier.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BobyqaOptimizer.h">
@@ -95,8 +110,25 @@
     <ClInclude Include="Sources\PlotRegion.h">
       <Filter>Frontend</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\Interval.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\IntervalTier.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Point.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\TextGrid.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\PointTier.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="README.md" />
+    <None Include="README.md">
+      <Filter>Backend</Filter>
+    </None>
   </ItemGroup>
 </Project>

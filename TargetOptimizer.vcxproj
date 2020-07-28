@@ -152,6 +152,8 @@
     <ClCompile Include="Sources\CdlpFilter.cpp" />
     <ClCompile Include="Sources\CsvWriter.cpp" />
     <ClCompile Include="Sources\GestureWriter.cpp" />
+    <ClCompile Include="Sources\Interval.cpp" />
+    <ClCompile Include="Sources\IntervalTier.cpp" />
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\MainWindow.cpp" />
     <ClCompile Include="Sources\OptimizationProblem.cpp" />
@@ -159,7 +161,10 @@
     <ClCompile Include="Sources\PitchTierReader.cpp" />
     <ClCompile Include="Sources\PlotRegion.cpp" />
     <ClCompile Include="Sources\BobyqaOptimizer.cpp" />
+    <ClCompile Include="Sources\Point.cpp" />
+    <ClCompile Include="Sources\PointTier.cpp" />
     <ClCompile Include="Sources\TamModelF0.cpp" />
+    <ClCompile Include="Sources\TextGrid.cpp" />
     <ClCompile Include="Sources\TextGridReader.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,12 +175,17 @@
     <ClInclude Include="Sources\dataio.h" />
     <ClInclude Include="Sources\GestureWriter.h" />
     <ClInclude Include="Sources\gui.h" />
+    <ClInclude Include="Sources\Interval.h" />
+    <ClInclude Include="Sources\IntervalTier.h" />
     <ClInclude Include="Sources\MainWindow.h" />
     <ClInclude Include="Sources\OptimizationProblem.h" />
     <ClInclude Include="Sources\PitchTierReader.h" />
     <ClInclude Include="Sources\PitchTierWriter.h" />
     <ClInclude Include="Sources\PlotRegion.h" />
+    <ClInclude Include="Sources\Point.h" />
+    <ClInclude Include="Sources\PointTier.h" />
     <ClInclude Include="Sources\TamModelF0.h" />
+    <ClInclude Include="Sources\TextGrid.h" />
     <ClInclude Include="Sources\TextGridReader.h" />
   </ItemGroup>
   <ItemGroup>
