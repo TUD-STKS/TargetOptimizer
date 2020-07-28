@@ -9,16 +9,24 @@ class wxPlotRegion :
 	public BasicPicture
 {
 public:
-	wxPlotRegion(wxWindow* parent, const BoundaryVector& boundaries, const TimeSignal& originalF0);
+	wxPlotRegion(wxWindow* parent, 
+		const BoundaryVector& boundaries, 
+		const TimeSignal& originalF0, 
+		const TargetVector& targets,
+		const TimeSignal& optimalF0);
 
 private:
 	void draw(wxDC& dc) override;
 	void drawBoundaries(wxDC& dc);
+	void drawOptimalF0(wxDC& dc);
 	void drawOriginalF0(wxDC& dc);
-	const BoundaryVector& m_boundaries;
-	const TimeSignal& m_origF0;
+	void drawTargets(wxDC& dc);	
 
 private:
+	const BoundaryVector& m_boundaries;
+	const TimeSignal& m_origF0;
+	const TimeSignal& m_optimalF0;
+	const TargetVector& m_targets;
 	Graph plot;
 };
 

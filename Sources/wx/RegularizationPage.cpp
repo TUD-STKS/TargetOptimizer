@@ -16,25 +16,35 @@ RegularizationPage::RegularizationPage(wxWindow* parent, wxWindowID id) : wxPane
 
 	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("lambda")) };
 	optionsSizer->Add(label, labelFlags);
-	wxSpinCtrlDouble* value{ new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.01"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT) };
-	optionsSizer->Add(value, valueFlags);
+	lambda = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.01"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	optionsSizer->Add(lambda, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("weight-slope"));
 	optionsSizer->Add(label, labelFlags);	
-	value = new wxSpinCtrlDouble(this, wxID_ANY, wxT("1.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	optionsSizer->Add(value, valueFlags);
+	weightSlope = new wxSpinCtrlDouble(this, wxID_ANY, wxT("1.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	optionsSizer->Add(weightSlope, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("weight-offset"));
 	optionsSizer->Add(label, labelFlags);
-	value = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.5"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	optionsSizer->Add(value, valueFlags);
+	weightOffset = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.5"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	optionsSizer->Add(weightOffset, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("weight-tau"));
 	optionsSizer->Add(label, labelFlags);
-	value = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.1"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
-	optionsSizer->Add(value, valueFlags);
+	weightTau = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.1"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	optionsSizer->Add(weightTau, valueFlags);
 	
 	this->SetSizer(optionsSizer);
+}
+
+RegularizationParameters RegularizationPage::getParameters()
+{
+	RegularizationParameters params;
+	params.lambda = lambda->GetValue();
+	params.weightSlope = weightSlope->GetValue();
+	params.weightTau = weightTau->GetValue();
+
+	return params;
 }
 
 #endif

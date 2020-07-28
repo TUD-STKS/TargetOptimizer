@@ -2,9 +2,9 @@
 
 #include "wxPlotRegion.h"
 
-wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0) : 
+wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0, const TargetVector& targets, const TimeSignal& optimalF0) :
     BasicPicture(parent), 
-    m_boundaries(bounds), m_origF0(originalF0)
+    m_boundaries(bounds), m_origF0(originalF0), m_targets(targets), m_optimalF0(optimalF0)
 {
     // Plot needs some margin to paint the axes and labels
     plot.init(this, 60, 0, 0, 40);
@@ -27,6 +27,10 @@ void wxPlotRegion::draw(wxDC& dc)
     drawBoundaries(dc);
     // Draw the F0 pitch marks
     drawOriginalF0(dc);
+    // Draw the pitch targets
+    drawTargets(dc);
+    // Draw F0 as produced by the Target Approximation Model
+    drawOptimalF0(dc);
 
     // Paint the axes
     plot.paintAbscissa(dc);
@@ -42,7 +46,7 @@ void wxPlotRegion::drawBoundaries(wxDC& dc)
 
     dc.SetPen(wxPen(*wxRED, 3, wxPENSTYLE_DOT));
 
-    if (m_boundaries.size() > 0)
+    if (!m_boundaries.empty())
     {
         /* Set the plot dimensions according to the boundaries */
         auto maxTime = *std::max_element(m_boundaries.begin(), m_boundaries.end());
@@ -63,6 +67,22 @@ void wxPlotRegion::drawBoundaries(wxDC& dc)
     }    
 }
 
+void wxPlotRegion::drawOptimalF0(wxDC& dc)
+{
+    dc.SetPen(wxPen(*wxGREEN, 5, wxPENSTYLE_SOLID));
+    if (!m_optimalF0.empty())
+    {
+        int radius = 2;
+        for (const auto& pitchMark : m_optimalF0)
+        {
+            wxPoint p;
+            p.x = plot.getXPos(pitchMark.time);
+            p.y = plot.getYPos(pitchMark.value);
+            dc.DrawCircle(p, radius);
+        }
+    }
+}
+
 void wxPlotRegion::drawOriginalF0(wxDC& dc)
 {
     int maxX, maxY, height, width;
@@ -70,7 +90,7 @@ void wxPlotRegion::drawOriginalF0(wxDC& dc)
 
     dc.SetPen(wxPen(*wxBLUE, 5, wxPENSTYLE_SOLID));
     int radius = 2;
-    if (m_origF0.size() > 0)
+    if (!m_origF0.empty())
     {
         /* Set the plot dimensions according to the boundaries */
         plot.linearOrdinate.positiveLimit = std::max_element(m_origF0.begin(), 
@@ -93,8 +113,29 @@ void wxPlotRegion::drawOriginalF0(wxDC& dc)
             p.y = plot.getYPos(pitchMark.value);
             dc.DrawCircle(p, radius);
         }
+    }    
+}
+
+void wxPlotRegion::drawTargets(wxDC& dc)
+{
+    if (!m_targets.empty())
+    {
+        dc.SetPen(wxPen(*wxBLACK, 3, wxPENSTYLE_LONG_DASH));
+        // Draw the targets as lines from one boundary to the next one
+        double begin = *std::min(m_boundaries.begin(), m_boundaries.end());
+        double end = begin;
+        wxPoint p0, p1;
+        for (const auto& target : m_targets)
+        {
+            p0.x = plot.getXPos(begin);
+            p0.y = plot.getYPos(target.offset);
+            end = begin + target.duration;
+            p1.x = plot.getXPos(end);
+            p1.y = plot.getYPos(target.slope * (end - begin) + target.offset);
+            begin = end;
+            dc.DrawLine(p0, p1);
+        }
     }
-    
 }
 
 #endif // USE_WXWIDGETS

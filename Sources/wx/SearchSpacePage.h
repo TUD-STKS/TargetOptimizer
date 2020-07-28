@@ -2,6 +2,7 @@
 #ifdef USE_WXWIDGETS
 
 #include <wx/wx.h>
+#include <wx/spinctrl.h>
 
 struct SearchSpaceParameters
 {

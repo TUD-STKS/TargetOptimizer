@@ -75,6 +75,9 @@
     <ClCompile Include="Sources\wx\RegularizationPage.cpp">
       <Filter>Frontend\wxWidgets GUI</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\wx\OptionsNotebook.cpp">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BobyqaOptimizer.h">
@@ -135,6 +138,9 @@
       <Filter>Frontend\wxWidgets GUI</Filter>
     </ClInclude>
     <ClInclude Include="Sources\wx\RegularizationPage.h">
+      <Filter>Frontend\wxWidgets GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\wx\OptionsNotebook.h">
       <Filter>Frontend\wxWidgets GUI</Filter>
     </ClInclude>
   </ItemGroup>

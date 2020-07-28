@@ -208,6 +208,7 @@
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions); USE_WXWIDGETS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\include\msvc;$(SolutionDir);C:\wxWidgets-3.1.0\include</AdditionalIncludeDirectories>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -334,6 +335,7 @@
     <ClCompile Include="Sources\TextGridReader.cpp" />
     <ClCompile Include="Sources\wx\BasicPicture.cpp" />
     <ClCompile Include="Sources\wx\Graph.cpp" />
+    <ClCompile Include="Sources\wx\OptionsNotebook.cpp" />
     <ClCompile Include="Sources\wx\RegularizationPage.cpp" />
     <ClCompile Include="Sources\wx\SearchSpacePage.cpp" />
     <ClCompile Include="Sources\wx\wxMainWindow.cpp" />
@@ -356,6 +358,7 @@
     <ClInclude Include="Sources\TextGridReader.h" />
     <ClInclude Include="Sources\wx\BasicPicture.h" />
     <ClInclude Include="Sources\wx\Graph.h" />
+    <ClInclude Include="Sources\wx\OptionsNotebook.h" />
     <ClInclude Include="Sources\wx\RegularizationPage.h" />
     <ClInclude Include="Sources\wx\SearchSpacePage.h" />
     <ClInclude Include="Sources\wx\wxMainWindow.h" />

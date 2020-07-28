@@ -1,6 +1,5 @@
 #ifdef USE_WXWIDGETS
 
-#include <wx/spinctrl.h>
 #include "SearchSpacePage.h"
 
 
