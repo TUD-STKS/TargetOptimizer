@@ -35,11 +35,19 @@ std::string PointTier::name()
 	return this->mark;
 }
 
-PointTier PointTier::append(Point point)
+void PointTier::append(Point point)
 {
 	this->points.push_back(point);
 	this->tmax = std::max(point.time(), this->tmax);
 	this->tmin = std::min(point.time(), this->tmin);
-	this->n = this->getNumberOfPoints();
-	return *this;
+	this->n += 1;
+}
+
+void PointTier::changeOffset(double offset)
+{
+	this->tmin += offset;
+	this->tmax += offset;
+	for (auto&& point : points) {
+		point.changeOffset(offset);
+	}
 }

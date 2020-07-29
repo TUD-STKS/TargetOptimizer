@@ -22,15 +22,13 @@ std::string Interval::name()
 	return this->mark;
 }
 
-Interval Interval::changeOffset(double offset)
+void Interval::changeOffset(double offset)
 {
 	this->tmin += offset;
 	this->tmax += offset;
-	return *this;
 }
 
-Interval Interval::changeText(std::string text)
+void Interval::changeText(std::string text)
 {
 	this->mark = text;
-	return *this;
 }

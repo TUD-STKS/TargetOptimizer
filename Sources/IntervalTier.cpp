@@ -36,27 +36,24 @@ std::string IntervalTier::name()
 	return this->mark;
 }
 
-IntervalTier IntervalTier::append(Interval interval)
+void IntervalTier::append(Interval interval)
 {
 	this->intervals.push_back(interval);
 	this->tmax = std::max(interval.end(), this->tmax);
 	this->tmin = std::min(interval.start(), this->tmin);
-	this->n = this->getNumberOfIntervals();
-	return *this;
+	this->n += 1;
 }
 
-IntervalTier IntervalTier::rename(std::string newName)
+void IntervalTier::rename(std::string newName)
 {
 	this->mark = newName;
-	return *this;
 }
 
-IntervalTier IntervalTier::changeOffset(double offset)
+void IntervalTier::changeOffset(double offset)
 {
 	this->tmin += offset;
 	this->tmax += offset;
 	for (auto&& interval:intervals) {
 		interval.changeOffset(offset);
 	}
-	return *this;
 }

@@ -12,9 +12,9 @@ public:
 	double start();
 	double end();
 	std::string name();
-	IntervalTier append(Interval interval);
-	IntervalTier rename(std::string newName);
-	IntervalTier changeOffset(double offset);
+	void append(Interval interval);
+	void rename(std::string newName);
+	void changeOffset(double offset);
 
 
 private:

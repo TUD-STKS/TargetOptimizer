@@ -5,6 +5,7 @@ public:
 
 	double time();
 	double mark();
+	void changeOffset(double offset);
 
 private:
 	double x;

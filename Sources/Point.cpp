@@ -15,3 +15,8 @@ double Point::mark()
 {
 	return this->y;
 }
+
+void Point::changeOffset(double offset)
+{
+	this->x += offset;
+}

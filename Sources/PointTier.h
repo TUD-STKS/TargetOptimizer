@@ -13,7 +13,8 @@ public:
 	double start();
 	double end();
 	std::string name();
-	PointTier append(Point point);
+	void append(Point point);
+	void changeOffset(double offset);
 
 
 private:

@@ -8,8 +8,8 @@ public:
 	double start();
 	double end();
 	std::string name();
-	Interval changeOffset(double offset);
-	Interval changeText(std::string text);
+	void changeOffset(double offset);
+	void changeText(std::string text);
 
 private:
 	double tmin;
