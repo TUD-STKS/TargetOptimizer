@@ -255,7 +255,15 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		Data::getInstance().originalF0,
 		Data::getInstance().syllableBoundaries);
 	BobyqaOptimizer optimizer;
-	optimizer.optimize(problem);
+	try
+	{
+		optimizer.optimize(problem);
+	}
+	catch (const std::exception&)
+	{
+		wxMessageBox(wxT("Something went wrong during the optimization. Did you choose matching TextGrid and PitchTier files?"), wxT("Error"), wxICON_ERROR);
+		return;
+	}	
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
