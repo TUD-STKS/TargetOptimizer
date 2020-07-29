@@ -3,12 +3,12 @@
 #include <dlib/cmd_line_parser.h>
 #include "gui.h"
 #include "BobyqaOptimizer.h"
-#include "TextGridReader.h"
+#include "TextGrid.h"
 
 
 int main(int argc, char* argv[])
 {
-	if(argc < 2)
+	if (argc < 2)
 	{
 		try
 		{
@@ -38,25 +38,25 @@ int main(int argc, char* argv[])
 			dlib::command_line_parser parser;
 
 			// command line options
-			parser.add_option("h","Display this help message.");
+			parser.add_option("h", "Display this help message.");
 			parser.set_group_name("Output Options");
-			parser.add_option("g","Choose for VTL gesture file.");
-			parser.add_option("c","Choose for csv table file.");
-			parser.add_option("p","Choose for PitchTier file.");
+			parser.add_option("g", "Choose for VTL gesture file.");
+			parser.add_option("c", "Choose for csv table file.");
+			parser.add_option("p", "Choose for PitchTier file.");
 			parser.set_group_name("Additional Parameter Options");
-			parser.add_option("lambda","Specify regularization parameter.",1);
-			parser.add_option("m-range","Specify search space for slope parameter.",1);
-			parser.add_option("b-range","Specify search space for offset parameter.",1);
-			parser.add_option("t-range","Specify search space for time constant parameter.",1);
-			parser.add_option("m-weight","Specify regularization weight for slope parameter.",1);
-			parser.add_option("b-weight","Specify regularization weight for offset parameter.",1);
-			parser.add_option("t-weight","Specify regularization weight for time constant parameter.",1);
+			parser.add_option("lambda", "Specify regularization parameter.", 1);
+			parser.add_option("m-range", "Specify search space for slope parameter.", 1);
+			parser.add_option("b-range", "Specify search space for offset parameter.", 1);
+			parser.add_option("t-range", "Specify search space for time constant parameter.", 1);
+			parser.add_option("m-weight", "Specify regularization weight for slope parameter.", 1);
+			parser.add_option("b-weight", "Specify regularization weight for offset parameter.", 1);
+			parser.add_option("t-weight", "Specify regularization weight for time constant parameter.", 1);
 
 			// parse command line
-			parser.parse(argc,argv);
+			parser.parse(argc, argv);
 
 			// check command line options
-			const char* one_time_opts[] = {"h", "g", "c", "p", "m-range", "b-range", "t-range", "m-weight", "b-weight", "t-weight"};
+			const char* one_time_opts[] = { "h", "g", "c", "p", "m-range", "b-range", "t-range", "m-weight", "b-weight", "t-weight" };
 			parser.check_one_time_options(one_time_opts);
 			parser.check_option_arg_range("m-range", 0.0, 100.0);
 			parser.check_option_arg_range("b-range", 0.0, 100.0);
@@ -83,11 +83,11 @@ int main(int argc, char* argv[])
 			}
 
 			// process TextGrid input
-			TextGridReader tgreader (parser[0]);
+			TextGridReader tgreader(parser[0]);
 			BoundaryVector bounds = tgreader.getBounds();
 
 			// process PitchTier input
-			PitchTierReader ptreader (parser[1]);
+			PitchTierReader ptreader(parser[1]);
 			TimeSignal f0 = ptreader.getF0();
 			std::string fileName = ptreader.getFileName();
 
@@ -101,19 +101,19 @@ int main(int argc, char* argv[])
 
 			// process optional parameter options
 			ParameterSet parameters;
-			parameters.deltaSlope = get_option(parser,"m-range",50.0);
-			parameters.deltaOffset = get_option(parser,"b-range",20.0);
-			parameters.deltaTau = get_option(parser,"t-range",5.0);
-			parameters.weightSlope = get_option(parser,"m-weight",1.0);
-			parameters.weightOffset = get_option(parser,"b-weight",0.5);
-			parameters.weightTau = get_option(parser,"t-weight",0.1);
-			parameters.lambda = get_option(parser,"lambda",0.01);
+			parameters.deltaSlope = get_option(parser, "m-range", 50.0);
+			parameters.deltaOffset = get_option(parser, "b-range", 20.0);
+			parameters.deltaTau = get_option(parser, "t-range", 5.0);
+			parameters.weightSlope = get_option(parser, "m-weight", 1.0);
+			parameters.weightOffset = get_option(parser, "b-weight", 0.5);
+			parameters.weightTau = get_option(parser, "t-weight", 0.1);
+			parameters.lambda = get_option(parser, "lambda", 0.01);
 			parameters.meanSlope = 0.0;
 			parameters.meanOffset = meanF0;
 			parameters.meanTau = 15.0;
 
 			// main functionality
-			OptimizationProblem problem (parameters, f0, bounds);
+			OptimizationProblem problem(parameters, f0, bounds);
 			BobyqaOptimizer optimizer;
 			optimizer.optimize(problem);
 			TargetVector optTargets = problem.getPitchTargets();
@@ -123,21 +123,21 @@ int main(int argc, char* argv[])
 			// process gesture-file output option
 			if (parser.option("g"))
 			{
-				GestureWriter gwriter (fileName + ".ges");
+				GestureWriter gwriter(fileName + ".ges");
 				gwriter.writeTargets(onset, optTargets);
 			}
 
 			// process csv-file output option
 			if (parser.option("c"))
 			{
-				CsvWriter cwriter (fileName + ".csv");
+				CsvWriter cwriter(fileName + ".csv");
 				cwriter.writeTargets(onset, optTargets);
 			}
 
 			// process PitchTarget-file output option
 			if (parser.option("p"))
 			{
-				PitchTierWriter pwriter (fileName + "-tam.PitchTier");
+				PitchTierWriter pwriter(fileName + "-tam.PitchTier");
 				pwriter.writeF0(optF0);
 			}
 

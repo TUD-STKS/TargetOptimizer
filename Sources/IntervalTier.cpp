@@ -41,7 +41,7 @@ void IntervalTier::append(Interval interval)
 	this->intervals.push_back(interval);
 	this->tmax = std::max(interval.end(), this->tmax);
 	this->tmin = std::min(interval.start(), this->tmin);
-	this->n += 1;
+	this->n = getNumberOfIntervals();
 }
 
 void IntervalTier::rename(std::string newName)

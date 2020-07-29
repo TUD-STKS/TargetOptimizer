@@ -15,12 +15,12 @@ public:
 	void append(Interval interval);
 	void rename(std::string newName);
 	void changeOffset(double offset);
+	int n;
 
 
 private:
 	double tmin;
 	double tmax;
 	std::string mark;
-	int n;
 	std::vector<Interval> intervals;
 };
