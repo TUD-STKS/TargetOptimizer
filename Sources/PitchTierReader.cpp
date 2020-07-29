@@ -1,5 +1,6 @@
 #include <dlib/string.h>
 #include <fstream>
+#include <cmath>
 #include "PitchTierReader.h"
 
 

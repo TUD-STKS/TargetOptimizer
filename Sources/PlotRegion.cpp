@@ -1,5 +1,5 @@
 #ifdef USE_WXWIDGETS
-
+#include <algorithm>
 #include "PlotRegion.h"
 
 PlotRegion::PlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0, const TargetVector& targets, const TimeSignal& optimalF0) :

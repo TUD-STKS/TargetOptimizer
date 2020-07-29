@@ -1,7 +1,7 @@
 #ifdef USE_WXWIDGETS
 
-#include "graph.h"
-#include <cmath>
+#include "Graph.h"
+
 
 const double Graph::EPSILON = 0.000001;
 
