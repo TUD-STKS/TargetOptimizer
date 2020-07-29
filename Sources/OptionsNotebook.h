@@ -3,7 +3,7 @@
 #include <wx/notebook.h>
 #include "SearchSpacePage.h"
 #include "RegularizationPage.h"
-#include "../OptimizationProblem.h"
+#include "OptimizationProblem.h"
 
 
 class OptionsNotebook :

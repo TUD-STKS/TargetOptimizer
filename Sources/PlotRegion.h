@@ -3,13 +3,13 @@
 
 #include "BasicPicture.h"
 #include "Graph.h"
-#include "../dataio.h"
+#include "dataio.h"
 
-class wxPlotRegion :
+class PlotRegion :
 	public BasicPicture
 {
 public:
-	wxPlotRegion(wxWindow* parent, 
+	PlotRegion(wxWindow* parent, 
 		const BoundaryVector& boundaries, 
 		const TimeSignal& originalF0, 
 		const TargetVector& targets,

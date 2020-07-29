@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cmath>
 #include <sstream>
-#include <dlib\error.h>
+#include <dlib/error.h>
 
 TimeSignal CdlpFilter::response(const SampleTimes& sampleTimes, const TargetVector& targets, const Sample onset) const
 {

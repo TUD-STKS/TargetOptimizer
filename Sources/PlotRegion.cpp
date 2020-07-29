@@ -1,8 +1,8 @@
 #ifdef USE_WXWIDGETS
 
-#include "wxPlotRegion.h"
+#include "PlotRegion.h"
 
-wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0, const TargetVector& targets, const TimeSignal& optimalF0) :
+PlotRegion::PlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0, const TargetVector& targets, const TimeSignal& optimalF0) :
     BasicPicture(parent), 
     m_boundaries(bounds), m_origF0(originalF0), m_targets(targets), m_optimalF0(optimalF0)
 {
@@ -17,7 +17,7 @@ wxPlotRegion::wxPlotRegion(wxWindow* parent, const BoundaryVector& bounds, const
     }
 
 
-void wxPlotRegion::draw(wxDC& dc)
+void PlotRegion::draw(wxDC& dc)
 {
     // Fill the background
     dc.SetBackground(*wxWHITE_BRUSH);
@@ -39,7 +39,7 @@ void wxPlotRegion::draw(wxDC& dc)
     
  }
 
-void wxPlotRegion::drawBoundaries(wxDC& dc)
+void PlotRegion::drawBoundaries(wxDC& dc)
 {
     int maxX, maxY, height, width;
     plot.getDimensions(maxX, maxY, height, width);
@@ -67,7 +67,7 @@ void wxPlotRegion::drawBoundaries(wxDC& dc)
     }    
 }
 
-void wxPlotRegion::drawOptimalF0(wxDC& dc)
+void PlotRegion::drawOptimalF0(wxDC& dc)
 {
     dc.SetPen(wxPen(*wxGREEN, 5, wxPENSTYLE_SOLID));
     if (!m_optimalF0.empty())
@@ -83,7 +83,7 @@ void wxPlotRegion::drawOptimalF0(wxDC& dc)
     }
 }
 
-void wxPlotRegion::drawOriginalF0(wxDC& dc)
+void PlotRegion::drawOriginalF0(wxDC& dc)
 {
     int maxX, maxY, height, width;
     plot.getDimensions(maxX, maxY, height, width);
@@ -116,7 +116,7 @@ void wxPlotRegion::drawOriginalF0(wxDC& dc)
     }    
 }
 
-void wxPlotRegion::drawTargets(wxDC& dc)
+void PlotRegion::drawTargets(wxDC& dc)
 {
     if (!m_targets.empty())
     {

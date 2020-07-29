@@ -1,5 +1,5 @@
 #pragma once
 
 #ifdef USE_WXWIDGETS
-#include "wx/wxMainWindow.h"
+#include "MainWindow.h"
 #endif

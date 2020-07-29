@@ -321,44 +321,44 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dlib\all\source.cpp" />
+    <ClCompile Include="Sources\BasicPicture.cpp" />
     <ClCompile Include="Sources\CdlpFilter.cpp" />
     <ClCompile Include="Sources\CsvWriter.cpp" />
     <ClCompile Include="Sources\GestureWriter.cpp" />
+    <ClCompile Include="Sources\Graph.cpp" />
     <ClCompile Include="Sources\main.cpp" />
+    <ClCompile Include="Sources\MainWindow.cpp" />
     <ClCompile Include="Sources\OptimizationProblem.cpp" />
+    <ClCompile Include="Sources\OptionsNotebook.cpp" />
     <ClCompile Include="Sources\PitchTierWriter.cpp" />
     <ClCompile Include="Sources\PitchTierReader.cpp" />
     <ClCompile Include="Sources\BobyqaOptimizer.cpp" />
+    <ClCompile Include="Sources\PlotRegion.cpp" />
+    <ClCompile Include="Sources\RegularizationPage.cpp" />
+    <ClCompile Include="Sources\SearchSpacePage.cpp" />
     <ClCompile Include="Sources\TamModelF0.cpp" />
     <ClCompile Include="Sources\TextGridReader.cpp" />
-    <ClCompile Include="Sources\wx\BasicPicture.cpp" />
-    <ClCompile Include="Sources\wx\Graph.cpp" />
-    <ClCompile Include="Sources\wx\OptionsNotebook.cpp" />
-    <ClCompile Include="Sources\wx\RegularizationPage.cpp" />
-    <ClCompile Include="Sources\wx\SearchSpacePage.cpp" />
-    <ClCompile Include="Sources\wx\wxMainWindow.cpp" />
-    <ClCompile Include="Sources\wx\wxPlotRegion.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Sources\BasicPicture.h" />
     <ClInclude Include="Sources\BobyqaOptimizer.h" />
     <ClInclude Include="Sources\CdlpFilter.h" />
     <ClInclude Include="Sources\CsvWriter.h" />
     <ClInclude Include="Sources\Data.h" />
     <ClInclude Include="Sources\dataio.h" />
     <ClInclude Include="Sources\GestureWriter.h" />
+    <ClInclude Include="Sources\Graph.h" />
     <ClInclude Include="Sources\gui.h" />
+    <ClInclude Include="Sources\MainWindow.h" />
     <ClInclude Include="Sources\OptimizationProblem.h" />
+    <ClInclude Include="Sources\OptionsNotebook.h" />
     <ClInclude Include="Sources\PitchTierReader.h" />
     <ClInclude Include="Sources\PitchTierWriter.h" />
+    <ClInclude Include="Sources\PlotRegion.h" />
+    <ClInclude Include="Sources\RegularizationPage.h" />
+    <ClInclude Include="Sources\SearchSpacePage.h" />
     <ClInclude Include="Sources\TamModelF0.h" />
     <ClInclude Include="Sources\TextGridReader.h" />
-    <ClInclude Include="Sources\wx\BasicPicture.h" />
-    <ClInclude Include="Sources\wx\Graph.h" />
-    <ClInclude Include="Sources\wx\OptionsNotebook.h" />
-    <ClInclude Include="Sources\wx\RegularizationPage.h" />
-    <ClInclude Include="Sources\wx\SearchSpacePage.h" />
-    <ClInclude Include="Sources\wx\wxMainWindow.h" />
-    <ClInclude Include="Sources\wx\wxPlotRegion.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

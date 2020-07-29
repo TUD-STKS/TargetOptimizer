@@ -14,14 +14,14 @@ public:
 	virtual bool OnInit();
 
 public:
-	wxMainWindow *mainWindow;
+	MainWindow *mainWindow;
 };
 
 wxIMPLEMENT_APP_NO_MAIN(TargetOptimizerGui);
 
 bool TargetOptimizerGui::OnInit()
 {
-	mainWindow = new wxMainWindow();
+	mainWindow = new MainWindow();
 	mainWindow->Show();
 	return true;
 }

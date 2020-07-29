@@ -4,8 +4,8 @@
 #include <wx/notebook.h>
 #include <wx/spinctrl.h>
 #include <wx/filename.h>
-#include "wxMainWindow.h"
-#include "../BobyqaOptimizer.h"
+#include "MainWindow.h"
+#include "BobyqaOptimizer.h"
 
 
 /* Menu IDs */
@@ -37,7 +37,7 @@ static const int IDC_TARGET_DISPLAY = wxNewId();
 static const int IDP_SEARCH_OPTIONS = wxNewId();
 static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
 
-wxBEGIN_EVENT_TABLE(wxMainWindow, wxFrame)
+wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(IDM_CLEAR, OnClear)
 EVT_MENU(IDM_OPEN_TEXTGRID, OnOpenTextGrid)
 EVT_MENU(IDM_OPEN_PITCHTIER, OnOpenPitchTier)
@@ -58,10 +58,10 @@ EVT_BUTTON(IDB_SAVE_CSV, OnSaveAsCsv)
 EVT_BUTTON(IDB_SAVE_PITCHTIER, OnSaveAsPitchTier)
 wxEND_EVENT_TABLE()
 
-wxMainWindow::wxMainWindow(const wxString& title, const wxPoint& pos, const wxSize& size) 	
+MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size) 	
 	: wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
-	this->SetBackgroundColour(*wxWHITE);
+	this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	
 	// The top level sizer for the main window
 	wxBoxSizer* topLevelSizer(new wxBoxSizer(wxVERTICAL));
@@ -131,6 +131,7 @@ wxMainWindow::wxMainWindow(const wxString& title, const wxPoint& pos, const wxSi
 	// Targets
 	wxStaticBoxSizer* targetsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
 	resultsTable = new wxGrid(this, IDC_TARGET_DISPLAY);
+	resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	resultsTable->EnableEditing(false);
 	resultsTable->CreateGrid(4, 1);
 	resultsTable->SetRowLabelValue(0, wxT("Slope [st/s]"));
@@ -138,6 +139,11 @@ wxMainWindow::wxMainWindow(const wxString& title, const wxPoint& pos, const wxSi
 	resultsTable->SetRowLabelValue(2, wxT("Tau [ms]"));
 	resultsTable->SetRowLabelValue(3, wxT("Duration [s]"));
 	resultsTable->SetColLabelValue(0, wxEmptyString);
+	resultsTable->SetRowLabelSize(wxGRID_AUTOSIZE);
+	resultsTable->SetRowLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
+	resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
+	resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
+	resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
 	
 	targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
@@ -150,7 +156,7 @@ wxMainWindow::wxMainWindow(const wxString& title, const wxPoint& pos, const wxSi
 }
 
 
-void wxMainWindow::clear()
+void MainWindow::clear()
 {
 	// Reset data
 	Data::getInstance().reset();
@@ -162,7 +168,7 @@ void wxMainWindow::clear()
 	this->SetTitle("Target Optimizer");
 }
 
-void wxMainWindow::OnAbout(wxCommandEvent& event)
+void MainWindow::OnAbout(wxCommandEvent& event)
 {
 	wxAboutDialogInfo info;
 	info.SetName(wxT("Target Optimizer"));
@@ -177,13 +183,13 @@ void wxMainWindow::OnAbout(wxCommandEvent& event)
 	wxAboutBox(info);
 }
 
-void wxMainWindow::OnClear(wxCommandEvent& event)
+void MainWindow::OnClear(wxCommandEvent& event)
 {
 	this->clear();
 	updateWidgets();
 }
 
-void wxMainWindow::OnHelp(wxCommandEvent& event)
+void MainWindow::OnHelp(wxCommandEvent& event)
 {
 	wxMessageBox(wxT(
 		"(1) Load Praat-TextGrid file (Praat -> Save as short text file...).\n"
@@ -192,12 +198,12 @@ void wxMainWindow::OnHelp(wxCommandEvent& event)
 		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
 }
 
-void wxMainWindow::OnQuit(wxCommandEvent& event)
+void MainWindow::OnQuit(wxCommandEvent& event)
 {
 	Close(true);
 }
 
-void wxMainWindow::OnOpenTextGrid(wxCommandEvent& event)
+void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
 {
 	wxFileDialog openFileDialog(this, wxT("Open TextGrid file"), "", "",
 			"TextGrid files (*.TextGrid)|*.TextGrid", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
@@ -220,7 +226,7 @@ void wxMainWindow::OnOpenTextGrid(wxCommandEvent& event)
 	updateWidgets();
 }
 
-void wxMainWindow::OnOpenPitchTier(wxCommandEvent& event)
+void MainWindow::OnOpenPitchTier(wxCommandEvent& event)
 {
 	wxFileDialog openFileDialog(this, wxT("Open PitchTier file"), "", "",
 		"PitchTier files (*.PitchTier)|*.PitchTier", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
@@ -241,7 +247,7 @@ void wxMainWindow::OnOpenPitchTier(wxCommandEvent& event)
 	updateWidgets();
 }
 
-void wxMainWindow::OnOptimize(wxCommandEvent& event)
+void MainWindow::OnOptimize(wxCommandEvent& event)
 {
 	auto options = optimizationOptions->getOptions();
 
@@ -262,7 +268,7 @@ void wxMainWindow::OnOptimize(wxCommandEvent& event)
 	updateWidgets();
 }
 
-void wxMainWindow::OnSaveAsGesture(wxCommandEvent& event)
+void MainWindow::OnSaveAsGesture(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save Gestural Score file"), "", defaultName,
@@ -273,7 +279,7 @@ void wxMainWindow::OnSaveAsGesture(wxCommandEvent& event)
 	gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 }
 
-void wxMainWindow::OnSaveAsCsv(wxCommandEvent& event)
+void MainWindow::OnSaveAsCsv(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save CSV file"), "", defaultName,
@@ -284,7 +290,7 @@ void wxMainWindow::OnSaveAsCsv(wxCommandEvent& event)
 	cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 }
 
-void wxMainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
+void MainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save PitchTier file"), "", defaultName,
@@ -296,7 +302,7 @@ void wxMainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
 }
 
 
-void wxMainWindow::updateWidgets()
+void MainWindow::updateWidgets()
 {
 	// Clear is only available when any of the files are loaded
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_CLEAR))->Enable(isTextGridLoaded || isPitchTierLoaded);

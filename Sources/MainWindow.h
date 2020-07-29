@@ -3,16 +3,16 @@
 #include <wx/wx.h>
 #include <wx/aboutdlg.h>
 #include <wx/grid.h>
-#include "wxPlotRegion.h"
+#include "PlotRegion.h"
 #include "OptionsNotebook.h"
-#include "../Data.h"
-#include "../OptimizationProblem.h"
+#include "Data.h"
+#include "OptimizationProblem.h"
 
 
-class wxMainWindow : public wxFrame
+class MainWindow : public wxFrame
 {
 public:
-    wxMainWindow(const wxString& title = wxT("Target Optimizer"), 
+    MainWindow(const wxString& title = wxT("Target Optimizer"), 
         const wxPoint& pos = wxDefaultPosition, 
         const wxSize& size = wxSize(1280, 720));
 private:
@@ -36,8 +36,8 @@ private:
     bool isOptimized{ false };
 
     // The picture area containing the plots ("figure" in MATLAB parlance)
-    wxPlotRegion* plotRegion{
-        new wxPlotRegion(this,
+    PlotRegion* plotRegion{
+        new PlotRegion(this,
         Data::getInstance().syllableBoundaries,
         Data::getInstance().originalF0,
         Data::getInstance().pitchTargets,

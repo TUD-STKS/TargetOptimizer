@@ -4,6 +4,7 @@
 #define __GRAPH_H__
 
 #include <wx/wx.h>
+#include <cmath>
 
 // ****************************************************************************
 // Internally, all numerical values for the quantities are in CGS units!
