@@ -51,7 +51,6 @@ void PlotRegion::drawBoundaries(wxDC& dc)
         /* Set the plot dimensions according to the boundaries */
         auto maxTime = *std::max_element(m_boundaries.begin(), m_boundaries.end());
         plot.abscissa.positiveLimit = std::max(maxTime + 0.1, plot.abscissa.positiveLimit);
-        plot.abscissa.positiveLimit += 0.01;
         
         for (const auto& boundary : m_boundaries)
         {

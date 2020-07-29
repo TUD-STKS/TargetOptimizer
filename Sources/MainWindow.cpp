@@ -251,6 +251,12 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 {
 	auto options = optimizationOptions->getOptions();
 
+	if (options.deltaOffset == 0 || options.deltaSlope == 0 || options.deltaTau == 0)
+	{
+		wxMessageBox(wxT("Error: 0 is not a valid search space parameter!"), wxT("Parameter error"), wxICON_ERROR);
+		return;
+	}
+
 	OptimizationProblem problem(options,
 		Data::getInstance().originalF0,
 		Data::getInstance().syllableBoundaries);
