@@ -19,9 +19,18 @@ Simply open the solution TargetOptimizer.sln and build.
 
 ## Build for Linux using GCC:
 
-Navigate inside the Sources folder and run:
+Navigate inside the Sources folder and run one of the following commands.
 
-g++ -std=c++11 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 *.cpp -o TargetOptimizer
+For the GUI version (requires wxWidgets):
+
+``g++ -std=c++14 -O3 -D USE_WXWIDGETS -I.. ../dlib/all/source.cpp -fopenmp -fpermissive -lpthread -lX11 *.cpp `wx-config --cxxflags --libs std` -o TargetOptimizer``
+
+For the command-line-only version:
+``g++ -std=c++11 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 *.cpp -o TargetOptimizer``
+
+
+
+
 
 
 Run TargetOptimizer from the command line:
