@@ -17,19 +17,19 @@ SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(pare
 	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("slope 0.0 [st/s]")) };
 	optionsSizer->Add(label, labelFlags);
 	optionsSizer->Add(plusMinus, plusMinusFlags);
-	slopeDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("50.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	slopeDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("50.0"), wxDefaultPosition, wxDefaultSize,  wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 50, 1);
 	optionsSizer->Add(slopeDeltaCtrl, valueFlags);
 	label = new wxStaticText(this, wxID_ANY, wxT("offset f0-mean [st]"));
 	optionsSizer->Add(label, labelFlags);
 	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
 	optionsSizer->Add(plusMinus, plusMinusFlags);
-	offsetDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("20.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	offsetDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("20.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 20, 1);
 	optionsSizer->Add(offsetDeltaCtrl, valueFlags);
 	label = new wxStaticText(this, wxID_ANY, wxT("tau 15.0 [ms]"));
 	optionsSizer->Add(label, labelFlags);
 	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
 	optionsSizer->Add(plusMinus, plusMinusFlags);
-	tauDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("5.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT);
+	tauDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("5.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 5, 1);
 	optionsSizer->Add(tauDeltaCtrl, valueFlags);
 	this->SetSizer(optionsSizer);
 }
