@@ -1,5 +1,4 @@
 #ifdef USE_WXWIDGETS
-
 #include <iostream>
 #include <wx/notebook.h>
 #include <wx/spinctrl.h>
@@ -222,7 +221,6 @@ void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
 
 	isOptimized = false;
 	isTextGridLoaded = true;
-
 	updateWidgets();
 }
 
