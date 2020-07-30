@@ -210,6 +210,13 @@ void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;     
 	
+	if (openFileDialog.GetPath() == wxEmptyString || openFileDialog.GetFilename() == wxEmptyString)
+	{
+		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"), 
+			wxT("Error"), wxICON_ERROR);
+		return;
+	}
+
 	if (isOptimized)
 	{
 		this->clear();
@@ -232,6 +239,12 @@ void MainWindow::OnOpenPitchTier(wxCommandEvent& event)
 		"PitchTier files (*.PitchTier)|*.PitchTier", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;
+	if (openFileDialog.GetPath() == wxEmptyString || openFileDialog.GetFilename() == wxEmptyString)
+	{
+		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
+			wxT("Error"), wxICON_ERROR);
+		return;
+	}
 
 	if (isOptimized)
 	{
@@ -289,6 +302,13 @@ void MainWindow::OnSaveAsGesture(wxCommandEvent& event)
 			"Gestural Score files (*.ges)|*.ges", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
+	if (saveFileDialog.GetPath() == wxEmptyString || saveFileDialog.GetFilename() == wxEmptyString)
+	{
+		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
+			wxT("Error"), wxICON_ERROR);
+		return;
+	}
+
 	GestureWriter gwriter(saveFileDialog.GetPath().ToStdString());
 	gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 }
@@ -300,6 +320,13 @@ void MainWindow::OnSaveAsCsv(wxCommandEvent& event)
 		"CSV (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
+	if (saveFileDialog.GetPath() == wxEmptyString || saveFileDialog.GetFilename() == wxEmptyString)
+	{
+		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
+			wxT("Error"), wxICON_ERROR);
+		return;
+	}
+
 	CsvWriter cwriter(saveFileDialog.GetPath().ToStdString());
 	cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 }
@@ -311,6 +338,12 @@ void MainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
 		"PitchTier (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
+	if (saveFileDialog.GetPath() == wxEmptyString || saveFileDialog.GetFilename() == wxEmptyString)
+	{
+		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
+			wxT("Error"), wxICON_ERROR);
+		return;
+	}
 	PitchTierWriter pwriter(saveFileDialog.GetPath().ToStdString());
 	pwriter.writeF0(Data::getInstance().optimalF0);
 }
