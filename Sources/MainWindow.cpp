@@ -209,20 +209,13 @@ void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
 			"TextGrid files (*.TextGrid)|*.TextGrid", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;     
-	
-	if (openFileDialog.GetPath().ToStdString() == "" || openFileDialog.GetFilename().ToStdString() == "")
-	{
-		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"), 
-			wxT("Error"), wxICON_ERROR);
-		return;
-	}
 
 	if (isOptimized)
 	{
 		this->clear();
 	}
 	
-	TextGridReader tgreader(openFileDialog.GetPath().ToStdString());
+	TextGridReader tgreader(std::string(openFileDialog.GetPath().utf8_str()));
 	Data::getInstance().syllableBoundaries = tgreader.getBounds();
 	this->SetTitle(wxT("Target Optimizer - ") + wxFileName(openFileDialog.GetFilename()).GetName());
 
@@ -239,18 +232,12 @@ void MainWindow::OnOpenPitchTier(wxCommandEvent& event)
 		"PitchTier files (*.PitchTier)|*.PitchTier", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (openFileDialog.GetPath().ToStdString() == "" || openFileDialog.GetFilename().ToStdString() == "")
-	{
-		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
-			wxT("Error"), wxICON_ERROR);
-		return;
-	}
 
 	if (isOptimized)
 	{
 		this->clear();
 	}
-	PitchTierReader ptreader(openFileDialog.GetPath().ToStdString());
+	PitchTierReader ptreader(std::string(openFileDialog.GetPath().utf8_str()));
 	Data::getInstance().originalF0 = ptreader.getF0();
 	this->SetTitle(wxT("Target Optimizer - ") + wxFileName(openFileDialog.GetFilename()).GetName());
 	
@@ -302,14 +289,8 @@ void MainWindow::OnSaveAsGesture(wxCommandEvent& event)
 			"Gestural Score files (*.ges)|*.ges", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
-	{
-		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
-			wxT("Error"), wxICON_ERROR);
-		return;
-	}
 
-	GestureWriter gwriter(saveFileDialog.GetPath().ToStdString());
+	GestureWriter gwriter(std::string(saveFileDialog.GetPath().utf8_str()));
 	gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 }
 
@@ -320,14 +301,8 @@ void MainWindow::OnSaveAsCsv(wxCommandEvent& event)
 		"CSV (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
-	{
-		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
-			wxT("Error"), wxICON_ERROR);
-		return;
-	}
 
-	CsvWriter cwriter(saveFileDialog.GetPath().ToStdString());
+	CsvWriter cwriter(std::string(saveFileDialog.GetPath().utf8_str()));
 	cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 }
 
@@ -338,13 +313,8 @@ void MainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
 		"PitchTier (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
-	{
-		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
-			wxT("Error"), wxICON_ERROR);
-		return;
-	}
-	PitchTierWriter pwriter(saveFileDialog.GetPath().ToStdString());
+	
+	PitchTierWriter pwriter(std::string(saveFileDialog.GetPath().utf8_str()));
 	pwriter.writeF0(Data::getInstance().optimalF0);
 }
 
