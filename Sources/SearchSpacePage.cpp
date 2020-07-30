@@ -8,7 +8,7 @@ SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(pare
 	// A sizer to organize the option labels and values
 	wxFlexGridSizer* optionsSizer{ new wxFlexGridSizer(3) };
 	wxSizerFlags labelFlags;
-	labelFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Border(wxRIGHT, 5);
+	labelFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Border(wxRIGHT|wxLEFT, 5);
 	wxStaticText* plusMinus{ new wxStaticText(this, wxID_ANY, wxT("+/-")) };
 	wxSizerFlags plusMinusFlags;
 	plusMinusFlags.Align(wxRIGHT | wxALIGN_CENTER_VERTICAL).Border(wxLEFT, 5);

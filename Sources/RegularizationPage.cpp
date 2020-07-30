@@ -10,7 +10,7 @@ RegularizationPage::RegularizationPage(wxWindow* parent, wxWindowID id) : wxPane
 	wxFlexGridSizer* optionsSizer{ new wxFlexGridSizer(2) };
 	optionsSizer->AddGrowableCol(0);
 	wxSizerFlags labelFlags;
-	labelFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Border(wxRIGHT, 5);
+	labelFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Border(wxRIGHT | wxLEFT, 5);
 	wxSizerFlags valueFlags;
 	valueFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Expand().Proportion(1).Border(wxALL, 5);
 
