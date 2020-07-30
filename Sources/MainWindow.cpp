@@ -299,7 +299,7 @@ void MainWindow::OnSaveAsGesture(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save Gestural Score file"), "", defaultName,
-			"Gestural Score files (*.ges)|*.ges", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+			"Gestural Score files (*.ges)|*.ges", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
@@ -317,7 +317,7 @@ void MainWindow::OnSaveAsCsv(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save CSV file"), "", defaultName,
-		"CSV (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		"CSV (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
@@ -335,7 +335,7 @@ void MainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save PitchTier file"), "", defaultName,
-		"PitchTier (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+		"PitchTier (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
