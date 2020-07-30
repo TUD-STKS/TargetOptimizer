@@ -206,11 +206,11 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
 {
 	wxFileDialog openFileDialog(this, wxT("Open TextGrid file"), "", "",
-			"TextGrid files (*.TextGrid)|*.TextGrid", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+			"TextGrid files (*.TextGrid)|*.TextGrid", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;     
 	
-	if (openFileDialog.GetPath() == wxEmptyString || openFileDialog.GetFilename() == wxEmptyString)
+	if (openFileDialog.GetPath().ToStdString() == "" || openFileDialog.GetFilename().ToStdString() == "")
 	{
 		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"), 
 			wxT("Error"), wxICON_ERROR);
@@ -236,10 +236,10 @@ void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
 void MainWindow::OnOpenPitchTier(wxCommandEvent& event)
 {
 	wxFileDialog openFileDialog(this, wxT("Open PitchTier file"), "", "",
-		"PitchTier files (*.PitchTier)|*.PitchTier", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+		"PitchTier files (*.PitchTier)|*.PitchTier", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (openFileDialog.GetPath() == wxEmptyString || openFileDialog.GetFilename() == wxEmptyString)
+	if (openFileDialog.GetPath().ToStdString() == "" || openFileDialog.GetFilename().ToStdString() == "")
 	{
 		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
 			wxT("Error"), wxICON_ERROR);
@@ -302,7 +302,7 @@ void MainWindow::OnSaveAsGesture(wxCommandEvent& event)
 			"Gestural Score files (*.ges)|*.ges", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetPath() == wxEmptyString || saveFileDialog.GetFilename() == wxEmptyString)
+	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
 	{
 		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
 			wxT("Error"), wxICON_ERROR);
@@ -320,7 +320,7 @@ void MainWindow::OnSaveAsCsv(wxCommandEvent& event)
 		"CSV (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetPath() == wxEmptyString || saveFileDialog.GetFilename() == wxEmptyString)
+	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
 	{
 		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
 			wxT("Error"), wxICON_ERROR);
@@ -338,7 +338,7 @@ void MainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
 		"PitchTier (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetPath() == wxEmptyString || saveFileDialog.GetFilename() == wxEmptyString)
+	if (saveFileDialog.GetPath().ToStdString() == "" || saveFileDialog.GetFilename().ToStdString() == "")
 	{
 		wxMessageBox(wxT("File not accepted!\nNote: Special characters in the path or file name are not supported!"),
 			wxT("Error"), wxICON_ERROR);
