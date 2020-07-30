@@ -3,6 +3,7 @@
 ################################################################################
 
 /Debug
+/Release
 /.vs/TargetOptimizer/v16
 /x64
 /TargetOptimizer.vcxproj.user

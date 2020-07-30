@@ -1,4 +1,5 @@
 #pragma once
 
+#ifdef USE_WXWIDGETS
 #include "MainWindow.h"
-#include "PlotRegion.h"
+#endif

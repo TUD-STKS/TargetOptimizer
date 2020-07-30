@@ -1,5 +1,6 @@
 #include <iomanip>
 #include <fstream>
+#include <cmath>
 #include "PitchTierWriter.h"
 
 

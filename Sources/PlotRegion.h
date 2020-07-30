@@ -1,28 +1,33 @@
 #pragma once
+#ifdef USE_WXWIDGETS
 
-#include <dlib/gui_widgets.h>
+#include "BasicPicture.h"
+#include "Graph.h"
 #include "dataio.h"
 
-using namespace dlib;
-
-
-class PlotRegion : public zoomable_region
+class PlotRegion :
+	public BasicPicture
 {
 public:
-    PlotRegion(drawable_window& w,
-        const BoundaryVector& bounds,
-        const TargetVector& targets, const TimeSignal& optimalF0, const TimeSignal& originalF0);
-    ~PlotRegion();
-
-    void update();
+	PlotRegion(wxWindow* parent, 
+		const BoundaryVector& boundaries, 
+		const TimeSignal& originalF0, 
+		const TargetVector& targets,
+		const TimeSignal& optimalF0);
 
 private:
-    void draw(const canvas& c) const;
-    SignalStat analyzeSignal(const TimeSignal& f0) const;
+	void draw(wxDC& dc) override;
+	void drawBoundaries(wxDC& dc);
+	void drawOptimalF0(wxDC& dc);
+	void drawOriginalF0(wxDC& dc);
+	void drawTargets(wxDC& dc);	
 
-    const TimeSignal& m_optF0;
-    const TimeSignal& m_origF0;
-    const BoundaryVector& m_boundaries;
-    const TargetVector& m_targets;
+private:
+	const BoundaryVector& m_boundaries;
+	const TimeSignal& m_origF0;
+	const TimeSignal& m_optimalF0;
+	const TargetVector& m_targets;
+	Graph plot;
 };
 
+#endif // USE_WXWIDGETS

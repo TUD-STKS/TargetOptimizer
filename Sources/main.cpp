@@ -5,30 +5,44 @@
 #include "BobyqaOptimizer.h"
 #include "TextGridReader.h"
 
+#ifdef USE_WXWIDGETS
+#include <wx/wx.h>
+
+class TargetOptimizerGui : public wxApp
+{
+public:
+	virtual bool OnInit();
+
+public:
+	MainWindow *mainWindow;
+};
+
+wxIMPLEMENT_APP_NO_MAIN(TargetOptimizerGui);
+
+bool TargetOptimizerGui::OnInit()
+{
+	mainWindow = new MainWindow();
+	mainWindow->Show();
+	return true;
+}
+
+#endif // USE_WXWIDGETS
 
 int main(int argc, char* argv[])
 {
 	if(argc < 2)
 	{
-		try
-		{
-			// ********** open GUI **********
-			// create window
-			MainWindow myWindow;
+#ifdef USE_WXWIDGETS
+			// ********** open wxWidgets GUI *****
+			auto* targetOptimizerGui = new TargetOptimizerGui();
+			wxApp::SetInstance(targetOptimizerGui);
+			wxEntry(argc, argv);
 
-			// tell window to put itself on the screen
-			myWindow.show();
-
-			// wait until the user closes this window before the program terminates
-			myWindow.wait_until_closed();
-		}
-		catch (std::exception& e)
-		{
-			std::ostringstream msg;
-			msg << "[main] Program was terminated because an error occurred!\n" << e.what() << std::endl;
-			message_box("Error", msg.str());
-			return EXIT_FAILURE;
-		}
+#else
+		std::cerr << "TargetOptimizer was compiled without GUI support.\n"
+			<< "To learn how to use it as a command line tool, use 'TargetOptimizer -h'\n"
+			<< "To use the GUI version, recompile with the USE_WXWIDGETS preprocessor macro (requires wxWidgets)" << std::endl;
+#endif // USE_WXWIDGETS		
 	}
 	else
 	{

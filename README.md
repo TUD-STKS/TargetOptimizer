@@ -11,7 +11,7 @@ The motivation for these differences are described in Birkholz P, Schmager P, Xu
 
 To estimate the pitch targets for an utterance, the model needs as input the syllable boundaries in terms of a Praat TextGrid file, and the pitch contour in terms of a Praat PitchTier file. Based on these data, the pitch targets can be estimated and exported in terms of a CSV file, a gestural score for VocalTractLab, or as a Praat PitchTier file with the model f0 contour. The software can be executed as a command line tool (without a GUI, to support batch processing) or as an application with a GUI. To call the program with GUI, simply start it without any parameters. A screenshot of the GUI is shown below (for the German word "Ästhetik").
 
-![Screenshot Target Optimizer 1.0](http://www.vocaltractlab.de/pictures/targetoptimizer-screenshot.gif)
+![Screenshot Target Optimizer 2.0](doc/TargetOptimizer_GUI.png)
 
 ## Build for Windows using Visual Studio 2019+
 Simply open the solution TargetOptimizer.sln and build.
@@ -19,9 +19,18 @@ Simply open the solution TargetOptimizer.sln and build.
 
 ## Build for Linux using GCC:
 
-Navigate inside the Sources folder and run:
+Navigate inside the Sources folder and run one of the following commands.
 
-g++ -std=c++11 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 *.cpp -o TargetOptimizer
+For the GUI version (requires wxWidgets):
+
+``g++ -std=c++14 -O3 -D USE_WXWIDGETS -I.. ../dlib/all/source.cpp -fopenmp -fpermissive -lpthread -lX11 *.cpp `wx-config --cxxflags --libs std` -o TargetOptimizer``
+
+For the command-line-only version:
+``g++ -std=c++11 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 *.cpp -o TargetOptimizer``
+
+
+
+
 
 
 Run TargetOptimizer from the command line:

@@ -7,7 +7,7 @@
     <Filter Include="Frontend">
       <UniqueIdentifier>{4b2f09af-ab58-4020-8d84-5c3f266d6b70}</UniqueIdentifier>
     </Filter>
-    <Filter Include="dlib">
+    <Filter Include="Backend\dlib">
       <UniqueIdentifier>{51420587-1cf7-433a-a092-d43a21aac24b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -24,9 +24,6 @@
     <ClCompile Include="Sources\main.cpp">
       <Filter>Frontend</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\MainWindow.cpp">
-      <Filter>Frontend</Filter>
-    </ClCompile>
     <ClCompile Include="Sources\OptimizationProblem.cpp">
       <Filter>Backend</Filter>
     </ClCompile>
@@ -39,17 +36,35 @@
     <ClCompile Include="Sources\TextGridReader.cpp">
       <Filter>Backend</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\TamModelF0.cpp">
+    <ClCompile Include="Sources\BobyqaOptimizer.cpp">
       <Filter>Backend</Filter>
     </ClCompile>
-    <ClCompile Include="Sources\BobyqaOptimizer.cpp">
+    <ClCompile Include="dlib\all\source.cpp">
+      <Filter>Backend\dlib</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\SearchSpacePage.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\RegularizationPage.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TamModelF0.cpp">
       <Filter>Backend</Filter>
     </ClCompile>
     <ClCompile Include="Sources\PlotRegion.cpp">
       <Filter>Frontend</Filter>
     </ClCompile>
-    <ClCompile Include="dlib\all\source.cpp">
-      <Filter>dlib</Filter>
+    <ClCompile Include="Sources\OptionsNotebook.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\MainWindow.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Graph.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\BasicPicture.cpp">
+      <Filter>Frontend</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,9 +89,6 @@
     <ClInclude Include="Sources\gui.h">
       <Filter>Frontend</Filter>
     </ClInclude>
-    <ClInclude Include="Sources\MainWindow.h">
-      <Filter>Frontend</Filter>
-    </ClInclude>
     <ClInclude Include="Sources\OptimizationProblem.h">
       <Filter>Backend</Filter>
     </ClInclude>
@@ -89,10 +101,28 @@
     <ClInclude Include="Sources\TextGridReader.h">
       <Filter>Backend</Filter>
     </ClInclude>
+    <ClInclude Include="Sources\SearchSpacePage.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\RegularizationPage.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
     <ClInclude Include="Sources\TamModelF0.h">
       <Filter>Backend</Filter>
     </ClInclude>
     <ClInclude Include="Sources\PlotRegion.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\OptionsNotebook.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\MainWindow.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Graph.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\BasicPicture.h">
       <Filter>Frontend</Filter>
     </ClInclude>
   </ItemGroup>
