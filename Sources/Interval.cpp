@@ -1,25 +1,32 @@
 #include "Interval.h"
 
-Interval::Interval(double xmin, double xmax, std::string name)
+Interval::Interval(double xmin, double xmax, std::string str)
 {
 	tmin = xmin;
 	tmax = xmax;
-	mark = name;
+	text = str;
 }
 
-double Interval::start()
+Interval::Interval()
+{
+	tmin = 0;
+	tmax = 0;
+	text = "";
+}
+
+double Interval::getStart()
 {
 	return this->tmin;
 }
 
-double Interval::end()
+double Interval::getEnd()
 {
 	return this->tmax;
 }
 
 std::string Interval::name()
 {
-	return this->mark;
+	return this->text;
 }
 
 void Interval::changeOffset(double offset)
@@ -30,5 +37,5 @@ void Interval::changeOffset(double offset)
 
 void Interval::changeText(std::string text)
 {
-	this->mark = text;
+	this->text = text;
 }

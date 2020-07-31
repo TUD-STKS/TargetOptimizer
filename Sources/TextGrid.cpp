@@ -1,83 +1,20 @@
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <algorithm>
+#include <regex>
 #include <stdlib.h>
 #include "TextGrid.h"
+#include "StringHelper.h"
 
 
-TextGrid::TextGrid(std::string name)
+TextGrid::TextGrid(double xmin, double xmax, int nTiers)
 {
-	mark = name;
-	n = 0;
-	tmin = 0;
-	tmax = 0;
+	tmin = xmin;
+	tmax = xmax;
+	numberOfTiers = nTiers;
 }
 
-int TextGrid::getNumberOfTiers()
-{
-	return this->n;
-}
-
-IntervalTier TextGrid::getIntervalTier(int i)
-{
-	return this->intervalTiers[i];
-}
-
-PointTier TextGrid::getPointTier(int i)
-{
-	return this->pointTiers[i];
-}
-
-double TextGrid::start()
-{
-	return this->tmin;
-}
-
-double TextGrid::end()
-{
-	return this->tmax;
-}
-
-std::string TextGrid::name()
-{
-	return this->mark;
-}
-
-void TextGrid::append(IntervalTier intervalTier)
-{
-	this->intervalTiers.push_back(intervalTier);
-	this->tmax = std::max(this->tmax, intervalTier.end());
-	this->tmin = std::min(this->tmin, intervalTier.start());
-	this->n = getNumberOfTiers();
-}
-
-void TextGrid::append(PointTier pointTier)
-{
-	this->pointTiers.push_back(pointTier);
-	this->tmax = std::max(this->tmax, pointTier.end());
-	this->tmin = std::min(this->tmin, pointTier.start());
-	this->n = getNumberOfTiers();
-}
-
-void TextGrid::changeOffset(double offset)
-{
-	this->tmin += offset;
-	this->tmax += offset;
-	for (auto&& intervalTier : this->intervalTiers) {
-		intervalTier.changeOffset(offset);
-	}
-	for (auto&& pointTier : this->pointTiers) {
-		pointTier.changeOffset(offset);
-	}
-}
-
-void TextGrid::changeTimes(double start, double end)
-{
-	this->tmin = start;
-	this->tmax = end;
-}
-
-void TextGrid::textGridReader(std::string inputFilename)
+TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 {
 	using namespace std;
 	ifstream inputFile;
@@ -85,84 +22,331 @@ void TextGrid::textGridReader(std::string inputFilename)
 		inputFile.open(inputFilename);
 		if (inputFile.is_open()) {
 			string line;
-			for (int lineCnt = 1; lineCnt < 4; lineCnt++) {
+			// header
+			for (int lineCnt = 1; lineCnt <= 2; lineCnt++) {
 				getline(inputFile, line);
 			}
+			// empty lines
 			getline(inputFile, line);
+			while (line == "") {
+				getline(inputFile, line);
+			}
 			vector<string> lineElements = split(trim(line));
 			if (lineElements.size() == 3 && lineElements[0] == "xmin") {
-				textGridFormat = "long";
-				cout << "TextGrid is long!" << endl;
+				TextGrid tg = LongTextGridFactory(inputFile, lineElements);
+				cout << "TextGridFile has format long!" << endl;
+				return tg;
 			}
-			else if (lineElements.size() == 1 && lineElements[0] != "" ) {
-				textGridFormat = "short";
-				cout << "TextGrid is short!" << endl;
+			else if (lineElements.size() == 1 && lineElements[0] != "") {
+				TextGrid tg = ShortTextGridFactory(inputFile, lineElements);
+				cout << "TextGridFile has format short!" << endl;
+				return tg;
 			}
 			else {
-				cout << "TextGridFile has an unknown file format!" << endl;
+				TextGrid tg = BinaryTextGridFactory(inputFile, lineElements);
+				cout << "TextGridFile has unknown format, probably binary!" << endl;
+				return tg;
 			}
-			this->tmin = stod(lineElements[0].c_str());
-			getline(inputFile, line);
-			this->tmax = stod(rtrim(line).c_str());
-			getline(inputFile, line);
-			getline(inputFile, line);
-			this->n = stoi(rtrim(line).c_str());
-			for (int tierNumber = 1; tierNumber <= this->n; tierNumber++) {
-				getline(inputFile, line);
-				getline(inputFile, line);
-				if (trim(regex_replace(line, regex("\""), "\t")) == "IntervalTier") {
-					getline(inputFile, line);
-					string tierName = trim(regex_replace(line, regex("\""), "\t"));
-					getline(inputFile, line);
-					double tierMin = stod(trim(line).c_str());
-					getline(inputFile, line);
-					double tierMax = stod(trim(line).c_str());
-					IntervalTier tmpTier = IntervalTier(tierMin, tierMax, tierName);
-					getline(inputFile, line);
-					tmpTier.n = stoi(rtrim(line).c_str());
-					for (int intervalNumber = 1; intervalNumber <= tmpTier.n; intervalNumber++) {
-						getline(inputFile, line);
-						double intervalMin = stod(trim(line).c_str());
-						getline(inputFile, line);
-						double intervalMax = stod(trim(line).c_str());
-						getline(inputFile, line);
-						string intervalMark = trim(regex_replace(line, regex("\""), "\t"));
-						tmpTier.append(Interval(intervalMin, intervalMax, intervalMark));
-					}
-					this->append(tmpTier);
-					int a = 10;
-				}
-				
-			}
-
-			inputFile.close();
 		}
 	}
 	catch (ifstream::failure e) {
-		cerr << "Exception opening/reading/closing file!\n";
+		cerr << "Exception opening/reading/closing file! " << e.what() << endl;
 	}
 }
 
-void TextGrid::textGridWriter(std::string outputFilename)
+TextGrid TextGrid::BinaryTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements)
 {
-	int dummy = 10;
+	TextGrid tgb = TextGrid(0, 0, 0);
+
+	return tgb;
 }
 
-std::vector<std::string> TextGrid::split(std::string stringFromLine)
+TextGrid TextGrid::ShortTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements)
 {
-	int element = 0;
-	std::vector<std::string> tmpLineElements;
-	tmpLineElements.push_back("");
-	for (auto&& character : stringFromLine) {
-		if (!isspace(character)) {
-			tmpLineElements[element] += character;
+	using namespace std;
+	string line;
+
+	TextGrid tgs = TextGrid(0, 0, 0);
+	// TMIN
+	tgs.tmin = stod(lineElements[0].c_str());
+	// Empty Lines
+	getline(file, line);
+	while (line == "") {
+		getline(file, line);
+	}
+	// TMAX
+	tgs.tmax = stod(rtrim(line).c_str());
+	// Empty Lines
+	getline(file, line);
+	while (line == "") {
+		getline(file, line);
+	}
+	// <exists>
+	getline(file, line);
+	// Empty Lines
+	while (line == "") {
+		getline(file, line);
+	}
+	// NUMBER OF TIERS
+	int numberOfTiersToAdd = stoi(rtrim(line).c_str());
+	for (int tierNumber = 1; tierNumber <= numberOfTiersToAdd; tierNumber++) {
+		getline(file, line);
+		while (line == "") {
+			getline(file, line);
 		}
-		else {
-			if (isspace(character) && tmpLineElements[element] != "") {
-				tmpLineElements.push_back("");
-				element++;
+		// IntervalTier
+		if (trim(regex_replace(line, regex("\""), "\t")) == "IntervalTier") {
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
 			}
+			string tierName = trim(regex_replace(line, regex("\""), "\t"));
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMin = stod(trim(line).c_str());
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMax = stod(trim(line).c_str());
+			IntervalTier tmpTier = IntervalTier(tierMin, tierMax, tierName);
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			// NUMBER OF INTERVALS IN TIER
+			int numberOfIntervalsToAdd = stoi(rtrim(line).c_str());
+			for (int intervalNumber = 1; intervalNumber <= numberOfIntervalsToAdd; intervalNumber++) {
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// ITMIN
+				double intervalMin = stod(trim(line).c_str());
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// ITMAX
+				double intervalMax = stod(trim(line).c_str());
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// ITEXT
+				string intervalText = trim(regex_replace(line, regex("\""), "\t"));
+				tmpTier.append(Interval(intervalMin, intervalMax, intervalText));
+			}
+			tgs.append(tmpTier);
+		}
+		// PointTier
+		else if (trim(regex_replace(line, regex("\""), "\t")) == "TextTier") {
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			string tierName = trim(regex_replace(line, regex("\""), "\t"));
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMin = stod(trim(line).c_str());
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMax = stod(trim(line).c_str());
+			PointTier tmpTier = PointTier(tierMin, tierMax, tierName);
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			// NUMBER OF POINTS IN TIER
+			int numberOfPointsToAdd = stoi(rtrim(line).c_str());
+			for (int pointN = 1; pointN <= numberOfPointsToAdd; pointN++) {
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// PNUMBER
+				double pointNumber = stod(trim(line).c_str());
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// PMARK
+				string pointMark = trim(regex_replace(line, regex("\""), "\t"));
+				tmpTier.append(Point(pointNumber, pointMark));
+			}
+			tgs.append(tmpTier);
 		}
 	}
-	return tmpLineElements;
+	file.close();
+	return tgs;
+}
+
+TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements)
+{
+	using namespace std;
+	string line;
+
+	TextGrid tgl = TextGrid(0, 0, 0);
+	// TMIN
+	tgl.tmin = stod(lineElements[2].c_str());
+	// Empty Lines
+	getline(file, line);
+	while (line == "") {
+		getline(file, line);
+	}
+	// TMAX
+	lineElements = split(trim(line), "=");
+	tgl.tmax = stod(lineElements[2].c_str());
+	// Empty Lines
+	getline(file, line);
+	while (line == "") {
+		getline(file, line);
+	}
+	// <exists>
+	getline(file, line);
+	// Empty Lines
+	while (line == "") {
+		getline(file, line);
+	}
+	// NUMBER OF TIERS
+	int numberOfTiersToAdd = stoi(split(trim(line).c_str(), "=")[2]);
+	// item []:
+	getline(file, line);
+	// Empty Lines
+	while (line == "") {
+		getline(file, line);
+	}
+	for (int tierNumber = 1; tierNumber <= numberOfTiersToAdd; tierNumber++) {
+		// item [x]:
+		getline(file, line);
+		while (line == "") {
+			getline(file, line);
+		}
+		getline(file, line);
+		// IntervalTier
+		if (split(trim(line).c_str(), "=")[2] == "\"IntervalTier\"") {
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			string tierName = split(trim(regex_replace(line, regex("\""), "\t")), "=")[2];
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMin = stod(split(trim(line).c_str(), "=")[2]);
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMax = stod(split(trim(line).c_str(), "=")[2]);
+			IntervalTier tmpTier = IntervalTier(tierMin, tierMax, tierName);
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			int numberOfIntervalsToAdd = stoi(split(trim(line).c_str(), "=")[2]);
+			for (int intervalNumber = 1; intervalNumber <= numberOfIntervalsToAdd; intervalNumber++) {
+				// intervals [x]:
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// IMIN
+				double intervalMin = stod(split(trim(line).c_str(), "=")[2]);
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// IMAX
+				double intervalMax = stod(split(trim(line).c_str(), "=")[2]);
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// ITEXT
+				string intervalText = split(trim(regex_replace(line, regex("\""), "\t")), "=")[2];
+				tmpTier.append(Interval(intervalMin, intervalMax, intervalText));
+			}
+			tgl.append(tmpTier);
+		}
+		// PointTier
+		else if (split(trim(line).c_str(), "=")[2] == "\"TextTier\"") {
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			string tierName = split(trim(regex_replace(line, regex("\""), "\t")), "=")[2];
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMin = stod(split(trim(line).c_str(), "=")[2]);
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			double tierMax = stod(split(trim(line).c_str(), "=")[2]);
+			PointTier tmpTier = PointTier(tierMin, tierMax, tierName);
+			getline(file, line);
+			while (line == "") {
+				getline(file, line);
+			}
+			int numberOfPointsToAdd = stoi(split(trim(line).c_str(), "=")[2]);
+			for (int pointN = 1; pointN <= numberOfPointsToAdd; pointN++) {
+				// points [x]:
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// PNUMBER
+				double pointNumber = stod(split(trim(line).c_str(), "=")[2]);
+				getline(file, line);
+				while (line == "") {
+					getline(file, line);
+				}
+				// PMARK
+				string pointMark = split(trim(regex_replace(line, regex("\""), "\t")), "=")[2];
+				tmpTier.append(Point(pointNumber, pointMark));
+			}
+			tgl.append(tmpTier);
+		}
+	}
+
+	return tgl;
+}
+
+void TextGrid::append(IntervalTier intervalTier)
+{
+	this->tierElements.emplace_back(intervalTier);
+	this->tmax = std::max(this->tmax, intervalTier.getEndingTime());
+	this->tmin = std::min(this->tmin, intervalTier.getStartingTime());
+	this->numberOfTiers = getNumberOfTiers();
+}
+
+void TextGrid::append(PointTier pointTier)
+{
+	this->tierElements.emplace_back(pointTier);
+	this->tmax = std::max(this->tmax, pointTier.getEndingTime());
+	this->tmin = std::min(this->tmin, pointTier.getStartingTime());
+	this->numberOfTiers = getNumberOfTiers();
+}
+
+int TextGrid::getNumberOfTiers()
+{
+	return this->tierElements.size();
 }

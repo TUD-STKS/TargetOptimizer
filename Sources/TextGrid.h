@@ -1,47 +1,35 @@
 #include <string>
-#include <regex>
-#include "IntervalTier.h"
-#include "PointTier.h"
+#include <vector>
+#include <variant>
+#include "Tier.h"
 
 class TextGrid
 {
 public:
-	// constructors
-	TextGrid(std::string name = "");
+	TextGrid(double xmin, double xmax, int nTiers);
+
+	static TextGrid readTextGridFile(const std::string& inputFilename);
+	static bool writeTextGridFile(const TextGrid& tg, const std::string& outputFilename, const std::string& format);
+
+			
+	auto getTier(int index) { return tierElements[index]; };
 
 	int getNumberOfTiers();
-	IntervalTier getIntervalTier(int i);
-	PointTier getPointTier(int i);
-	double start();
-	double end();
-	std::string name();
 	void append(IntervalTier intervalTier);
 	void append(PointTier pointTier);
-	void changeOffset(double offset);
-	void changeTimes(double start, double end);
 
-	void textGridReader(std::string inputFilename);
-	void textGridWriter(std::string outputFilename);
+	auto operator[](int index) { return getTier(index); };
 
 private:
+	static TextGrid BinaryTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
+	static TextGrid ShortTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
+	static TextGrid LongTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);		
+	
+
 	double tmin;
 	double tmax;
-	int n;
-	std::string mark;
-	std::vector<IntervalTier> intervalTiers;
-	std::vector<PointTier> pointTiers;
-	std::string textGridFormat;
+	int numberOfTiers;
 
-	std::string ltrim(const std::string& s) {
-		return std::regex_replace(s, std::regex("^\\s+"), std::string(""));
-	}
-	std::string rtrim(const std::string& s) {
-		return std::regex_replace(s, std::regex("\\s+$"), std::string(""));
-	}
-	std::string trim(const std::string& s) {
-		return ltrim(rtrim(s));
-	}
 
-	std::vector<std::string> split(std::string stringFromLine);
+	std::vector<std::variant<IntervalTier, PointTier>> tierElements;
 };
-

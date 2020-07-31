@@ -4,9 +4,10 @@ class Interval {
 public:
 	// constructors
 	Interval(double xmin, double xmax, std::string name = "");
+	Interval();
 
-	double start();
-	double end();
+	double getStart();
+	double getEnd();
 	std::string name();
 	void changeOffset(double offset);
 	void changeText(std::string text);
@@ -14,5 +15,5 @@ public:
 private:
 	double tmin;
 	double tmax;
-	std::string mark;
+	std::string text;
 };

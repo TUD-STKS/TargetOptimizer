@@ -1,15 +1,18 @@
+#include <string>
+
 class Point
 {
 public:
-	Point(double time, double value);
+	Point(double time, std::string label);
 
-	double time();
-	double mark();
+	double getStart();
+	double getEnd();
+	std::string getMark();
 	void changeOffset(double offset);
+	void changeText(std::string newText);
 
 private:
-	double x;
-	double y;
-
+	double number;
+	std::string mark;
 };
 

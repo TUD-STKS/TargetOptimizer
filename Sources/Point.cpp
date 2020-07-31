@@ -1,22 +1,33 @@
+#include <iostream>
 #include "Point.h"
 
-Point::Point(double time, double value)
+Point::Point(double time, std::string label)
 {
-	x = time;
-	y = value;
+	number = time;
+	mark = label;
 }
 
-double Point::time()
+double Point::getStart()
 {
-	return this->x;
+	return this->number;
 }
 
-double Point::mark()
+double Point::getEnd()
 {
-	return this->y;
+	return this->number;
+}
+
+std::string Point::getMark()
+{
+	return this->mark;
 }
 
 void Point::changeOffset(double offset)
 {
-	this->x += offset;
+	this->number += offset;
+}
+
+void Point::changeText(std::string newText)
+{
+	this->mark = newText;
 }
