@@ -31,6 +31,12 @@ SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(pare
 	optionsSizer->Add(plusMinus, plusMinusFlags);
 	tauDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("5.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 5, 1);
 	optionsSizer->Add(tauDeltaCtrl, valueFlags);
+	label = new wxStaticText(this, wxID_ANY, wxT("boundary delta [ms]"));
+	optionsSizer->Add(label, labelFlags);
+	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
+	optionsSizer->Add(plusMinus, plusMinusFlags);
+	boundaryDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 0, 1);
+	optionsSizer->Add(boundaryDeltaCtrl, valueFlags);
 	this->SetSizer(optionsSizer);
 }
 
@@ -40,6 +46,7 @@ SearchSpaceParameters SearchSpacePage::getParameters()
 	params.slopeDelta = slopeDeltaCtrl->GetValue();
 	params.offsetDelta = offsetDeltaCtrl->GetValue();
 	params.tauDelta = tauDeltaCtrl->GetValue();
+	params.boundaryDelta = boundaryDeltaCtrl->GetValue();
 	return params;
 }
 

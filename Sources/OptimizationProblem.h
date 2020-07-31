@@ -10,6 +10,7 @@ struct ParameterSet
 	double deltaSlope;
 	double deltaOffset;
 	double deltaTau;
+	double deltaBoundary;
 	double lambda; // regularisation coefficient
 	double weightSlope;
 	double weightOffset;

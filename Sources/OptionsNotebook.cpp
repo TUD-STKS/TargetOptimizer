@@ -10,6 +10,7 @@ ParameterSet OptionsNotebook::getOptions()
 	params.deltaOffset = searchParams.offsetDelta;
 	params.deltaSlope = searchParams.slopeDelta;
 	params.deltaTau = searchParams.tauDelta;
+	params.deltaBoundary = searchParams.boundaryDelta;
 	params.lambda = regularizationParams.lambda;
 	params.weightOffset = regularizationParams.weightOffset;
 	params.weightSlope = regularizationParams.weightSlope;

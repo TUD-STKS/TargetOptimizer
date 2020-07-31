@@ -23,6 +23,7 @@ private:
 	wxSpinCtrlDouble *slopeDeltaCtrl;
 	wxSpinCtrlDouble *offsetDeltaCtrl;
 	wxSpinCtrlDouble *tauDeltaCtrl;
+	wxSpinCtrlDouble *boundaryDeltaCtrl;
 };
 
 #endif
