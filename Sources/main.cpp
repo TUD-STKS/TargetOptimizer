@@ -2,6 +2,7 @@
 #include <string>
 #include <dlib/cmd_line_parser.h>
 #include "gui.h"
+#include "dataio.h"
 #include "BobyqaOptimizer.h"
 #include "TextGridReader.h"
 
