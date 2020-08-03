@@ -137,20 +137,20 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	//// The notebook with optimization options
 	//targetOptions = new OptionsNotebook(this, wxID_ANY);
 	//targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
-	resultsTable = new wxGrid(this, IDC_TARGET_DISPLAY);
-	resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-	resultsTable->EnableEditing(false);
-	resultsTable->CreateGrid(4, 1);
-	resultsTable->SetRowLabelValue(0, wxT("Slope [st/s]"));
-	resultsTable->SetRowLabelValue(1, wxT("Offset [st]"));
-	resultsTable->SetRowLabelValue(2, wxT("Tau [ms]"));
-	resultsTable->SetRowLabelValue(3, wxT("Duration [s]"));
-	resultsTable->SetColLabelValue(0, wxEmptyString);
-	resultsTable->SetRowLabelSize(wxGRID_AUTOSIZE);
-	resultsTable->SetRowLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
-	resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
-	resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
-	resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
+	//resultsTable = new wxGrid(this, IDC_TARGET_DISPLAY);
+	//resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+	//resultsTable->EnableEditing(false);
+	//resultsTable->CreateGrid(4, 1);
+	//resultsTable->SetRowLabelValue(0, wxT("Slope [st/s]"));
+	//resultsTable->SetRowLabelValue(1, wxT("Offset [st]"));
+	//resultsTable->SetRowLabelValue(2, wxT("Tau [ms]"));
+	//resultsTable->SetRowLabelValue(3, wxT("Duration [s]"));
+	//resultsTable->SetColLabelValue(0, wxEmptyString);
+	//resultsTable->SetRowLabelSize(wxGRID_AUTOSIZE);
+	//resultsTable->SetRowLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
+	//resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
+	//resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
+	//resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
 	//targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
 
@@ -178,7 +178,7 @@ void MainWindow::clear()
 	isPitchTierLoaded = false;
 	isOptimized = false;
 
-	resultsTable->ClearGrid();
+	//resultsTable->ClearGrid();
 	this->SetTitle("Target Optimizer");
 }
 
@@ -351,29 +351,37 @@ void MainWindow::updateWidgets()
 	this->GetMenuBar()->Enable(IDM_SAVE_PITCHTIER, isOptimized);
 	
 	// The pitch target display is only available after optimization
-	static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
+	//static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
+	targetOptions->boundaryPage->Enable(isTextGridLoaded);
+
+	if (!Data::getInstance().syllableBoundaries.empty())
+	{
+		//std::cout << Data::getInstance().syllableBoundaries.at(0) << std::endl;
+		targetOptions->boundaryPage->setEntries( Data::getInstance().syllableBoundaries );
+	}
+
+	targetOptions->resultPage->Enable(isOptimized);
 
 	plotRegion->Refresh();
 
 	// Add optimized targets to table
 	if (!Data::getInstance().pitchTargets.empty())
 	{
-		// Resize result table to correct number of columns
-		int colDifference = Data::getInstance().pitchTargets.size() - resultsTable->GetNumberCols();
-		if (colDifference > 0) { resultsTable->InsertCols(0, colDifference); }
-		if (colDifference < 0) { resultsTable->DeleteCols(0, -1*colDifference); }
-
-		int col = 0;
-		for (const auto& target : Data::getInstance().pitchTargets)
-		{
-			resultsTable->SetColLabelValue(col, wxT("Target ") + wxString::Format(wxT("%i"), col));
-			resultsTable->SetCellValue(wxGridCellCoords(0, col), wxString::Format(wxT("%.3f"), target.slope));
-			resultsTable->SetCellValue(wxGridCellCoords(1, col), wxString::Format(wxT("%.3f"), target.offset));
-			resultsTable->SetCellValue(wxGridCellCoords(2, col), wxString::Format(wxT("%.3f"), target.tau));
-			resultsTable->SetCellValue(wxGridCellCoords(3, col), wxString::Format(wxT("%.3f"), target.duration));
-
-			col++;
-		}
+		targetOptions->resultPage->setEntries( Data::getInstance().pitchTargets );
+//		// Resize result table to correct number of columns
+//		int colDifference = Data::getInstance().pitchTargets.size() - resultsTable->GetNumberCols();
+//		if (colDifference > 0) { resultsTable->InsertCols(0, colDifference); }
+//		if (colDifference < 0) { resultsTable->DeleteCols(0, -1*colDifference); }
+//		int col = 0;
+//		for (const auto& target : Data::getInstance().pitchTargets)
+//		{
+//			resultsTable->SetColLabelValue(col, wxT("Target ") + wxString::Format(wxT("%i"), col));
+//			resultsTable->SetCellValue(wxGridCellCoords(0, col), wxString::Format(wxT("%.3f"), target.slope));
+//			resultsTable->SetCellValue(wxGridCellCoords(1, col), wxString::Format(wxT("%.3f"), target.offset));
+//			resultsTable->SetCellValue(wxGridCellCoords(2, col), wxString::Format(wxT("%.3f"), target.tau));
+//			resultsTable->SetCellValue(wxGridCellCoords(3, col), wxString::Format(wxT("%.3f"), target.duration));
+//			col++;
+//		}
 	}
 
 }

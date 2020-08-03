@@ -4,6 +4,8 @@
 #include <wx/wx.h>
 //#include <wx/spinctrl.h>
 #include <wx/grid.h>
+#include <vector>
+#include "Data.h"
 
 struct ResultParameters
 {
@@ -20,6 +22,7 @@ public:
 	ResultPage(wxWindow *parent, wxWindowID id);
 	
 	ResultParameters getParameters();
+	void setEntries( std::vector<PitchTarget> );
 private:
 	//wxSpinCtrlDouble *slopeDeltaCtrl;
 	//wxSpinCtrlDouble *offsetDeltaCtrl;

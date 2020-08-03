@@ -4,6 +4,8 @@
 #include <wx/wx.h>
 //#include <wx/spinctrl.h>
 #include <wx/grid.h>
+#include <vector>
+#include "Data.h"
 
 struct BoundaryParameters
 {
@@ -20,6 +22,7 @@ public:
 	BoundaryPage(wxWindow *parent, wxWindowID id);
 	
 	BoundaryParameters getParameters();
+	void setEntries( BoundaryVector );
 private:
 	//wxSpinCtrlDouble *slopeDeltaCtrl;
 	//wxSpinCtrlDouble *offsetDeltaCtrl;
