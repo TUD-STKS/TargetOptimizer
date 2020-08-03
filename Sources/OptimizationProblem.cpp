@@ -87,18 +87,21 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 {
 	// convert data
 	TargetVector targets;
-	for (unsigned i = 0; i < arg.size() / 3; ++i)
+	BoundaryVector boundaries;
+	for (unsigned i = 0; i < arg.size() / 4; ++i)
 	{
+		boundaries.push_back(m_bounds[i]);// + arg(4 * i +3));
 		PitchTarget pt;
-		pt.slope = arg(3 * i + 0);
-		pt.offset = arg(3 * i + 1);
-		pt.tau = arg(3 * i + 2);
+		pt.slope = arg(4 * i + 0);
+		pt.offset = arg(4 * i + 1);
+		pt.tau = arg(4 * i + 2);
 		pt.duration = m_bounds[i + 1] - m_bounds[i];
 		targets.push_back(pt);
 	}
 
 	// create model f0
-	TamModelF0 tamF0(m_bounds, m_originalF0[0].value);
+	//TamModelF0 tamF0(m_bounds, m_originalF0[0].value);
+	TamModelF0 tamF0(boundaries, m_originalF0[0].value);
 	tamF0.setPitchTargets(targets);
 
 	return costFunction(tamF0);

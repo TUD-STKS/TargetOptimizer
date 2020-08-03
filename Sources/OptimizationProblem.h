@@ -41,6 +41,7 @@ public:
 
 	// operator called by optimizer
 	double operator() (const DlibVector& arg) const;
+	//BoundaryVector m_bounds;
 
 private:
 	// private member functions
@@ -52,6 +53,7 @@ private:
 	ParameterSet m_parameters;
 	TimeSignal m_originalF0;
 	BoundaryVector m_bounds;
+	//BoundaryVector m_bounds;
 
 	// store result
 	TamModelF0 m_modelOptimalF0;

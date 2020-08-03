@@ -5,6 +5,7 @@
 #include <wx/grid.h>
 #include "PlotRegion.h"
 #include "OptionsNotebook.h"
+#include "TargetsNotebook.h"
 #include "Data.h"
 #include "OptimizationProblem.h"
 
@@ -44,6 +45,8 @@ private:
         Data::getInstance().optimalF0
         )};
     OptionsNotebook *optimizationOptions;
+    OptionsNotebook *optimizationOptions2;
+    TargetsNotebook *targetOptions;
     wxGrid *resultsTable;
 
     wxDECLARE_EVENT_TABLE();

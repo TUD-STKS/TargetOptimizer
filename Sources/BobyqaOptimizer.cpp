@@ -12,27 +12,31 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	double mmin = ps.meanSlope - ps.deltaSlope;
 	double bmin = ps.meanOffset - ps.deltaOffset;
 	double tmin = ps.meanTau - ps.deltaTau;
+	double boundary_min = -1*ps.deltaBoundary; // adding the boundary optim
 	double mmax = ps.meanSlope + ps.deltaSlope;
 	double bmax = ps.meanOffset + ps.deltaOffset;
 	double tmax = ps.meanTau + ps.deltaTau;
+	double boundary_max = ps.deltaBoundary; // adding the boundary optim
 
 	DlibVector lowerBound, upperBound;
-	lowerBound.set_size(numTar * 3);
-	upperBound.set_size(numTar * 3);
+	lowerBound.set_size(numTar * 4);
+	upperBound.set_size(numTar * 4);
 
 	for (unsigned i = 0; i < numTar; ++i)
 	{
-		lowerBound(3 * i + 0) = mmin;
-		lowerBound(3 * i + 1) = bmin;
-		lowerBound(3 * i + 2) = tmin;
-		upperBound(3 * i + 0) = mmax;
-		upperBound(3 * i + 1) = bmax;
-		upperBound(3 * i + 2) = tmax;
+		lowerBound(4 * i + 0) = mmin;
+		lowerBound(4 * i + 1) = bmin;
+		lowerBound(4 * i + 2) = tmin;
+		lowerBound(4 * i + 3) = boundary_min;
+		upperBound(4 * i + 0) = mmax;
+		upperBound(4 * i + 1) = bmax;
+		upperBound(4 * i + 2) = tmax;
+		upperBound(4 * i + 3) = boundary_max;
 	}
 
 	// optmization setup
 	long npt(2 * lowerBound.size() + 1);	// number of interpolation points
-	const double rho_begin = (std::min(std::min(mmax - mmin, bmax - bmin), tmax - tmin) - 1.0) / 2.0; // initial trust region radius
+	const double rho_begin = (std::min(std::min(std::min(mmax - mmin, bmax - bmin), tmax - tmin), boundary_max-boundary_min) - 1.0) / 2.0; // initial trust region radius
 	const double rho_end(1e-6); // stopping trust region radius -> accuracy
 	const long max_f_evals(1e5); // max number of objective function evaluations
 
@@ -50,12 +54,13 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	{
 		// random initialization
 		DlibVector x;
-		x.set_size(numTar * 3);
+		x.set_size(numTar * 4);
 		for (unsigned i = 0; i < numTar; ++i)
 		{
-			x(3 * i + 0) = getRandomValue(mmin, mmax);
-			x(3 * i + 1) = getRandomValue(bmin, bmax);
-			x(3 * i + 2) = getRandomValue(tmin, tmax);
+			x(4 * i + 0) = getRandomValue(mmin, mmax);
+			x(4 * i + 1) = getRandomValue(bmin, bmax);
+			x(4 * i + 2) = getRandomValue(tmin, tmax);
+			x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
 		}
 
 		try
@@ -90,9 +95,9 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	for (unsigned i = 0; i < numTar; ++i)
 	{
 		PitchTarget pt;
-		pt.slope = xtmp(3 * i + 0);
-		pt.offset = xtmp(3 * i + 1);
-		pt.tau = xtmp(3 * i + 2);
+		pt.slope = xtmp(4 * i + 0);
+		pt.offset = xtmp(4 * i + 1);
+		pt.tau = xtmp(4 * i + 2);
 		pt.duration = op.getPitchTargets()[i].duration;
 		opt.push_back(pt);
 	}

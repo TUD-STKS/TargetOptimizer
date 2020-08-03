@@ -4,6 +4,7 @@
 #include <wx/wx.h>
 #include <wx/spinctrl.h>
 
+
 struct SearchSpaceParameters
 {
 	double slopeDelta{ 50 };
@@ -24,6 +25,7 @@ private:
 	wxSpinCtrlDouble *offsetDeltaCtrl;
 	wxSpinCtrlDouble *tauDeltaCtrl;
 	wxSpinCtrlDouble *boundaryDeltaCtrl;
+
 };
 
 #endif

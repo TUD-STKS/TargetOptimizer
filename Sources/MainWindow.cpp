@@ -32,6 +32,9 @@ static const int IDB_CLEAR = wxNewId();
 /* Control IDs */
 static const int IDC_TARGET_DISPLAY = wxNewId();
 
+static const int IDC_BOUNDARY_OPTIONS = wxNewId();
+static const int IDC_RESULT_DISPLAY = wxNewId();
+
 /* */
 static const int IDP_SEARCH_OPTIONS = wxNewId();
 static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
@@ -127,8 +130,13 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 
 	bottomSizer->Add(actionsSizer, wxSizerFlags().Border(wxALL, 5).Expand());
 
+	
+
 	// Targets
 	wxStaticBoxSizer* targetsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
+	//// The notebook with optimization options
+	//targetOptions = new OptionsNotebook(this, wxID_ANY);
+	//targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
 	resultsTable = new wxGrid(this, IDC_TARGET_DISPLAY);
 	resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	resultsTable->EnableEditing(false);
@@ -143,8 +151,15 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
 	resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
 	resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
-	
-	targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
+	//targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
+
+
+	//wxStaticBoxSizer* optionsSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
+	//// The notebook with optimization options
+	targetOptions = new TargetsNotebook(this, wxID_ANY);
+	targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
+	//bottomSizer->Add(optionsSizer2, wxSizerFlags().Border(wxALL, 5).Expand());
+
 
 	bottomSizer->Add(targetsSizer, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
 	
