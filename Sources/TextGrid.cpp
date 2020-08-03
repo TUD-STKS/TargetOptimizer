@@ -7,13 +7,6 @@
 #include "StringHelper.h"
 
 
-TextGrid::TextGrid(double xmin, double xmax, int nTiers)
-{
-	tmin = xmin;
-	tmax = xmax;
-	numberOfTiers = nTiers;
-}
-
 TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 {
 	using namespace std;
@@ -330,23 +323,3 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 	return tgl;
 }
 
-void TextGrid::append(IntervalTier intervalTier)
-{
-	this->tierElements.emplace_back(intervalTier);
-	this->tmax = std::max(this->tmax, intervalTier.getEndingTime());
-	this->tmin = std::min(this->tmin, intervalTier.getStartingTime());
-	this->numberOfTiers = getNumberOfTiers();
-}
-
-void TextGrid::append(PointTier pointTier)
-{
-	this->tierElements.emplace_back(pointTier);
-	this->tmax = std::max(this->tmax, pointTier.getEndingTime());
-	this->tmin = std::min(this->tmin, pointTier.getStartingTime());
-	this->numberOfTiers = getNumberOfTiers();
-}
-
-int TextGrid::getNumberOfTiers()
-{
-	return this->tierElements.size();
-}

@@ -3,15 +3,12 @@
 class Point
 {
 public:
-	Point(double time, std::string label);
+	Point(double number, std::string mark);
 
 	double getStart();
 	double getEnd();
-	std::string getMark();
-	void changeOffset(double offset);
-	void changeText(std::string newText);
 
-private:
+public:
 	double number;
 	std::string mark;
 };

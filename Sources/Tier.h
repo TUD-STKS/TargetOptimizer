@@ -10,55 +10,44 @@
 
 template<class TierType> class Tier;
 
-typedef Tier<Interval>	IntervalTier;
-typedef Tier<Point>		PointTier;
-
 template<class TierType> class Tier {
 
 public:
-	Tier(double xmin, double xmax, std::string str);	
+	Tier() = delete;
+	// What happens to copy constructor? Delete if necessary
+	Tier(std::string str);	
 
 	void append(TierType element);
-	int getNumberOfElements();
+	int size();
 	TierType& getElement(int i);
-	std::string getName();
-	void renameTier(std::string newName);
-	void renameElement(int i, std::string newName);
+	bool setElementStart(int elementIndex, double newStart);
+	bool setElementEnd(int elementIndex, double newEnd);
 	double getStartingTime();
 	double getEndingTime();
 
-	auto operator[](int index) { return getElement(index); };
+public:
+	std::string name;
 
-	int numberOfElements;
+	auto operator[](int index) { return getElement(index); };
 
 private:
 	std::vector<TierType> elements;
-	double tmin; 
-	double tmax;
-	std::string name;	
 };
 
 template<class TierType>
-inline Tier<TierType>::Tier(double xmin, double xmax, std::string str)
+inline Tier<TierType>::Tier(std::string str)
 {
-	tmin = xmin;
-	tmax = xmax;
 	name = str;
-
-	numberOfElements = 0;
 }
 
 template<class TierType>
 inline void Tier<TierType>::append(TierType element)
 {
 	this->elements.push_back(element);
-	this->tmax = std::max(element.getEnd(), this->tmax);
-	this->tmin = std::min(element.getStart(), this->tmin);
-	this->numberOfElements = getNumberOfElements();
 }
 
 template<class TierType>
-inline int Tier<TierType>::getNumberOfElements()
+inline int Tier<TierType>::size()
 {
 	return this->elements.size();
 }
@@ -66,40 +55,31 @@ inline int Tier<TierType>::getNumberOfElements()
 template<class TierType>
 inline TierType& Tier<TierType>::getElement(int i)
 {
-	try {
-		return this->elements.at(i);
-	}
-	catch (const std::out_of_range& oor) {
-		std::cerr << "Out of range error: " << oor.what() << '\n';
-	}	
+	return this->elements.at(i);
 }
 
 template<class TierType>
-inline std::string Tier<TierType>::getName()
+inline bool Tier<TierType>::setElementStart(int elementIndex, double newStart)
 {
-	return this->name;
+	//TODO: Move end of previous element and start of selected element
+	return false;
 }
 
 template<class TierType>
-inline void Tier<TierType>::renameTier(std::string newName)
+inline bool Tier<TierType>::setElementEnd(int elementIndex, double newEnd)
 {
-	this->name = newName;
-}
-
-template<class TierType>
-inline void Tier<TierType>::renameElement(int i, std::string newName)
-{
-	this->getElement(i).changeText(newName);
+	//TODO: Move end of selected element and start of next element
+	return false;
 }
 
 template<class TierType>
 inline double Tier<TierType>::getStartingTime()
 {
-	return this->tmin;
+	return std::min(elements.begin()->getStart(), elements.end()->getStart());
 }
 
 template<class TierType>
 inline double Tier<TierType>::getEndingTime()
 {
-	return this->tmax;
+	return std::max(elements.begin()->getEnd(), elements.end()->getEnd());
 }

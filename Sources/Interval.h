@@ -3,17 +3,23 @@
 class Interval {
 public:
 	// constructors
-	Interval(double xmin, double xmax, std::string name = "");
-	Interval();
+	Interval() = delete;
+	Interval(double tmin, double tmax, std::string text);	
 
 	double getStart();
 	double getEnd();
-	std::string name();
 	void changeOffset(double offset);
-	void changeText(std::string text);
+
+public:
+	std::string text;
+
+private:
+	//TODO: Allow Tier access to these functions (friend?)
+	bool setStart(double newStart);
+	bool setEnd(double newEnd);
 
 private:
 	double tmin;
 	double tmax;
-	std::string text;
+	
 };
