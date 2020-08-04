@@ -34,7 +34,7 @@ SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(pare
 	optionsSizer->Add(label, labelFlags);
 	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
 	optionsSizer->Add(plusMinus, plusMinusFlags);
-	boundaryDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("5.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 5, 1);
+	boundaryDeltaCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxT("40.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 40, 1);
 	optionsSizer->Add(boundaryDeltaCtrl, valueFlags);
 	this->SetSizer(optionsSizer);
 }

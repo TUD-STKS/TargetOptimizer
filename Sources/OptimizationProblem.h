@@ -30,11 +30,12 @@ public:
 	OptimizationProblem(const ParameterSet& parameters, const TimeSignal& originalF0, const BoundaryVector& bounds);
 
 	// public member functions
-	void setOptimum(const TargetVector& targets);
+	void setOptimum(const BoundaryVector& boundaries, const TargetVector& targets);
 
 	ParameterSet getParameters() const;
 	TimeSignal getModelF0() const;
 	TargetVector getPitchTargets() const;
+	BoundaryVector getBoundaries() const;
 	Sample getOnset() const;
 	double getCorrelationCoefficient() const;
 	double getRootMeanSquareError() const;

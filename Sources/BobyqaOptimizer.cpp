@@ -7,6 +7,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 {
 	unsigned numTar = op.getPitchTargets().size();
 	ParameterSet ps = op.getParameters();
+	BoundaryVector initialBoundaries  = op.getBoundaries();
 
 	// precalculate bounds
 	double mmin = ps.meanSlope - ps.deltaSlope;
@@ -91,19 +92,25 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	}
 
 	// convert result to TargetVector
-	TargetVector opt;
+	TargetVector opt_targets;
+	BoundaryVector opt_boundaries;
 	for (unsigned i = 0; i < numTar; ++i)
 	{
+		opt_boundaries.push_back( initialBoundaries[i] + xtmp(4 * i +3)/1000 );
+
 		PitchTarget pt;
 		pt.slope = xtmp(4 * i + 0);
 		pt.offset = xtmp(4 * i + 1);
 		pt.tau = xtmp(4 * i + 2);
-		pt.duration = op.getPitchTargets()[i].duration;
-		opt.push_back(pt);
+		pt.duration = ( initialBoundaries[i + 1] + xtmp(4 * (i+1) +3)/1000 ) - ( initialBoundaries[i] + xtmp(4 * i +3)/1000 );//op.getPitchTargets()[i].duration;
+		opt_targets.push_back(pt);
+
+
 	}
+	opt_boundaries.push_back( initialBoundaries.at( numTar )  );
 
 	// store optimum
-	op.setOptimum(opt);
+	op.setOptimum( opt_boundaries, opt_targets );
 
 	// DEBUG message
 #ifdef DEBUG_MSG

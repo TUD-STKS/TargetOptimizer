@@ -26,13 +26,15 @@ public:
 	
 	ResultParameters getParameters();
 	void setEntries( std::vector<PitchTarget> );
+	
+	wxGrid *resultsTable;
 private:
 	//wxSpinCtrlDouble *slopeDeltaCtrl;
 	//wxSpinCtrlDouble *offsetDeltaCtrl;
 	//wxSpinCtrlDouble *tauDeltaCtrl;
 	//wxSpinCtrlDouble *boundaryDeltaCtrl;
 
-    wxGrid *resultsTable;
+    //wxGrid *resultsTable;
 };
 
 #endif

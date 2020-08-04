@@ -2,7 +2,7 @@
 #include "CdlpFilter.h"
 
 
-TamModelF0::TamModelF0(const BoundaryVector& bounds, const double onsetValue)
+TamModelF0::TamModelF0(const BoundaryVector& bounds, const double onsetValue) : m_bounds(bounds)
 {
 	// determine onset
 	m_onset.time = bounds[0];
@@ -20,6 +20,11 @@ TamModelF0::TamModelF0(const BoundaryVector& bounds, const double onsetValue)
 void TamModelF0::setPitchTargets(const TargetVector& targets)
 {
 	m_targets = targets;
+}
+
+void TamModelF0::setBoundaries(const BoundaryVector& boundaries)
+{
+	m_bounds = boundaries;
 }
 
 TimeSignal TamModelF0::calculateF0(const double samplingPeriod) const
@@ -52,6 +57,11 @@ TimeSignal TamModelF0::calculateF0(const SampleTimes& times) const
 TargetVector TamModelF0::getPitchTargets() const
 {
 	return m_targets;
+}
+
+BoundaryVector TamModelF0::getBoundaries() const
+{
+	return m_bounds;
 }
 
 Sample TamModelF0::getOnset() const

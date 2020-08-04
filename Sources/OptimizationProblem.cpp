@@ -4,8 +4,9 @@
 OptimizationProblem::OptimizationProblem(const ParameterSet& parameters, const TimeSignal& originalF0, const BoundaryVector& bounds)
 	: m_parameters(parameters), m_originalF0(originalF0), m_bounds(bounds), m_modelOptimalF0(bounds, originalF0[0].value) {};
 
-void OptimizationProblem::setOptimum(const TargetVector& targets)
+void OptimizationProblem::setOptimum(const BoundaryVector& boundaries, const TargetVector& targets)
 {
+	m_modelOptimalF0.setBoundaries( boundaries );
 	m_modelOptimalF0.setPitchTargets(targets);
 }
 
@@ -24,6 +25,11 @@ TimeSignal OptimizationProblem::getModelF0() const
 TargetVector OptimizationProblem::getPitchTargets() const
 {
 	return m_modelOptimalF0.getPitchTargets();
+}
+
+BoundaryVector OptimizationProblem::getBoundaries() const
+{
+	return m_modelOptimalF0.getBoundaries();
 }
 
 Sample OptimizationProblem::getOnset() const
@@ -102,7 +108,8 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	{
 		boundaries.push_back( m_bounds.back() );
 	}
-	std::cout << "b size: " << boundaries.size() << " m size: " << m_bounds.size() << std::endl;
+	std::cout << "b: " << boundaries.at(0) << " "<< boundaries.at(1) << " "<< boundaries.at(2) << " "<< boundaries.at(3) 
+	 << " m: " << m_bounds.at(0) << " "<< m_bounds.at(1) << " " << m_bounds.at(2)<< " " << m_bounds.at(3) << std::endl;
 
 	// create model f0
 	//TamModelF0 tamF0(m_bounds, m_originalF0[0].value);

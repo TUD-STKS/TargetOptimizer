@@ -9,7 +9,7 @@
 
 
 /* Control ID */
-static const int IDC_BOUNDARY_TABLE = wxNewId();
+extern int IDC_BOUNDARY_TABLE;
 
 struct BoundaryParameters
 {

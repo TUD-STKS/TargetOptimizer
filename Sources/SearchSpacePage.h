@@ -10,7 +10,7 @@ struct SearchSpaceParameters
 	double slopeDelta{ 50 };
 	double offsetDelta{ 20 };
 	double tauDelta{ 15 };
-	double boundaryDelta{ 5 };
+	double boundaryDelta{ 40 };
 };
 
 class SearchSpacePage :

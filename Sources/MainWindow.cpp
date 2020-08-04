@@ -186,6 +186,8 @@ void MainWindow::clear()
 	isOptimized = false;
 
 	//resultsTable->ClearGrid();
+	targetOptions->boundaryPage->boundaryTable->ClearGrid();
+	targetOptions->resultPage->resultsTable->ClearGrid();
 	this->SetTitle("Target Optimizer");
 }
 
@@ -206,9 +208,12 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 
 void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
 {
-	std::cout << "OnBoundaryCellChanged called!"<< std::endl;
 	double Cell;
-	Data::getInstance().syllableBoundaries.at( event.GetCol() ) = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
+	targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
+
+	Data::getInstance().syllableBoundaries.at( event.GetCol() ) = Cell;
+	//Data::getInstance().syllableBoundaries.at( event.GetCol() ) = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
+	std::cout << "OnBoundaryCellChanged called! Cell = "<< Cell << " syllable: " << Data::getInstance().syllableBoundaries.at( event.GetCol() ) << std::endl;
 
 	//if(!number.ToDouble(&value)){ /* error! */ } // TODO: hiermit error abfangen falls jemand etwas anderes als eine Zahl eingibt!!
 
@@ -308,7 +313,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
-	//Data::getInstance().syllableBoundaries = problem.getBoundaries();
+	Data::getInstance().syllableBoundaries = problem.getBoundaries();
 
 
 	std::ostringstream msg;
