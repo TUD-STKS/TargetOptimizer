@@ -7,6 +7,10 @@
 #include <vector>
 #include "Data.h"
 
+
+/* Control ID */
+static const int IDC_BOUNDARY_TABLE = wxNewId();
+
 struct BoundaryParameters
 {
 	double slopeDelta{ 50 };
@@ -23,13 +27,15 @@ public:
 	
 	BoundaryParameters getParameters();
 	void setEntries( BoundaryVector );
+
+	wxGrid *boundaryTable;
 private:
 	//wxSpinCtrlDouble *slopeDeltaCtrl;
 	//wxSpinCtrlDouble *offsetDeltaCtrl;
 	//wxSpinCtrlDouble *tauDeltaCtrl;
 	//wxSpinCtrlDouble *boundaryDeltaCtrl;
 
-	wxGrid *boundaryTable;
+	//wxGrid *boundaryTable;
 };
 
 #endif

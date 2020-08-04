@@ -1,5 +1,5 @@
 #include "OptimizationProblem.h"
-
+#include <iostream>
 
 OptimizationProblem::OptimizationProblem(const ParameterSet& parameters, const TimeSignal& originalF0, const BoundaryVector& bounds)
 	: m_parameters(parameters), m_originalF0(originalF0), m_bounds(bounds), m_modelOptimalF0(bounds, originalF0[0].value) {};
@@ -90,14 +90,19 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	BoundaryVector boundaries;
 	for (unsigned i = 0; i < arg.size() / 4; ++i)
 	{
-		boundaries.push_back(m_bounds[i]);// + arg(4 * i +3));
+		boundaries.push_back( m_bounds[i] + arg(4 * i +3)/1000 );// + arg(4 * i +3));
 		PitchTarget pt;
 		pt.slope = arg(4 * i + 0);
 		pt.offset = arg(4 * i + 1);
 		pt.tau = arg(4 * i + 2);
-		pt.duration = m_bounds[i + 1] - m_bounds[i];
+		pt.duration = ( m_bounds[i + 1] + arg(4 * (i+1) +3)/1000 ) - boundaries[i];// (m_bounds[i] + arg(4 * i +3)/1000);
 		targets.push_back(pt);
 	}
+	if (!m_bounds.empty())
+	{
+		boundaries.push_back( m_bounds.back() );
+	}
+	std::cout << "b size: " << boundaries.size() << " m size: " << m_bounds.size() << std::endl;
 
 	// create model f0
 	//TamModelF0 tamF0(m_bounds, m_originalF0[0].value);

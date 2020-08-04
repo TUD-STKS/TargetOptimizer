@@ -1,13 +1,12 @@
 #ifdef USE_WXWIDGETS
 
 #include "BoundaryPage.h"
-/* Control IDs */
-static const int IDC_BOUNDARY_DISPLAY = wxNewId();
+
 
 BoundaryPage::BoundaryPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
 {
 	wxFlexGridSizer* boundarySizer{ new wxFlexGridSizer(3) };
-	boundaryTable = new wxGrid(this, IDC_BOUNDARY_DISPLAY);
+	boundaryTable = new wxGrid(this, IDC_BOUNDARY_TABLE);
 	boundaryTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	boundaryTable->EnableEditing(true);
 	boundaryTable->CreateGrid(1, 1);

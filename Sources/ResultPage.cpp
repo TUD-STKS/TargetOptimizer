@@ -1,13 +1,12 @@
 #ifdef USE_WXWIDGETS
 
 #include "ResultPage.h"
-/* Control IDs */
-static const int IDC_RESULT_DISPLAY = wxNewId();
+
 
 ResultPage::ResultPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
 {
 	wxFlexGridSizer* resultsSizer{ new wxFlexGridSizer(3) };
-	resultsTable = new wxGrid(this, IDC_RESULT_DISPLAY);
+	resultsTable = new wxGrid(this, IDC_RESULT_TABLE);
 	resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	resultsTable->EnableEditing(false);
 	resultsTable->CreateGrid(4, 1);

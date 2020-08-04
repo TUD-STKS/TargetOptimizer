@@ -30,14 +30,19 @@ static const int IDB_SAVE_PITCHTIER = wxNewId();
 static const int IDB_CLEAR = wxNewId();
 
 /* Control IDs */
-static const int IDC_TARGET_DISPLAY = wxNewId();
-
-static const int IDC_BOUNDARY_OPTIONS = wxNewId();
-static const int IDC_RESULT_DISPLAY = wxNewId();
+//static const int IDC_TARGET_DISPLAY = wxNewId();
+//static const int IDC_BOUNDARY_TABLE = wxNewId();
+//static const int IDC_RESULT_TABLE = wxNewId();
 
 /* */
 static const int IDP_SEARCH_OPTIONS = wxNewId();
 static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
+
+
+//typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);
+//#define MyEventHandler(func) wxEVENT_HANDLER_CAST(MyEventFunction, func)
+//wxDEFINE_EVENT(EVT_GRID_CELL_CHANGED, MyEvent);
+//#define EVT_GRID(id, func) wx__DECLARE_EVT1(EVT_GRID_CELL_CHANGED, id, MyEventHandler(func))
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(IDM_CLEAR, OnClear)
@@ -58,6 +63,8 @@ EVT_BUTTON(IDB_OPTIMIZE, OnOptimize)
 EVT_BUTTON(IDB_SAVE_GESTURES, OnSaveAsGesture)
 EVT_BUTTON(IDB_SAVE_CSV, OnSaveAsCsv)
 EVT_BUTTON(IDB_SAVE_PITCHTIER, OnSaveAsPitchTier)
+
+EVT_GRID_CMD_CELL_CHANGED(IDC_BOUNDARY_TABLE, OnBoundaryCellChanged)
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size) 	
@@ -197,6 +204,21 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 	wxAboutBox(info);
 }
 
+void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
+{
+	std::cout << "OnBoundaryCellChanged called!"<< std::endl;
+	double Cell;
+	Data::getInstance().syllableBoundaries.at( event.GetCol() ) = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
+
+	//if(!number.ToDouble(&value)){ /* error! */ } // TODO: hiermit error abfangen falls jemand etwas anderes als eine Zahl eingibt!!
+
+	
+	//isOptimized = false;
+	//isPitchTierLoaded = true;
+	
+	updateWidgets();
+}
+
 void MainWindow::OnClear(wxCommandEvent& event)
 {
 	this->clear();
@@ -286,6 +308,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
+	//Data::getInstance().syllableBoundaries = problem.getBoundaries();
 
 
 	std::ostringstream msg;

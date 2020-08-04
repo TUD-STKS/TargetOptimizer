@@ -7,6 +7,9 @@
 #include <vector>
 #include "Data.h"
 
+/* Control ID */
+static const int IDC_RESULT_TABLE = wxNewId();
+
 struct ResultParameters
 {
 	double slopeDelta{ 50 };

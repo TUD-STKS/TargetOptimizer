@@ -19,6 +19,7 @@ public:
 private:
     void clear();
     void OnAbout(wxCommandEvent& event);
+    void OnBoundaryCellChanged(wxGridEvent& event);
     void OnClear(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
     void OnOpenTextGrid(wxCommandEvent& event);
@@ -47,7 +48,7 @@ private:
     OptionsNotebook *optimizationOptions;
     OptionsNotebook *optimizationOptions2;
     TargetsNotebook *targetOptions;
-    wxGrid *resultsTable;
+    //wxGrid *resultsTable;
 
     wxDECLARE_EVENT_TABLE();
 };
