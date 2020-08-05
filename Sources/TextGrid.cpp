@@ -52,12 +52,12 @@ void TextGrid::appendPointTier(PointTier& pointTier)
 	this->pointTiers.insert(std::make_pair(pointTier.name, pointTier));
 }
 
-IntervalTier TextGrid::getIntervalTier(std::string name)
+IntervalTier& TextGrid::getIntervalTier(std::string name)
 {
 	return this->intervalTiers.find(name)->second;
 }
 
-PointTier TextGrid::getPointTier(std::string name)
+PointTier& TextGrid::getPointTier(std::string name)
 {
 	return this->pointTiers.find(name)->second;
 }

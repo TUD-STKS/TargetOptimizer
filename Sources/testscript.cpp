@@ -3,22 +3,25 @@
 
 int main() {
 
-	TextGrid tg = TextGrid::readTextGridFile(R"(C:\Users\stone\source\repos\TargetOptimizer\Sources\De-Gabelschlüssel_Long.TextGrid)");
+	TextGrid tg = TextGrid::readTextGridFile("De-Gabelschlüssel_Long.TextGrid");
 
 	TextGrid tg2 = tg; // copy constructor works
 
 	IntervalTier intervalTierToAppend = IntervalTier("Appended (Type: Interval)"); // creating new interval tier
-	intervalTierToAppend.append(Interval(1.3, 3.6, "New Interval")); // appending intervals
-	intervalTierToAppend.append(Interval(0.2, 1.3, "New Interval (2)"));
+	intervalTierToAppend.append(Interval(0.2, 1.3, "New Interval")); // appending intervals
+	intervalTierToAppend.append(Interval(1.3, 3.6, "New Interval (2)"));
 
-	intervalTierToAppend.setElementStart(0, 0.0);
-	
 	PointTier pointTierToAppend = PointTier("Appended (Type: Point)"); // creating new point tier
 	pointTierToAppend.append(Point(0.2, "First Point")); // appending points
 	pointTierToAppend.append(Point(1000, "Second Point"));
 
 	tg.appendIntervalTier(intervalTierToAppend); // appending interval tier
 	tg.appendPointTier(pointTierToAppend); // appending point tier
+
+	tg.getIntervalTier("Appended (Type: Interval)").setElementStart(0, 1);
+	tg.getIntervalTier("Appended (Type: Interval)").setElementEnd(4, 1.7);
+	tg.getIntervalTier("Appended (Type: Interval)").setElementStart(1, 1.2);
+	tg.getIntervalTier("Appended (Type: Interval)").setElementEnd(100, 5000);
 
 	IntervalTier intervalTierToGet = tg.getIntervalTier("Appended (Type: Interval)"); // getting interval tiers
 	PointTier pointTierToGet = tg.getPointTier("Appended (Type: Point)"); // getting point tiers

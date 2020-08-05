@@ -17,7 +17,6 @@ public:
 	std::string text;
 
 private:
-	//TODO: Allow Tier access to these functions (friend?)
 	template <class TierType>
 	friend bool Tier<TierType>::setElementStart(int, double);
 	template <class TierType>

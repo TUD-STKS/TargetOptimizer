@@ -13,8 +13,6 @@ template<class TierType> class Tier {
 
 public:
 	Tier() = delete;
-	// TODO: What happens to copy constructor? Delete if necessary
-	// Copy constructor works!
 	Tier(std::string str);	
 
 	void append(TierType element);
@@ -61,15 +59,61 @@ inline TierType& Tier<TierType>::getElement(int i)
 template<class TierType>
 inline bool Tier<TierType>::setElementStart(int elementIndex, double newStart)
 {
-	elements[elementIndex].tmin = newStart;
-	return false;
+	if ((elementIndex >= 0 && elementIndex < (signed int)elements.size()) && newStart >= 0) {
+		if (newStart < elements[elementIndex].tmax) {
+			if (elementIndex != 0) {
+				if (newStart > elements[elementIndex - 1].tmin) {
+					elements[elementIndex - 1].tmax = newStart;
+				}
+				else {
+					std::cout << "Starting time must be later than the starting time of previous interval (" << elements[elementIndex - 1].tmin << ") !" << std::endl;
+					return false;
+				}
+			}
+			elements[elementIndex].tmin = newStart;
+			std::cout << "Starting time has successfully been changed!" << std::endl;
+			return true;
+		}
+		else
+		{
+			std::cout << "Starting time must be earlier than the ending time of selected interval (" << elements[elementIndex].tmax << ") !" << std::endl;
+			return false;
+		}		
+	}
+	else {
+		std::cout << "Please use a valid element index (0 < index < numIntervals/numPoints) and a valid starting time (> 0)!" << std::endl;
+		return false;
+	}
 }
 
 template<class TierType>
 inline bool Tier<TierType>::setElementEnd(int elementIndex, double newEnd)
 {
-	//TODO: Move end of selected element and start of next element
-	return false;
+	if ((elementIndex >= 0 && elementIndex < (signed int)elements.size()) && newEnd >= 0) {
+		if (newEnd > elements[elementIndex].tmin) {
+			if (elementIndex != elements.size() - 1) {
+				if (newEnd < elements[elementIndex + 1].tmax) {
+					elements[elementIndex + 1].tmin = newEnd;
+				}
+				else {
+					std::cout << "Ending time must be earlier than the ending time of following interval (" << elements[elementIndex + 1].tmax << ") !" << std::endl;
+					return false;
+				}
+					
+			}
+			elements[elementIndex].tmax = newEnd;
+			std::cout << "Ending time has successfully been changed!" << std::endl;
+			return true;
+		}
+		else {
+			std::cout << "Ending time must be later than the starting time of selected interval (" << elements[elementIndex].tmin << ") !" << std::endl;
+			return false;
+		}
+	}
+	else {
+		std::cout << "Please use a valid element index (0 < index < numIntervals) and a valid ending time (> 0)!" << std::endl;
+		return false;
+	}
 }
 
 template<class TierType>

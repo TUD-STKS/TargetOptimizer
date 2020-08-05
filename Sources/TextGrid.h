@@ -19,8 +19,8 @@ public:
 	void appendIntervalTier(IntervalTier& intervalTier);
 	void appendPointTier(PointTier& pointTier);
 
-	IntervalTier getIntervalTier(std::string name);
-	PointTier getPointTier(std::string name);
+	IntervalTier& getIntervalTier(std::string name);
+	PointTier& getPointTier(std::string name);
 
 	double getStart();
 	double getEnd();
