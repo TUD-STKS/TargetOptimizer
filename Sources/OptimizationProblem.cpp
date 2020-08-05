@@ -32,6 +32,11 @@ BoundaryVector OptimizationProblem::getBoundaries() const
 	return m_modelOptimalF0.getBoundaries();
 }
 
+void OptimizationProblem::setBoundaries( const BoundaryVector& boundaries )
+{
+	m_bounds = boundaries;
+}
+
 Sample OptimizationProblem::getOnset() const
 {
 	return m_modelOptimalF0.getOnset();
@@ -94,22 +99,35 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	// convert data
 	TargetVector targets;
 	BoundaryVector boundaries;
-	for (unsigned i = 0; i < arg.size() / 4; ++i)
+	for (unsigned i = 0; i < arg.size() / m_parameters.numberOptVar; ++i)
 	{
-		boundaries.push_back( m_bounds[i] + arg(4 * i +3)/1000 );// + arg(4 * i +3));
 		PitchTarget pt;
-		pt.slope = arg(4 * i + 0);
-		pt.offset = arg(4 * i + 1);
-		pt.tau = arg(4 * i + 2);
-		pt.duration = ( m_bounds[i + 1] + arg(4 * (i+1) +3)/1000 ) - boundaries[i];// (m_bounds[i] + arg(4 * i +3)/1000);
+		pt.slope = arg(m_parameters.numberOptVar * i + 0);
+		pt.offset = arg(m_parameters.numberOptVar * i + 1);
+		pt.tau = arg(m_parameters.numberOptVar * i + 2);
+		//pt.duration = m_bounds[i + 1] - m_bounds[i];// (m_bounds[i] + arg(4 * i +3)/1000);
+		std::cout << "b: opt bound false? " << m_parameters.optimizeBoundaries << std::endl;
+		if (m_parameters.optimizeBoundaries)
+		{
+			boundaries.push_back( m_bounds[i] + arg(m_parameters.numberOptVar * i +3)/1000 );
+			pt.duration = ( m_bounds[i + 1] + arg(m_parameters.numberOptVar * (i+1) +3)/1000 ) - boundaries[i];
+		}
+		else{
+			std::cout << "b: opt bound false " << m_parameters.optimizeBoundaries << std::endl;
+			pt.duration = m_bounds[i + 1] - m_bounds[i];
+		}
 		targets.push_back(pt);
 	}
-	if (!m_bounds.empty())
+	if (m_parameters.optimizeBoundaries) //(!m_bounds.empty()
 	{
-		boundaries.push_back( m_bounds.back() );
+		boundaries.push_back( m_bounds.back() + arg(m_parameters.numberOptVar * (arg.size() / m_parameters.numberOptVar) +3)/1000 );
 	}
-	std::cout << "b: " << boundaries.at(0) << " "<< boundaries.at(1) << " "<< boundaries.at(2) << " "<< boundaries.at(3) 
-	 << " m: " << m_bounds.at(0) << " "<< m_bounds.at(1) << " " << m_bounds.at(2)<< " " << m_bounds.at(3) << std::endl;
+	else
+	{
+		boundaries = m_bounds;
+	}
+	//std::cout << "b: " << boundaries.at(0) << " "<< boundaries.at(1) << " "<< boundaries.at(2) << " "<< boundaries.at(3) 
+	std::cout << " m: " << m_bounds.at(0) << " "<< m_bounds.at(1) << " " << m_bounds.at(2)<< " " << m_bounds.at(3) << std::endl;
 
 	// create model f0
 	//TamModelF0 tamF0(m_bounds, m_originalF0[0].value);
@@ -131,6 +149,7 @@ double OptimizationProblem::costFunction(const TamModelF0& tamF0) const
 	{
 		error += std::pow((m_originalF0[i].value - modelF0[i].value), 2.0);
 	}
+	std::cout << "error " << error << std::endl;
 
 	// calculate penalty term
 	double penalty = 0.0;

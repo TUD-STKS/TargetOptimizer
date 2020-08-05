@@ -1,5 +1,6 @@
 #ifdef USE_WXWIDGETS
 #include "OptionsNotebook.h"
+#include <iostream> //exclude again
 
 ParameterSet OptionsNotebook::getOptions()
 {
@@ -18,6 +19,17 @@ ParameterSet OptionsNotebook::getOptions()
 	params.meanSlope = 0.0;
 	// TODO: Make meanTau a tunable parameter in the GUI (?)
 	params.meanTau = 15.0;
+
+	params.optimizeBoundaries = (searchParams.boundaryDelta != 0);
+	if (params.optimizeBoundaries)
+	{
+		params.numberOptVar = 4;
+	}
+	else
+	{
+		params.numberOptVar = 3;
+	}
+	std::cout << "number of opt var: " << params.numberOptVar << std::endl;
 	
 	// TODO: Find a better place for meanF0 calculation
 	//calculate mean f0

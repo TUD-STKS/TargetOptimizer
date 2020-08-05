@@ -10,6 +10,7 @@ public:
 
 	// public member functions
 	void optimize(OptimizationProblem& op) const;
+	//void optimize_targets_and_boundaries(OptimizationProblem& op) const;
 
 private:
 	// private member functions

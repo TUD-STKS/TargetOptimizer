@@ -18,6 +18,8 @@ struct ParameterSet
 	double meanSlope;
 	double meanOffset;
 	double meanTau;
+	bool   optimizeBoundaries;
+	int    numberOptVar;
 };
 
 // dlib linear algebra column vector for optimization tasks
@@ -31,6 +33,7 @@ public:
 
 	// public member functions
 	void setOptimum(const BoundaryVector& boundaries, const TargetVector& targets);
+	void setBoundaries(const BoundaryVector& boundaries);
 
 	ParameterSet getParameters() const;
 	TimeSignal getModelF0() const;

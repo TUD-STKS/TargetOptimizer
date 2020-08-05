@@ -25,6 +25,7 @@ void TamModelF0::setPitchTargets(const TargetVector& targets)
 void TamModelF0::setBoundaries(const BoundaryVector& boundaries)
 {
 	m_bounds = boundaries;
+	m_onset.time = boundaries.at(0);
 }
 
 TimeSignal TamModelF0::calculateF0(const double samplingPeriod) const
