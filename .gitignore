@@ -8,3 +8,6 @@
 /TargetOptimizer.vcxproj.user
 /dlib/out
 /.vs
+/Unit Test TextGrid/Debug
+/Unit Test TextGrid/x64/Release
+/Unit Test TextGrid/Unit Test TextGrid.vcxproj.user

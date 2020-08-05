@@ -1,12 +1,11 @@
+#pragma once
+
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
 #include <typeinfo>
-#include "Interval.h"
-#include "Point.h"
-
 
 template<class TierType> class Tier;
 
@@ -62,7 +61,7 @@ inline TierType& Tier<TierType>::getElement(int i)
 template<class TierType>
 inline bool Tier<TierType>::setElementStart(int elementIndex, double newStart)
 {
-	//TODO: Move end of previous element and start of selected element
+	elements[elementIndex].tmin = newStart;
 	return false;
 }
 

@@ -1,4 +1,7 @@
+#pragma once
+
 #include <string>
+#include "Tier.h"
 
 class Interval {
 public:
@@ -15,8 +18,10 @@ public:
 
 private:
 	//TODO: Allow Tier access to these functions (friend?)
-	bool setStart(double newStart);
-	bool setEnd(double newEnd);
+	template <class TierType>
+	friend bool Tier<TierType>::setElementStart(int, double);
+	template <class TierType>
+	friend bool Tier<TierType>::setElementEnd(int, double);
 
 private:
 	double tmin;

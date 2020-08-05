@@ -1,9 +1,9 @@
 #include "TextGrid.h"
-
+#include <string>
 
 int main() {
 
-	TextGrid tg = TextGrid::readTextGridFile("De-Gabelschlüssel_Long.TextGrid");
+	TextGrid tg = TextGrid::readTextGridFile(R"(C:\Users\stone\source\repos\TargetOptimizer\Sources\De-Gabelschlüssel_Long.TextGrid)");
 
 	TextGrid tg2 = tg; // copy constructor works
 
@@ -11,6 +11,8 @@ int main() {
 	intervalTierToAppend.append(Interval(1.3, 3.6, "New Interval")); // appending intervals
 	intervalTierToAppend.append(Interval(0.2, 1.3, "New Interval (2)"));
 
+	intervalTierToAppend.setElementStart(0, 0.0);
+	
 	PointTier pointTierToAppend = PointTier("Appended (Type: Point)"); // creating new point tier
 	pointTierToAppend.append(Point(0.2, "First Point")); // appending points
 	pointTierToAppend.append(Point(1000, "Second Point"));

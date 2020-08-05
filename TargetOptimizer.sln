@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.29806.167
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TargetOptimizer", "TargetOptimizer.vcxproj", "{266A9FD9-9635-464C-9ACB-8A15629008C9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Unit Test TextGrid", "Unit Test TextGrid\Unit Test TextGrid.vcxproj", "{517E3047-8558-4990-8462-FF3A6C0FC51E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,14 @@ Global
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.Release|Win32.Build.0 = Release|Win32
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.Release|x64.ActiveCfg = Release|x64
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.Release|x64.Build.0 = Release|x64
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Debug|Win32.Build.0 = Debug|Win32
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Debug|x64.ActiveCfg = Debug|x64
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Debug|x64.Build.0 = Debug|x64
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Release|Win32.ActiveCfg = Release|Win32
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Release|Win32.Build.0 = Release|Win32
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Release|x64.ActiveCfg = Release|x64
+		{517E3047-8558-4990-8462-FF3A6C0FC51E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

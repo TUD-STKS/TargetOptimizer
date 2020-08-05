@@ -2,6 +2,8 @@
 #include <vector>
 #include <map>
 #include "Tier.h"
+#include "Interval.h"
+#include "Point.h"
 
 typedef Tier<Interval>	IntervalTier;
 typedef Tier<Point>		PointTier;
