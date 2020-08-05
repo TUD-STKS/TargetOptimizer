@@ -1,0 +1,114 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2 
+tiers? <exists> 
+size = 3 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "ORT-MAU" 
+        xmin = 0.3 
+        xmax = 2 
+        intervals: size = 3 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.467 
+            text = "-" 
+        intervals [2]:
+            xmin = 0.467 
+            xmax = 1.487 
+            text = "GabelschlÃ¼ssel" 
+        intervals [3]:
+            xmin = 1.487 
+            xmax = 2 
+            text = "-" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "Phonemes" 
+        xmin = 0.15
+        xmax = 2 
+        intervals: size = 13 
+        intervals [1]:
+            xmin = 0.15 
+            xmax = 0.467 
+            text = "<p:>" 
+        intervals [2]:
+            xmin = 0.467 
+            xmax = 0.507 
+            text = "g" 
+        intervals [3]:
+            xmin = 0.507 
+            xmax = 0.687 
+            text = "a:" 
+        intervals [4]:
+            xmin = 0.687 
+            xmax = 0.717 
+            text = "b" 
+        intervals [5]:
+            xmin = 0.717 
+            xmax = 0.747 
+            text = "@" 
+        intervals [6]:
+            xmin = 0.747 
+            xmax = 0.917 
+            text = "l" 
+        intervals [7]:
+            xmin = 0.917 
+            xmax = 1.007 
+            text = "S" 
+        intervals [8]:
+            xmin = 1.007 
+            xmax = 1.047 
+            text = "l" 
+        intervals [9]:
+            xmin = 1.047 
+            xmax = 1.217 
+            text = "Y" 
+        intervals [10]:
+            xmin = 1.217 
+            xmax = 1.277 
+            text = "s" 
+        intervals [11]:
+            xmin = 1.277 
+            xmax = 1.327 
+            text = "@" 
+        intervals [12]:
+            xmin = 1.327 
+            xmax = 1.487 
+            text = "l" 
+        intervals [13]:
+            xmin = 1.487 
+            xmax = 2 
+            text = "<p:>" 
+    item [3]:
+        class = "IntervalTier" 
+        name = "Syllables" 
+        xmin = 0.15  
+        xmax = 2 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0.15 
+            xmax = 0.467 
+            text = "" 
+        intervals [2]:
+            xmin = 0.467 
+            xmax = 0.687 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.687 
+            xmax = 0.917 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.917 
+            xmax = 1.217 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.217 
+            xmax = 1.487 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.487 
+            xmax = 2 
+            text = "" 

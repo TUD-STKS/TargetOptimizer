@@ -2,7 +2,6 @@
 #include <iostream>
 #include <algorithm>
 #include <regex>
-#include <stdlib.h>
 #include "TextGrid.h"
 #include "StringHelper.h"
 
@@ -13,6 +12,7 @@ TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 	ifstream inputFile;
 	try {
 		inputFile.open(inputFilename);
+		inputFile.exceptions(inputFile.failbit);
 		if (inputFile.is_open()) {
 			string line;
 			// header
@@ -35,21 +35,108 @@ TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 				cout << "TextGridFile has format short!" << endl;
 				return tg;
 			}
-			else {
-				TextGrid tg = BinaryTextGridFactory(inputFile, lineElements);
-				cout << "TextGridFile has unknown format, probably binary!" << endl;
-				return tg;
-			}
 		}
 	}
-	catch (ifstream::failure e) {
+	catch (const ios_base::failure& e) {
 		cerr << "Exception opening/reading/closing file! " << e.what() << endl;
 	}
 }
 
+void TextGrid::appendIntervalTier(IntervalTier& intervalTier)
+{
+	this->intervalTiers.insert(std::make_pair(intervalTier.name, intervalTier));
+}
+
+void TextGrid::appendPointTier(PointTier& pointTier)
+{
+	this->pointTiers.insert(std::make_pair(pointTier.name, pointTier));
+}
+
+IntervalTier TextGrid::getIntervalTier(std::string name)
+{
+	return this->intervalTiers.find(name)->second;
+}
+
+PointTier TextGrid::getPointTier(std::string name)
+{
+	return this->pointTiers.find(name)->second;
+}
+
+double TextGrid::getStart()
+{
+	double intervalMin = INFINITY;
+	double pointMin = INFINITY;
+	double tierMin = INFINITY;
+
+	if (this->intervalTiers.size() > 0) {
+		intervalMin = this->intervalTiers.begin()->second.getStartingTime();
+		for (auto iterator = intervalTiers.begin(); iterator != intervalTiers.end(); ++iterator) {
+			if (iterator->second.getStartingTime() < intervalMin) {
+				intervalMin = iterator->second.getStartingTime();
+			}
+		}
+	}	
+
+	if (this->pointTiers.size() > 0) {
+		pointMin = this->pointTiers.begin()->second.getStartingTime();
+		for (auto iterator = pointTiers.begin(); iterator != pointTiers.end(); ++iterator) {
+
+			if (iterator->second.getStartingTime() < pointMin) {
+				pointMin = iterator->second.getStartingTime();
+			}
+		}
+	}
+
+	if (intervalMin <= pointMin) {
+		tierMin = intervalMin;
+	}
+	else
+	{
+		tierMin = pointMin;
+	}
+
+	return tierMin;
+}
+
+double TextGrid::getEnd()
+{
+	double intervalMax = 0;
+	double pointMax = 0;
+	double tierMax = 0;
+
+	if (this->intervalTiers.size() > 0) {
+		intervalMax = this->intervalTiers.begin()->second.getEndingTime();
+		for (auto iterator = intervalTiers.begin(); iterator != intervalTiers.end(); ++iterator) {
+			if (iterator->second.getEndingTime() > intervalMax) {
+				intervalMax = iterator->second.getEndingTime();
+			}
+		}
+	}
+	
+	if (this->pointTiers.size() > 0 ) {
+		pointMax = this->pointTiers.begin()->second.getEndingTime();
+		for (auto iterator = pointTiers.begin(); iterator != pointTiers.end(); ++iterator) {
+			if (iterator->second.getEndingTime() > pointMax) {
+				pointMax = iterator->second.getEndingTime();
+			}
+		}
+	}
+	
+
+	if (intervalMax >= pointMax) {
+		tierMax = intervalMax;
+	}
+	else
+	{
+		tierMax = pointMax;
+	}
+
+	return tierMax;
+}
+
 TextGrid TextGrid::BinaryTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements)
 {
-	TextGrid tgb = TextGrid(0, 0, 0);
+	TextGrid tgb = TextGrid();
 
 	return tgb;
 }
@@ -59,16 +146,16 @@ TextGrid TextGrid::ShortTextGridFactory(std::ifstream& file, std::vector<std::st
 	using namespace std;
 	string line;
 
-	TextGrid tgs = TextGrid(0, 0, 0);
+	TextGrid tgs = TextGrid();
 	// TMIN
-	tgs.tmin = stod(lineElements[0].c_str());
+	//double tmin = stod(lineElements[0].c_str());
 	// Empty Lines
 	getline(file, line);
 	while (line == "") {
 		getline(file, line);
 	}
 	// TMAX
-	tgs.tmax = stod(rtrim(line).c_str());
+	//double tmax = stod(rtrim(line).c_str());
 	// Empty Lines
 	getline(file, line);
 	while (line == "") {
@@ -104,7 +191,7 @@ TextGrid TextGrid::ShortTextGridFactory(std::ifstream& file, std::vector<std::st
 				getline(file, line);
 			}
 			double tierMax = stod(trim(line).c_str());
-			IntervalTier tmpTier = IntervalTier(tierMin, tierMax, tierName);
+			IntervalTier tmpTier = IntervalTier(tierName);
 			getline(file, line);
 			while (line == "") {
 				getline(file, line);
@@ -132,7 +219,7 @@ TextGrid TextGrid::ShortTextGridFactory(std::ifstream& file, std::vector<std::st
 				string intervalText = trim(regex_replace(line, regex("\""), "\t"));
 				tmpTier.append(Interval(intervalMin, intervalMax, intervalText));
 			}
-			tgs.append(tmpTier);
+			tgs.appendIntervalTier(tmpTier);
 		}
 		// PointTier
 		else if (trim(regex_replace(line, regex("\""), "\t")) == "TextTier") {
@@ -145,13 +232,13 @@ TextGrid TextGrid::ShortTextGridFactory(std::ifstream& file, std::vector<std::st
 			while (line == "") {
 				getline(file, line);
 			}
-			double tierMin = stod(trim(line).c_str());
+			//double tierMin = stod(trim(line).c_str());
 			getline(file, line);
 			while (line == "") {
 				getline(file, line);
 			}
 			double tierMax = stod(trim(line).c_str());
-			PointTier tmpTier = PointTier(tierMin, tierMax, tierName);
+			PointTier tmpTier = PointTier(tierName);
 			getline(file, line);
 			while (line == "") {
 				getline(file, line);
@@ -173,7 +260,7 @@ TextGrid TextGrid::ShortTextGridFactory(std::ifstream& file, std::vector<std::st
 				string pointMark = trim(regex_replace(line, regex("\""), "\t"));
 				tmpTier.append(Point(pointNumber, pointMark));
 			}
-			tgs.append(tmpTier);
+			tgs.appendPointTier(tmpTier);
 		}
 	}
 	file.close();
@@ -185,9 +272,9 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 	using namespace std;
 	string line;
 
-	TextGrid tgl = TextGrid(0, 0, 0);
+	TextGrid tgl = TextGrid();
 	// TMIN
-	tgl.tmin = stod(lineElements[2].c_str());
+	//double tmin = stod(lineElements[2].c_str());
 	// Empty Lines
 	getline(file, line);
 	while (line == "") {
@@ -195,7 +282,7 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 	}
 	// TMAX
 	lineElements = split(trim(line), "=");
-	tgl.tmax = stod(lineElements[2].c_str());
+	//double tmax = stod(lineElements[2].c_str());
 	// Empty Lines
 	getline(file, line);
 	while (line == "") {
@@ -239,7 +326,7 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 				getline(file, line);
 			}
 			double tierMax = stod(split(trim(line).c_str(), "=")[2]);
-			IntervalTier tmpTier = IntervalTier(tierMin, tierMax, tierName);
+			IntervalTier tmpTier = IntervalTier(tierName);
 			getline(file, line);
 			while (line == "") {
 				getline(file, line);
@@ -271,7 +358,7 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 				string intervalText = split(trim(regex_replace(line, regex("\""), "\t")), "=")[2];
 				tmpTier.append(Interval(intervalMin, intervalMax, intervalText));
 			}
-			tgl.append(tmpTier);
+			tgl.appendIntervalTier(tmpTier);
 		}
 		// PointTier
 		else if (split(trim(line).c_str(), "=")[2] == "\"TextTier\"") {
@@ -284,13 +371,13 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 			while (line == "") {
 				getline(file, line);
 			}
-			double tierMin = stod(split(trim(line).c_str(), "=")[2]);
+			//double tierMin = stod(split(trim(line).c_str(), "=")[2]);
 			getline(file, line);
 			while (line == "") {
 				getline(file, line);
 			}
-			double tierMax = stod(split(trim(line).c_str(), "=")[2]);
-			PointTier tmpTier = PointTier(tierMin, tierMax, tierName);
+			//double tierMax = stod(split(trim(line).c_str(), "=")[2]);
+			PointTier tmpTier = PointTier(tierName);
 			getline(file, line);
 			while (line == "") {
 				getline(file, line);
@@ -316,7 +403,7 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 				string pointMark = split(trim(regex_replace(line, regex("\""), "\t")), "=")[2];
 				tmpTier.append(Point(pointNumber, pointMark));
 			}
-			tgl.append(tmpTier);
+			tgl.appendPointTier(tmpTier);
 		}
 	}
 

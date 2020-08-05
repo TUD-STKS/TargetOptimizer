@@ -14,7 +14,8 @@ template<class TierType> class Tier {
 
 public:
 	Tier() = delete;
-	// What happens to copy constructor? Delete if necessary
+	// TODO: What happens to copy constructor? Delete if necessary
+	// Copy constructor works!
 	Tier(std::string str);	
 
 	void append(TierType element);
@@ -75,11 +76,11 @@ inline bool Tier<TierType>::setElementEnd(int elementIndex, double newEnd)
 template<class TierType>
 inline double Tier<TierType>::getStartingTime()
 {
-	return std::min(elements.begin()->getStart(), elements.end()->getStart());
+	return std::min_element(this->elements.begin(), this->elements.end(), [](auto& a, auto& b) {return a.getStart() < b.getStart(); })->getStart();
 }
 
 template<class TierType>
 inline double Tier<TierType>::getEndingTime()
 {
-	return std::max(elements.begin()->getEnd(), elements.end()->getEnd());
+	return std::max_element(this->elements.begin(), this->elements.end(), [](auto& a, auto& b) {return a.getEnd() < b.getEnd(); })->getEnd();
 }

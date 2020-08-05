@@ -4,7 +4,7 @@ class Interval {
 public:
 	// constructors
 	Interval() = delete;
-	Interval(double tmin, double tmax, std::string text);	
+	Interval(double tmin, double tmax, std::string text);
 
 	double getStart();
 	double getEnd();
@@ -21,5 +21,5 @@ private:
 private:
 	double tmin;
 	double tmax;
-	
 };
+

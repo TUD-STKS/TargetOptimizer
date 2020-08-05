@@ -1,6 +1,6 @@
 #include <string>
 #include <vector>
-#include <variant>
+#include <map>
 #include "Tier.h"
 
 typedef Tier<Interval>	IntervalTier;
@@ -14,15 +14,21 @@ public:
 	static TextGrid readTextGridFile(const std::string& inputFilename);
 	static bool writeTextGridFile(const TextGrid& tg, const std::string& outputFilename, const std::string& format);
 
+	void appendIntervalTier(IntervalTier& intervalTier);
+	void appendPointTier(PointTier& pointTier);
+
+	IntervalTier getIntervalTier(std::string name);
+	PointTier getPointTier(std::string name);
+
 	double getStart();
 	double getEnd();
 
 public:
-	std::vector<IntervalTier> intervalTiers;
-	std::vector<PointTier> pointTiers;
+	std::multimap<std::string, IntervalTier> intervalTiers;
+	std::multimap<std::string, PointTier> pointTiers;
 
 private:
 	static TextGrid BinaryTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
 	static TextGrid ShortTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
-	static TextGrid LongTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);		
+	static TextGrid LongTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
 };
