@@ -8,10 +8,9 @@ int main() {
 	TextGrid tg2 = tg; // copy constructor works
 
 	IntervalTier intervalTierToAppend = IntervalTier("Appended (Type: Interval)"); // creating new interval tier
-	intervalTierToAppend.append(Interval(0.2, 1.3, "New Interval")); // appending intervals
-	intervalTierToAppend.append(Interval(1.3, 3.6, "New Interval"));
-	//intervalTierToAppend.setConsecutive(false);
-	intervalTierToAppend.append(Interval(3.8, 5, "New Interval")); // won't work as long the interval tier is set to "mustBeConsecutive = true"
+	intervalTierToAppend.append(Interval(0.2, 1.3, "First Interval")); // appending intervals
+	intervalTierToAppend.append(Interval(1.3, 3.2, "Second Interval"));
+	intervalTierToAppend.append(Interval(3.6, 5, "Third Interval", false)); // works because interval is designed to be non consecutive
 
 	PointTier pointTierToAppend = PointTier("Appended (Type: Point)"); // creating new point tier
 	pointTierToAppend.append(Point(0.2, "First Point")); // appending points
@@ -20,10 +19,9 @@ int main() {
 	tg.appendIntervalTier(intervalTierToAppend); // appending interval tier
 	tg.appendPointTier(pointTierToAppend); // appending point tier
 
-	tg.getIntervalTier("Appended (Type: Interval)").setElementStart(0, 1); // setting new starting time
-	tg.getIntervalTier("Appended (Type: Interval)").setElementEnd(4, 1.7); // bad index
-	tg.getIntervalTier("Appended (Type: Interval)").setElementStart(1, 1.2); // setting new starting time of second element (end of first element is shifted accordingly)
-	tg.getIntervalTier("Appended (Type: Interval)").setElementEnd(100, 5000); // bad index
+	tg.getIntervalTier("Appended (Type: Interval)").setElementEnd(0, 1.1); // setting new starting time
+	tg.getIntervalTier("Appended (Type: Interval)").setElementStart(2, 3.9); // setting new starting time for non consecutive interval
+
 
 	IntervalTier intervalTierToGet = tg.getIntervalTier("Appended (Type: Interval)"); // getting interval tiers
 	PointTier pointTierToGet = tg.getPointTier("Appended (Type: Point)"); // getting point tiers
@@ -41,6 +39,8 @@ int main() {
 
 	TextGrid::writeTextGridFile(tg, "test_short.TextGrid", "short");
 	TextGrid::writeTextGridFile(tg, "test_long.TextGrid", "long");
+
+	std::cout << tg3 << std::endl;
 
 	return 0;
 }

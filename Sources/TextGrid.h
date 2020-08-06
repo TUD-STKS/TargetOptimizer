@@ -4,6 +4,7 @@
 #include <map>
 #include "Interval.h"
 #include "Point.h"
+#include <ostream>
 
 typedef Tier<Interval>	IntervalTier;
 typedef Tier<Point>		PointTier;
@@ -25,7 +26,9 @@ public:
 	PointTier& getPointTier(std::string name);
 
 	double getStart();
-	double getEnd();	
+	double getEnd();
+
+	friend std::ostream& operator<<(std::ostream& os, TextGrid& tg);
 
 public:
 	std::multimap<std::string, IntervalTier> intervalTiers;
@@ -34,11 +37,6 @@ public:
 private:
 	static TextGrid BinaryTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
 	static TextGrid ShortTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
-	static TextGrid LongTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);	
-};
+	static TextGrid LongTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements);
 
-template<class TierType>
-inline bool sortElements(Tier<TierType>& tier)
-{
-	return false;
-}
+};

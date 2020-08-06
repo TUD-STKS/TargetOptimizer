@@ -505,3 +505,47 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 	return tgl;
 }
 
+std::ostream& operator<<(std::ostream& os, TextGrid& tg)
+{
+	using namespace std;
+	os << endl;
+	os << "File type = \"ooTextFile\"" << endl;
+	os << "Object class = \"TextGrid\"" << endl;
+	os << endl;
+	os << "xmin = " << tg.getStart() << endl;
+	os << "xmax = " << tg.getEnd() << endl;
+	os << "tiers? <exists>" << endl;
+	os << "size = " << tg.intervalTiers.size() + tg.pointTiers.size() << endl;
+	os << "item []:" << endl;
+	int tierCnt = 1;
+	for (auto& intervalTier : tg.intervalTiers) {
+		os << "    item [" + to_string(tierCnt) + "]:" << endl;
+		tierCnt += 1;
+		os << "        class = \"IntervalTier\"" << endl;
+		os << "        name = " + (string)"\"" + intervalTier.first + "\"" << endl;
+		os << "        xmin = " + to_string(intervalTier.second.getStartingTime()) << endl;
+		os << "        xmax = " + to_string(intervalTier.second.getEndingTime()) << endl;
+		os << "        intervals: size = " + to_string(intervalTier.second.size()) << endl;
+		for (int intervalNumber = 0; intervalNumber < intervalTier.second.size(); intervalNumber++) {
+			os << "        intervals [" + to_string(intervalNumber + 1) + "]:" << endl;
+			os << "            xmin = " + to_string(intervalTier.second[intervalNumber].getStart()) << endl;
+			os << "            xmax = " + to_string(intervalTier.second[intervalNumber].getEnd()) << endl;
+			os << "            text = \"" + intervalTier.second[intervalNumber].text + "\"" << endl;
+		}
+	}
+	for (auto& pointTier : tg.pointTiers) {
+		os << "    item [" + to_string(tierCnt) + "]:" << endl;
+		tierCnt += 1;
+		os << "        class = \"TextTier\"" << endl;
+		os << "        name = " + (string)"\"" + pointTier.first + "\"" << endl;
+		os << "        xmin = " + to_string(pointTier.second.getStartingTime()) << endl;
+		os << "        xmax = " + to_string(pointTier.second.getEndingTime()) << endl;
+		os << "        intervals: size = " + to_string(pointTier.second.size()) << endl;
+		for (int pointNumber = 0; pointNumber < pointTier.second.size(); pointNumber++) {
+			os << "        points [" + to_string(pointNumber + 1) + "]:" << endl;
+			os << "            number = " + to_string(pointTier.second[pointNumber].getStart()) << endl;
+			os << "            mark = \"" + pointTier.second[pointNumber].mark + "\"" << endl;
+		}
+	}
+	return os;
+}

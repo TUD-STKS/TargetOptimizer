@@ -6,11 +6,13 @@ class Interval {
 public:
 	// constructors
 	Interval() = delete;
-	Interval(double tmin, double tmax, std::string text);
+	Interval(double tmin, double tmax, std::string text, bool isConsecutive = true);
 
 	double getStart();
 	double getEnd();
 	void changeOffset(double offset);
+
+	bool getConsecutiveness();
 
 public:
 	std::string text;
@@ -24,5 +26,7 @@ private:
 private:
 	double tmin;
 	double tmax;
+
+	bool isConsecutive;
 };
 

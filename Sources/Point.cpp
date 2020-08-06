@@ -1,9 +1,9 @@
 #include <iostream>
 #include "Point.h"
 
-Point::Point(double number, std::string mark) : number(number), mark(mark)
+Point::Point(double number, std::string mark, bool isConsecutive) : number(number), mark(mark), isConsecutive(isConsecutive)
 {
-	
+
 }
 
 double Point::getStart()
@@ -14,5 +14,10 @@ double Point::getStart()
 double Point::getEnd()
 {
 	return this->number;
+}
+
+bool Point::getConsecutiveness()
+{
+	return isConsecutive;
 }
 

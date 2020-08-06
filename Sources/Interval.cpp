@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Interval.h"
 
-Interval::Interval(double tmin, double tmax, std::string text) : tmin(tmin), tmax(tmax), text(text)
+Interval::Interval(double tmin, double tmax, std::string text, bool isConsecutive) : tmin(tmin), tmax(tmax), text(text), isConsecutive(isConsecutive)
 {
 	
 }
@@ -21,5 +21,10 @@ void Interval::changeOffset(double offset)
 {
 	this->tmin += offset;
 	this->tmax += offset;
+}
+
+bool Interval::getConsecutiveness()
+{
+	return isConsecutive;
 }
 
