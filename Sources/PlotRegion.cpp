@@ -23,6 +23,9 @@ void PlotRegion::draw(wxDC& dc)
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
 
+    // Set the axis limits
+    setAxesLimits();
+
     // Draw the syllable boundaries
     drawBoundaries(dc);
     // Draw the F0 pitch marks
@@ -47,11 +50,7 @@ void PlotRegion::drawBoundaries(wxDC& dc)
     dc.SetPen(wxPen(*wxRED, 3, wxPENSTYLE_DOT));
 
     if (!m_boundaries.empty())
-    {
-        /* Set the plot dimensions according to the boundaries */
-        auto maxTime = *std::max_element(m_boundaries.begin(), m_boundaries.end());
-        plot.abscissa.positiveLimit = std::max(maxTime + 0.1, plot.abscissa.positiveLimit);
-        
+    {  
         for (const auto& boundary : m_boundaries)
         {
             wxPoint p0, p1;
@@ -91,20 +90,6 @@ void PlotRegion::drawOriginalF0(wxDC& dc)
     int radius = 2;
     if (!m_origF0.empty())
     {
-        /* Set the plot dimensions according to the boundaries */
-        plot.linearOrdinate.positiveLimit = std::max_element(m_origF0.begin(), 
-            m_origF0.end(), 
-            [](const auto& a, const auto& b) { return a.value < b.value; })->value;
-        plot.linearOrdinate.positiveLimit += 6;
-        plot.linearOrdinate.negativeLimit = std::max_element(m_origF0.begin(),
-            m_origF0.end(),
-            [](const auto& a, const auto& b) { return a.value > b.value; })->value;
-        plot.linearOrdinate.negativeLimit -= 6;
-        auto maxTime = std::max_element(m_origF0.begin(),
-            m_origF0.end(),
-            [](const auto& a, const auto& b) { return a.time < b.time; })->time;
-        plot.abscissa.positiveLimit = std::max(maxTime + 0.1 , plot.abscissa.positiveLimit);
-
         for (const auto& pitchMark : m_origF0)
         {
             wxPoint p;
@@ -135,6 +120,61 @@ void PlotRegion::drawTargets(wxDC& dc)
             dc.DrawLine(p0, p1);
         }
     }
+}
+
+void PlotRegion::setAxesLimits()
+{
+    
+    /* Determine the largest data point to be plotted */
+    double maxTimeBoundary = 0.1;
+    if (!m_boundaries.empty())
+    {
+        // Largest Boundary
+        maxTimeBoundary = *std::max_element(m_boundaries.begin(), m_boundaries.end());
+    }
+    
+    double maxTimeOriginalF0 = 0.1;
+    double maxOriginalF0 = 1;
+    double minOriginalF0 = 0;
+    if (!m_origF0.empty())
+    {
+        // Largest time instant of original F0
+        maxTimeOriginalF0 = std::max_element(m_origF0.begin(),
+            m_origF0.end(),
+            [](const auto& a, const auto& b) { return a.time < b.time; })->time;
+        // Largest F0 value
+        maxOriginalF0 = std::max_element(m_origF0.begin(),
+            m_origF0.end(),
+            [](const auto& a, const auto& b) { return a.value < b.value; })->value;
+        // Smallest F0 value
+        minOriginalF0 = std::min_element(m_origF0.begin(),
+            m_origF0.end(),
+            [](const auto& a, const auto& b) { return a.value < b.value; })->value;
+    }
+    
+    double maxTimeOptimalF0 = 0.1;
+    double maxOptimalF0 = 1;
+    double minOptimalF0 = minOriginalF0;
+    if (!m_optimalF0.empty())
+    {
+        // Largest time instant of optimal F0
+        maxTimeOptimalF0 = std::max_element(m_optimalF0.begin(),
+            m_optimalF0.end(),
+            [](const auto& a, const auto& b) { return a.time < b.time; })->time;
+        // Largest F0 value
+        maxOptimalF0 = std::max_element(m_origF0.begin(),
+            m_origF0.end(),
+            [](const auto& a, const auto& b) { return a.value < b.value; })->value;
+        // Smallest F0 value
+        minOptimalF0 = std::min_element(m_origF0.begin(),
+            m_origF0.end(),
+            [](const auto& a, const auto& b) { return a.value < b.value; })->value;
+    }
+    
+    /* Set the limits */
+    plot.abscissa.positiveLimit = std::max({ maxTimeBoundary, maxTimeOriginalF0, maxTimeOptimalF0 }) + 0.1;
+    plot.linearOrdinate.positiveLimit = std::max({ maxOriginalF0, maxOptimalF0 }) + 6;
+    plot.linearOrdinate.negativeLimit = std::min({ minOriginalF0, minOptimalF0 }) - 6;
 }
 
 #endif // USE_WXWIDGETS

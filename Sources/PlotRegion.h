@@ -21,6 +21,7 @@ private:
 	void drawOptimalF0(wxDC& dc);
 	void drawOriginalF0(wxDC& dc);
 	void drawTargets(wxDC& dc);	
+	void setAxesLimits();
 
 private:
 	const BoundaryVector& m_boundaries;

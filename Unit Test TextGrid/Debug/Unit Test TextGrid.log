@@ -1,0 +1,7 @@
+﻿  Interval.cpp
+  Point.cpp
+  testscript.cpp
+  TextGrid.cpp
+  Generating Code...
+C:\Users\stone\source\repos\TargetOptimizer\Sources\TextGrid.cpp(43): warning C4715: 'TextGrid::readTextGridFile': not all control paths return a value
+  Unit Test TextGrid.vcxproj -> C:\Users\stone\source\repos\TargetOptimizer\Debug\Unit Test TextGrid.exe
