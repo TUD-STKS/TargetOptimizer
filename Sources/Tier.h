@@ -1,11 +1,11 @@
 #pragma once
-
 #include <string>
 #include <vector>
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
 #include <typeinfo>
+
 
 template<class TierType> class Tier;
 
@@ -15,13 +15,15 @@ public:
 	Tier() = delete;
 	Tier(std::string str);	
 
-	void append(TierType element);
+	bool append(TierType element);
 	int size();
 	TierType& getElement(int i);
 	bool setElementStart(int elementIndex, double newStart);
 	bool setElementEnd(int elementIndex, double newEnd);
 	double getStartingTime();
 	double getEndingTime();
+
+	void setConsecutive(bool);
 
 public:
 	std::string name;
@@ -30,18 +32,72 @@ public:
 
 private:
 	std::vector<TierType> elements;
+	bool mustBeConsecutive;
 };
 
 template<class TierType>
 inline Tier<TierType>::Tier(std::string str)
 {
+	auto type = (std::string)typeid(this).name(); 
+	if (type == "class Tier<class Interval> *") {
+		mustBeConsecutive = true;
+	}
+	else if (type == "class Tier<class Point> *") {
+		mustBeConsecutive = false;
+	}
 	name = str;
 }
 
 template<class TierType>
-inline void Tier<TierType>::append(TierType element)
+inline bool Tier<TierType>::append(TierType element)
 {
-	this->elements.push_back(element);
+	if (this->mustBeConsecutive) {
+		if (this->elements.size() != 0)	{
+			double newElementStart = element.getStart();
+			if (newElementStart == this->elements.back().getEnd()) {
+				this->elements.push_back(element);
+				std::cout << "Interval has successfully been added!" << std::endl;
+				return true;
+			}
+			else {
+				std::cout << "Intervals have to be consecutive! Starting time must be at " << this->elements.back().getEnd() << "!" << std::endl;
+				return false;
+			}
+		}		
+		else {
+			this->elements.push_back(element);
+			std::cout << "Interval has successfully been added!" << std::endl;
+			return true;
+		}
+	}
+	else {
+		std::string type = (std::string)typeid(element).name();
+		if (type == "class Interval") {
+			if (this->elements.size() != 0) {
+				double newElementStart = element.getStart();
+				if (newElementStart >= this->elements.back().getEnd()) {
+					this->elements.push_back(element);
+					std::cout << "Interval has successfully been added!" << std::endl;
+					return true;
+				}
+				else {
+					std::cout << "Starting time of the new interval has to be later than the ending time of previous interval (" << this->elements.back().getEnd() << ")!" << std::endl;
+					return false;
+				}
+			}
+			else {
+				this->elements.push_back(element);
+				std::cout << "Interval has successfully been added!" << std::endl;
+				return true;
+			}
+		}
+		else if (type == "class Point") {
+			this->elements.push_back(element);
+			std::cout << "Point has successfully been added!" << std::endl;
+			return true;
+		}		
+	}
+	return false;
 }
 
 template<class TierType>
@@ -126,4 +182,10 @@ template<class TierType>
 inline double Tier<TierType>::getEndingTime()
 {
 	return std::max_element(this->elements.begin(), this->elements.end(), [](auto& a, auto& b) {return a.getEnd() < b.getEnd(); })->getEnd();
+}
+
+template<class TierType>
+inline void Tier<TierType>::setConsecutive(bool flag)
+{
+	this->mustBeConsecutive = flag;
 }

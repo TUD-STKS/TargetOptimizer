@@ -2,9 +2,8 @@
 #include <iostream>
 #include <algorithm>
 #include <regex>
-#include "TextGrid.h"
 #include "StringHelper.h"
-
+#include "TextGrid.h"
 
 TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 {
@@ -42,14 +41,109 @@ TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 	}
 }
 
+bool TextGrid::writeTextGridFile(TextGrid& tg, const std::string& outputFilename, const std::string& format)
+{
+	using namespace std;
+	ofstream outputFile;
+	try {
+		outputFile.open(outputFilename);
+		outputFile.exceptions(outputFile.failbit);
+		if (outputFile.is_open()) {
+			string line;
+			outputFile << "File type = \"ooTextFile\"" << endl;
+			outputFile << "Object class = \"TextGrid\"" << endl;
+			outputFile << endl;
+			if (format == "short") {
+				outputFile << tg.getStart() << endl;
+				outputFile << tg.getEnd() << endl;
+				outputFile << "<exists>" << endl;
+				outputFile << tg.intervalTiers.size() + tg.pointTiers.size() << endl;
+				for (auto& intervalTier : tg.intervalTiers) {
+					outputFile << "\"IntervalTier\"" << endl;
+					outputFile << "\"" + intervalTier.first + "\"" << endl;
+					outputFile << intervalTier.second.getStartingTime() << endl;
+					outputFile << intervalTier.second.getEndingTime() << endl;
+					outputFile << intervalTier.second.size() << endl;
+					for (int intervalNumber = 0; intervalNumber < intervalTier.second.size(); intervalNumber++) {
+						outputFile << intervalTier.second[intervalNumber].getStart() << endl;
+						outputFile << intervalTier.second[intervalNumber].getEnd() << endl;
+						outputFile << "\"" + intervalTier.second[intervalNumber].text + "\"" << endl;
+					}
+				}
+				for (auto& pointTier : tg.pointTiers) {
+					outputFile << "\"TextTier\"" << endl;
+					outputFile << "\"" + pointTier.first + "\"" << endl;
+					outputFile << pointTier.second.getStartingTime() << endl;
+					outputFile << pointTier.second.getEndingTime() << endl;
+					outputFile << pointTier.second.size() << endl;
+					for (int pointNumber = 0; pointNumber < pointTier.second.size(); pointNumber++) {
+						outputFile << pointTier.second[pointNumber].getStart() << endl;
+						outputFile << "\"" + pointTier.second[pointNumber].mark + "\"" << endl;
+					}
+				}
+				outputFile.close();
+				return true;
+			}
+			else if (format == "long") {
+				outputFile << "xmin = " << tg.getStart() << endl;
+				outputFile << "xmax = " << tg.getEnd() << endl;
+				outputFile << "tiers? <exists>" << endl;
+				outputFile << "size = " << tg.intervalTiers.size() + tg.pointTiers.size() << endl;
+				outputFile << "item []:" << endl;
+				int tierCnt = 1;
+				for (auto& intervalTier : tg.intervalTiers) {
+					outputFile << "    item [" + to_string(tierCnt) + "]:" << endl;
+					tierCnt += 1;
+					outputFile << "        class = \"IntervalTier\"" << endl;
+					outputFile << "        name = " + (string)"\"" + intervalTier.first + "\"" << endl;
+					outputFile << "        xmin = " + to_string(intervalTier.second.getStartingTime()) << endl;
+					outputFile << "        xmax = " + to_string(intervalTier.second.getEndingTime()) << endl;
+					outputFile << "        intervals: size = " + to_string(intervalTier.second.size()) << endl;
+					for (int intervalNumber = 0; intervalNumber < intervalTier.second.size(); intervalNumber++) {
+						outputFile << "        intervals [" + to_string(intervalNumber + 1) + "]:" << endl;
+						outputFile << "            xmin = " + to_string(intervalTier.second[intervalNumber].getStart()) << endl;
+						outputFile << "            xmax = " + to_string(intervalTier.second[intervalNumber].getEnd()) << endl;
+						outputFile << "            text = \"" + intervalTier.second[intervalNumber].text + "\"" << endl;
+					}
+				}
+				for (auto& pointTier : tg.pointTiers) {
+					outputFile << "    item [" + to_string(tierCnt) + "]:" << endl;
+					tierCnt += 1;
+					outputFile << "        class = \"TextTier\"" << endl;
+					outputFile << "        name = " + (string)"\"" + pointTier.first + "\"" << endl;
+					outputFile << "        xmin = " + to_string(pointTier.second.getStartingTime()) << endl;
+					outputFile << "        xmax = " + to_string(pointTier.second.getEndingTime()) << endl;
+					outputFile << "        intervals: size = " + to_string(pointTier.second.size()) << endl;
+					for (int pointNumber = 0; pointNumber < pointTier.second.size(); pointNumber++) {
+						outputFile << "        points [" + to_string(pointNumber + 1) + "]:" << endl;
+						outputFile << "            number = " + to_string(pointTier.second[pointNumber].getStart()) << endl;
+						outputFile << "            mark = \"" + pointTier.second[pointNumber].mark + "\"" << endl;
+					}
+				}
+				outputFile.close();
+				return true;
+			}
+			else { // binary
+
+			}			
+		}
+	}
+	catch (const ios_base::failure& e) {
+		cerr << "Exception opening/writing/closing file! " << e.what() << endl;
+	}
+	return false;
+}
+
 void TextGrid::appendIntervalTier(IntervalTier& intervalTier)
 {
 	this->intervalTiers.insert(std::make_pair(intervalTier.name, intervalTier));
+	std::cout << "IntervalTier has successfully been added!" << std::endl;
 }
 
 void TextGrid::appendPointTier(PointTier& pointTier)
 {
 	this->pointTiers.insert(std::make_pair(pointTier.name, pointTier));
+	std::cout << "PointTier has successfully been added!" << std::endl;
 }
 
 IntervalTier& TextGrid::getIntervalTier(std::string name)
@@ -133,6 +227,7 @@ double TextGrid::getEnd()
 
 	return tierMax;
 }
+
 
 TextGrid TextGrid::BinaryTextGridFactory(std::ifstream& file, std::vector<std::string> lineElements)
 {
@@ -406,7 +501,7 @@ TextGrid TextGrid::LongTextGridFactory(std::ifstream& file, std::vector<std::str
 			tgl.appendPointTier(tmpTier);
 		}
 	}
-
+	file.close();
 	return tgl;
 }
 
