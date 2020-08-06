@@ -62,9 +62,9 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	wxMenuBar* menuBar(new wxMenuBar());
 	// File menu
 	wxMenu* menu(new wxMenu());
-	menu->Append(IDM_OPEN, wxT("Open &File(s)..."));
-	menu->Append(IDM_OPTIMIZE, wxT("Optimize"));
-	menu->Append(IDM_SAVE_AS, wxT("Save as..."));
+	menu->Append(IDM_OPEN, wxT("&Open File(s)..."));
+	menu->Append(IDM_OPTIMIZE, wxT("Optimize &Targets"));
+	menu->Append(IDM_SAVE_AS, wxT("&Save as..."));
 	menu->Append(IDM_CLEAR, wxT("&Clear"));
 	menu->AppendSeparator();
 	menu->Append(wxID_EXIT, wxT("&Quit"));
