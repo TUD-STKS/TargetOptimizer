@@ -23,7 +23,7 @@ void PlotRegion::draw(wxDC& dc)
     dc.SetBackground(*wxWHITE_BRUSH);
     dc.Clear();
 
-    // Set the axis limits
+    // Set the axes limits
     setAxesLimits();
 
     // Draw the syllable boundaries
@@ -127,19 +127,27 @@ void PlotRegion::setAxesLimits()
     
     /* Determine the largest data point to be plotted */
     double maxTimeBoundary = 0.1;
+    double minTimeBoundary = 0.0;
     if (!m_boundaries.empty())
     {
-        // Largest Boundary
+        // Largest boundary
         maxTimeBoundary = *std::max_element(m_boundaries.begin(), m_boundaries.end());
+        // Smallest boundary
+        minTimeBoundary = *std::min_element(m_boundaries.begin(), m_boundaries.end());
     }
     
     double maxTimeOriginalF0 = 0.1;
+    double minTimeOriginalF0 = minTimeBoundary;
     double maxOriginalF0 = 1;
     double minOriginalF0 = 0;
     if (!m_origF0.empty())
     {
         // Largest time instant of original F0
         maxTimeOriginalF0 = std::max_element(m_origF0.begin(),
+            m_origF0.end(),
+            [](const auto& a, const auto& b) { return a.time < b.time; })->time;
+        // Smallest time instant of original F0
+        minTimeOriginalF0 = std::min_element(m_origF0.begin(),
             m_origF0.end(),
             [](const auto& a, const auto& b) { return a.time < b.time; })->time;
         // Largest F0 value
@@ -153,12 +161,17 @@ void PlotRegion::setAxesLimits()
     }
     
     double maxTimeOptimalF0 = 0.1;
+    double minTimeOptimalF0 = minTimeOriginalF0;
     double maxOptimalF0 = 1;
     double minOptimalF0 = minOriginalF0;
     if (!m_optimalF0.empty())
     {
         // Largest time instant of optimal F0
         maxTimeOptimalF0 = std::max_element(m_optimalF0.begin(),
+            m_optimalF0.end(),
+            [](const auto& a, const auto& b) { return a.time < b.time; })->time;
+        // Smallest time instant of optimal F0
+        minTimeOptimalF0 = std::min_element(m_optimalF0.begin(),
             m_optimalF0.end(),
             [](const auto& a, const auto& b) { return a.time < b.time; })->time;
         // Largest F0 value
@@ -173,6 +186,7 @@ void PlotRegion::setAxesLimits()
     
     /* Set the limits */
     plot.abscissa.positiveLimit = std::max({ maxTimeBoundary, maxTimeOriginalF0, maxTimeOptimalF0 }) + 0.1;
+    plot.abscissa.negativeLimit = std::min({ minTimeBoundary, minTimeOriginalF0, minTimeOptimalF0 }) - 0.1;
     plot.linearOrdinate.positiveLimit = std::max({ maxOriginalF0, maxOptimalF0 }) + 6;
     plot.linearOrdinate.negativeLimit = std::min({ minOriginalF0, minOptimalF0 }) - 6;
 }

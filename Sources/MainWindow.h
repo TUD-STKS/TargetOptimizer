@@ -20,12 +20,9 @@ private:
     void OnAbout(wxCommandEvent& event);
     void OnClear(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
-    void OnOpenTextGrid(wxCommandEvent& event);
-    void OnOpenPitchTier(wxCommandEvent& event);    
+    void OnOpen(wxCommandEvent& event);
     void OnOptimize(wxCommandEvent& event);
-    void OnSaveAsGesture(wxCommandEvent& event);
-    void OnSaveAsCsv(wxCommandEvent& event);
-    void OnSaveAsPitchTier(wxCommandEvent& event);
+    void OnSaveAs(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void updateWidgets();
 
