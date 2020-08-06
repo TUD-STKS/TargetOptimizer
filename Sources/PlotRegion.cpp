@@ -162,12 +162,12 @@ void PlotRegion::setAxesLimits()
             m_optimalF0.end(),
             [](const auto& a, const auto& b) { return a.time < b.time; })->time;
         // Largest F0 value
-        maxOptimalF0 = std::max_element(m_origF0.begin(),
-            m_origF0.end(),
+        maxOptimalF0 = std::max_element(m_optimalF0.begin(),
+            m_optimalF0.end(),
             [](const auto& a, const auto& b) { return a.value < b.value; })->value;
         // Smallest F0 value
-        minOptimalF0 = std::min_element(m_origF0.begin(),
-            m_origF0.end(),
+        minOptimalF0 = std::min_element(m_optimalF0.begin(),
+            m_optimalF0.end(),
             [](const auto& a, const auto& b) { return a.value < b.value; })->value;
     }
     
