@@ -138,22 +138,19 @@ int main(int argc, char* argv[])
 			// process gesture-file output option
 			if (parser.option("g"))
 			{
-				GestureWriter gwriter (fileName + ".ges");
-				gwriter.writeTargets(onset, optTargets);
+				DataIO::saveGesturalScore(fileName + ".ges");
 			}
 
 			// process csv-file output option
 			if (parser.option("c"))
 			{
-				CsvWriter cwriter (fileName + ".csv");
-				cwriter.writeTargets(onset, optTargets);
+				DataIO::saveCsvFile(fileName + ".csv");
 			}
 
 			// process PitchTarget-file output option
 			if (parser.option("p"))
 			{
-				PitchTierWriter pwriter (fileName + "-tam.PitchTier");
-				pwriter.writeF0(optF0);
+				DataIO::savePitchTier(fileName + "-tam.PitchTier");
 			}
 
 			// print results

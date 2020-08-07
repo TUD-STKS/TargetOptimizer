@@ -1,8 +1,9 @@
 #ifdef USE_WXWIDGETS
 #include <iostream>
-#include <wx/notebook.h>
-#include <wx/spinctrl.h>
 #include <wx/filename.h>
+#include <wx/notebook.h>
+#include <wx/progdlg.h>
+#include <wx/spinctrl.h>
 #include "MainWindow.h"
 #include "BobyqaOptimizer.h"
 
@@ -239,24 +240,6 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 	Close(true);
 }
 
-void MainWindow::saveGesturalScore(std::string filename)
-{
-	GestureWriter gwriter(filename);
-	gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
-}
-
-void MainWindow::saveCsvFile(std::string filename)
-{
-	CsvWriter cwriter(filename);
-	cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
-}
-
-void MainWindow::savePitchTier(std::string filename)
-{
-	PitchTierWriter pwriter(filename);
-	pwriter.writeF0(Data::getInstance().optimalF0);
-}
-
 void MainWindow::OnOptimize(wxCommandEvent& event)
 {
 	auto options = optimizationOptions->getOptions();
@@ -271,15 +254,20 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		Data::getInstance().originalF0,
 		Data::getInstance().syllableBoundaries);
 	BobyqaOptimizer optimizer;
+	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE);
+	pd.Pulse();
 	try
 	{
 		optimizer.optimize(problem);
 	}
 	catch (const std::exception&)
 	{
+		pd.Close();
 		wxMessageBox(wxT("Something went wrong during the optimization. Did you choose matching TextGrid and PitchTier files?"), wxT("Error"), wxICON_ERROR);
 		return;
 	}
+	pd.Close();
+	
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
@@ -301,15 +289,15 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 		return;
 	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
 	{
-		saveGesturalScore(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveGesturalScore(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("csv")))
 	{
-		saveCsvFile(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveCsvFile(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("PitchTier")))
 	{
-		savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else
 	{

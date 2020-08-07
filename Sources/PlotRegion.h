@@ -3,7 +3,8 @@
 
 #include "BasicPicture.h"
 #include "Graph.h"
-#include "dataio.h"
+#include "Data.h"
+
 
 class PlotRegion :
 	public BasicPicture

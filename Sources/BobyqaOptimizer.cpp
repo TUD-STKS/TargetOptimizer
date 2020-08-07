@@ -45,6 +45,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	int numThreads = omp_get_max_threads();
 	omp_set_num_threads(numThreads);
 
+	int numIterationsDone(0);
 #pragma omp parallel for schedule(dynamic)
 	for (unsigned it = 0; it < RANDOMITERATIONS; ++it)
 	{
@@ -73,10 +74,14 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 
 		// write optimization results back
 #pragma omp critical (updateMinValue)
-		if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 		{
-			fmin = ftmp;
-			xtmp = x;
+			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
+			{
+				fmin = ftmp;
+				xtmp = x;
+
+			}
+			std::cout << "Iteration " << ++numIterationsDone << " of " << RANDOMITERATIONS << " finished." << std::endl;
 		}
 	}
 

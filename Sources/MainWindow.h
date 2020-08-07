@@ -6,6 +6,7 @@
 #include "PlotRegion.h"
 #include "OptionsNotebook.h"
 #include "Data.h"
+#include "dataio.h"
 #include "OptimizationProblem.h"
 
 
@@ -24,9 +25,6 @@ private:
     void OnOptimize(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
-    void saveGesturalScore(std::string filename);
-    void saveCsvFile(std::string filename);
-    void savePitchTier(std::string filename);
     void updateWidgets();
 
 
