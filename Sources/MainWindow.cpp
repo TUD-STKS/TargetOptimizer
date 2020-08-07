@@ -47,17 +47,17 @@ EVT_BUTTON(IDB_OPTIMIZE, OnOptimize)
 EVT_BUTTON(IDB_SAVE_AS, OnSaveAs)
 wxEND_EVENT_TABLE()
 
-MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size) 	
+MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size)
 	: wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
 	this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-	
+
 	// The top level sizer for the main window
 	wxBoxSizer* topLevelSizer(new wxBoxSizer(wxVERTICAL));
 
 	// The sizer for the bottom part of the window containing
 	wxBoxSizer* bottomSizer(new wxBoxSizer(wxHORIZONTAL));
-	
+
 	// Create the menu bar
 	wxMenuBar* menuBar(new wxMenuBar());
 	// File menu
@@ -76,7 +76,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	menuBar->Append(menu, wxT("&Help"));
 
 	this->SetMenuBar(menuBar);
-	
+
 
 	plotRegion->SetMinSize(wxSize(900, 600));
 	topLevelSizer->Add(plotRegion, wxSizerFlags().Expand().Border(wxALL, 10).Proportion(1));
@@ -124,13 +124,13 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
 	resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
 	resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
-	
+
 	targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
 	bottomSizer->Add(targetsSizer, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
-	
+
 	topLevelSizer->Add(bottomSizer, wxSizerFlags().Expand());
-	
+
 	updateWidgets();
 	this->SetSizerAndFit(topLevelSizer);
 }
@@ -158,7 +158,7 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 	info.SetWebSite(wxT("https://github.com/TUD-STKS/TargetOptimizer"));
 	info.AddDeveloper(wxT("Paul Krug"));
 	info.AddDeveloper(wxT("Patrick Schmager"));
-	info.AddDeveloper(wxT("Simon Stone"));	
+	info.AddDeveloper(wxT("Simon Stone"));
 	info.AddDeveloper(wxT("Alexander Wilbrandt"));
 	wxAboutBox(info);
 }
@@ -197,7 +197,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 	}
 	if (numTextGrid > 1 || numPitchTier > 1)
 	{
-		wxMessageBox(wxT("Please select at most one TextGrid and one PitchTier file."), 
+		wxMessageBox(wxT("Please select at most one TextGrid and one PitchTier file."),
 			wxT("Too many files"), wxICON_ERROR);
 		return;
 	}
@@ -237,6 +237,24 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 	Close(true);
 }
 
+void MainWindow::saveGesturalScore(std::string filename)
+{
+	GestureWriter gwriter(filename);
+	gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+}
+
+void MainWindow::saveCsvFile(std::string filename)
+{
+	CsvWriter cwriter(filename);
+	cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+}
+
+void MainWindow::savePitchTier(std::string filename)
+{
+	PitchTierWriter pwriter(filename);
+	pwriter.writeF0(Data::getInstance().optimalF0);
+}
+
 void MainWindow::OnOptimize(wxCommandEvent& event)
 {
 	auto options = optimizationOptions->getOptions();
@@ -259,7 +277,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	{
 		wxMessageBox(wxT("Something went wrong during the optimization. Did you choose matching TextGrid and PitchTier files?"), wxT("Error"), wxICON_ERROR);
 		return;
-	}	
+	}
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
@@ -276,28 +294,24 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save as..."), "", defaultName,
-		"Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+		wxT("Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier|All supported files (*.ges, *.csv, *.PitchTier)|*.ges; *.csv; *.PitchTier"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-	if (saveFileDialog.GetFilterIndex() == 0)// .ges selected
+	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
 	{
-		GestureWriter gwriter(std::string(saveFileDialog.GetPath().utf8_str()));
-		gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+		saveGesturalScore(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
-	else if (saveFileDialog.GetFilterIndex() == 1) // .csv selected
+	else if (saveFileDialog.GetPath().EndsWith(wxT("csv")))
 	{
-		CsvWriter cwriter(std::string(saveFileDialog.GetPath().utf8_str()));
-		cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+		saveCsvFile(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
-	else if (saveFileDialog.GetFilterIndex() == 2) // .PitchTier selected
+	else if (saveFileDialog.GetPath().EndsWith(wxT("PitchTier")))
 	{
-		PitchTierWriter pwriter(std::string(saveFileDialog.GetPath().utf8_str()));
-		pwriter.writeF0(Data::getInstance().optimalF0);
+		savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else
 	{
-		// Should not be possible
-		throw std::runtime_error("Error saving file");
+		wxMessageBox(wxT("Please use one of the supported file types!"), wxT("Unsupported file format"), wxICON_ERROR);
 	}
 }
 
@@ -310,11 +324,11 @@ void MainWindow::updateWidgets()
 	// Optimization is only available if all necessary files are loaded
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable(isTextGridLoaded && isPitchTierLoaded);
 	this->GetMenuBar()->Enable(IDM_OPTIMIZE, isTextGridLoaded && isPitchTierLoaded);
-	
+
 	// Saving files is only available after optimization
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_AS))->Enable(isOptimized);
 	this->GetMenuBar()->Enable(IDM_SAVE_AS, isOptimized);
-		
+
 	// The pitch target display is only available after optimization
 	static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
 
@@ -326,7 +340,7 @@ void MainWindow::updateWidgets()
 		// Resize result table to correct number of columns
 		int colDifference = Data::getInstance().pitchTargets.size() - resultsTable->GetNumberCols();
 		if (colDifference > 0) { resultsTable->InsertCols(0, colDifference); }
-		if (colDifference < 0) { resultsTable->DeleteCols(0, -1*colDifference); }
+		if (colDifference < 0) { resultsTable->DeleteCols(0, -1 * colDifference); }
 
 		int col = 0;
 		for (const auto& target : Data::getInstance().pitchTargets)

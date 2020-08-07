@@ -24,7 +24,11 @@ private:
     void OnOptimize(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
+    void saveGesturalScore(std::string filename);
+    void saveCsvFile(std::string filename);
+    void savePitchTier(std::string filename);
     void updateWidgets();
+
 
 private:
     //TODO: Replace flags with proper progress manager
