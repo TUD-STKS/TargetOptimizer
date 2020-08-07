@@ -16,6 +16,7 @@ public:
 
 public:
 	ParameterSet getOptions();
+	void ResetTargetTables();
 	BoundaryPage *boundaryPage;
     ResultPage *resultPage;
 

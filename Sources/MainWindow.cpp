@@ -193,9 +193,8 @@ void MainWindow::clear()
 	isPitchTierLoaded = false;
 	isOptimized = false;
 
-	//resultsTable->ClearGrid();
-	targetOptions->boundaryPage->boundaryTable->ClearGrid();
-	targetOptions->resultPage->resultsTable->ClearGrid();
+	targetOptions->ResetTargetTables();
+
 	this->SetTitle("Target Optimizer");
 }
 
