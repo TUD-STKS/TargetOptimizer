@@ -1,5 +1,6 @@
 #ifdef USE_WXWIDGETS
 #include <iostream>
+#include <wx/choicdlg.h>
 #include <wx/filename.h>
 #include <wx/notebook.h>
 #include <wx/progdlg.h>
@@ -216,7 +217,17 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 		if (filepath.EndsWith("TextGrid"))
 		{
 			auto tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
-			Data::getInstance().syllableBoundaries = tg.getBounds();
+			wxArrayString choices;
+			for (const auto& tierName : tg.getIntervalTierNames())
+			{
+				choices.push_back(wxString(tierName));
+			}
+			wxSingleChoiceDialog intervalChoiceDialog(this,
+				wxT("Please pick the interval tier that holds the initial target boundaries"),
+					wxT("Pick boundary tier"),
+					choices);
+			intervalChoiceDialog.ShowModal();
+			Data::getInstance().syllableBoundaries = tg.getBounds(std::string(intervalChoiceDialog.GetStringSelection().utf8_str()));
 			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
 
 			isOptimized = false;
@@ -267,7 +278,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		return;
 	}
 	pd.Close();
-	
+
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();

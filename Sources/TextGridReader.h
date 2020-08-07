@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include "Data.h"
+#include <vector>
+#include "TextGrid.h"
 
 class TextGridReader {
 public:
@@ -8,13 +9,12 @@ public:
 	TextGridReader(const std::string& textGridFile);
 
 	// public member functions
-	BoundaryVector getBounds() const;
+	std::vector<double> getBounds(std::string tierName = "Position") const;
+	
+public:
+	std::vector<std::string> getIntervalTierNames() const;
 
 private:
-	// private member functions
-	void readFile(const std::string& textGridFile);
-	static bool checkDigits(const std::string& s);
-
 	// data members
-	BoundaryVector m_bounds;
+	TextGrid tg;
 };

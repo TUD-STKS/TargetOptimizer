@@ -1,61 +1,48 @@
 #include <fstream>
 #include <dlib/string.h>
 #include <dlib/error.h>
+#include <iostream>
 #include "TextGridReader.h"
 
 
 TextGridReader::TextGridReader(const std::string& textGridFile)
 {
-	readFile(textGridFile);
+	tg = TextGrid::readTextGridFile(textGridFile);
 }
 
-BoundaryVector TextGridReader::getBounds() const
+std::vector<double> TextGridReader::getBounds(std::string tierName) const
 {
-	return m_bounds;
-}
-
-void TextGridReader::readFile(const std::string& textGridFile)
-{
-	// create a file-reading object
-	std::ifstream fin;
-	fin.open(textGridFile.c_str()); // open data file
-	if (!fin.good())
-	{
-		throw dlib::error("[read_data_file] TextGrid input file not found!");
-	}
-
-	// container for string values
-	std::string line, line_1, line_2;
-
-	// process lines
-	while (std::getline(fin, line))
-	{
-		if (line == "\"1\"")
+	IntervalTier boundsTier;
+	boundsTier = tg.intervalTiers.find(tierName)->second;
+	std::vector<double> bounds;
+	for (const auto& boundInterval : boundsTier)
+	{	
+		if (boundInterval.text == "" && bounds.empty())
 		{
-			m_bounds.push_back(atof(line_2.c_str()));
-			m_bounds.push_back(atof(line_1.c_str()));
+			// This is the first interval (which holds silence)
+			// The end of this interval is the initial start of the first target
+			bounds.push_back(boundInterval.getEnd());
 		}
-		else if (!line.substr(0, 1).compare("\""))
+		else if (boundInterval.text == "")
 		{
-			line = dlib::trim(line, "\"");
-			if (checkDigits(line) && !line.empty())
-			{
-				m_bounds.push_back(atof(line_1.c_str()));
-			}
+			// This is the last interval (which holds silence)
+			// Do nothing
 		}
-
-		// store temporary
-		line_2 = line_1;
-		line_1 = line;
+		else
+		{
+			// Add the next initial target boundary
+			bounds.push_back(boundInterval.getEnd());
+		}		
 	}
-
-	if (m_bounds.size() == 0)
-	{
-		throw dlib::error("Wrong TextGrid File Format!");
-	}
+	return bounds;
 }
 
-bool TextGridReader::checkDigits(const std::string& s)
+std::vector<std::string> TextGridReader::getIntervalTierNames() const
 {
-	return s.find_first_not_of("0123456789") == std::string::npos;
+	std::vector<std::string> intervalTierNames;
+	for (const auto& intervalTier : tg.intervalTiers)
+	{
+		intervalTierNames.push_back(intervalTier.first);
+	}
+	return intervalTierNames;
 }

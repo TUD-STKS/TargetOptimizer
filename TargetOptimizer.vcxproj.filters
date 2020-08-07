@@ -66,6 +66,15 @@
     <ClCompile Include="Sources\BasicPicture.cpp">
       <Filter>Frontend</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\Interval.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\Point.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TextGrid.cpp">
+      <Filter>Backend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BobyqaOptimizer.h">
@@ -124,6 +133,21 @@
     </ClInclude>
     <ClInclude Include="Sources\BasicPicture.h">
       <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Interval.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Point.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\StringHelper.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\TextGrid.h">
+      <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\Tier.h">
+      <Filter>Backend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
