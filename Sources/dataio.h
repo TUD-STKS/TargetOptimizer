@@ -7,6 +7,15 @@
 
 namespace DataIO
 {
+	inline PitchTierReader readPitchTierFile(std::string filename)
+	{
+		return PitchTierReader(std::string(filename));
+	}
+
+	inline TextGridReader readTextGridFile(std::string filename)
+	{
+		return TextGridReader(std::string(filename));
+	}
 
 	inline void saveGesturalScore(std::string filename)
 	{

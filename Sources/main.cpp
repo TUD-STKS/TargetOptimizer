@@ -98,11 +98,10 @@ int main(int argc, char* argv[])
 			}
 
 			// process TextGrid input
-			TextGridReader tgreader (parser[0]);
-			BoundaryVector bounds = tgreader.getBounds();
+			BoundaryVector bounds = DataIO::readTextGridFile(parser[0]).getBounds();
 
 			// process PitchTier input
-			PitchTierReader ptreader (parser[1]);
+			auto ptreader = DataIO::readPitchTierFile(parser[1]);
 			TimeSignal f0 = ptreader.getF0();
 			std::string fileName = ptreader.getFileName();
 

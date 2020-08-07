@@ -215,8 +215,8 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 	{
 		if (filepath.EndsWith("TextGrid"))
 		{
-			TextGridReader tgreader(std::string(filepath.utf8_str()));
-			Data::getInstance().syllableBoundaries = tgreader.getBounds();
+			auto tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
+			Data::getInstance().syllableBoundaries = tg.getBounds();
 			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
 
 			isOptimized = false;
@@ -224,7 +224,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 		}
 		if (filepath.EndsWith("PitchTier"))
 		{
-			PitchTierReader ptreader(std::string(filepath.utf8_str()));
+			auto ptreader = DataIO::readPitchTierFile(std::string(filepath.utf8_str()));
 			Data::getInstance().originalF0 = ptreader.getF0();
 			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
 
@@ -254,7 +254,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		Data::getInstance().originalF0,
 		Data::getInstance().syllableBoundaries);
 	BobyqaOptimizer optimizer;
-	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE);
+	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
 	pd.Pulse();
 	try
 	{
