@@ -99,7 +99,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	wxSizerFlags buttonFlags;
 	buttonFlags.Expand().Border(wxALL, 5);
 	actionsSizer->Add(button, buttonFlags);
-	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize"));
+	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize Targets"));
 	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_SAVE_AS, wxT("Save as..."));
 	actionsSizer->Add(button, buttonFlags);
@@ -276,7 +276,7 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save as..."), "", defaultName,
-		"Gestural Score files (*.ges)|*.ges|CSV files (*.csv)|*.csv|PitchTier files (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+		"Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 	if (saveFileDialog.GetFilterIndex() == 0)// .ges selected
