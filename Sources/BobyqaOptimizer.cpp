@@ -75,7 +75,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
 	std::cout << "rho_begin"<< rho_begin << std::endl;
 	const double rho_end(1e-6); // stopping trust region radius -> accuracy
-	const long max_f_evals(1e5); // max number of objective function evaluations
+	const long max_f_evals(1e6); // max number of objective function evaluations
 
 	// initialize
 	double fmin(1e6);

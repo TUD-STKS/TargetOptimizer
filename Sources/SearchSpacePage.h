@@ -11,6 +11,7 @@ struct SearchSpaceParameters
 	double offsetDelta{ 20 };
 	double tauDelta{ 15 };
 	double boundaryDelta{ 40 };
+	int    initBounds{ 0 };
 };
 
 class SearchSpacePage :
@@ -25,6 +26,7 @@ private:
 	wxSpinCtrlDouble *offsetDeltaCtrl;
 	wxSpinCtrlDouble *tauDeltaCtrl;
 	wxSpinCtrlDouble *boundaryDeltaCtrl;
+	wxSpinCtrl       *initBoundsCtrl;
 
 };
 

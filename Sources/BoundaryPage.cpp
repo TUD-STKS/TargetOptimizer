@@ -13,7 +13,7 @@ BoundaryPage::BoundaryPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id
 	boundaryTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 	boundaryTable->EnableEditing(true);
 	boundaryTable->CreateGrid(1, 1);
-	boundaryTable->SetRowLabelValue(0, wxT("Duration"));
+	boundaryTable->SetRowLabelValue(0, wxT("Time"));
 	//boundaryTable->SetRowLabelValue(1, wxT("Offset [st]"));
 	//boundaryTable->SetRowLabelValue(2, wxT("Tau [ms]"));
 	//boundaryTable->SetRowLabelValue(3, wxT("Duration [s]"));

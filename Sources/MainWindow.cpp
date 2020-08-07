@@ -15,6 +15,7 @@ static const int IDM_SAVE_GESTURES = wxNewId();
 static const int IDM_SAVE_CSV = wxNewId();
 static const int IDM_SAVE_PITCHTIER = wxNewId();
 static const int IDM_CLEAR = wxNewId();
+static const int IDM_INIT_BOUNDS = wxNewId();
 /* Buit-in IDs in use */
 // wxID_EXIT
 // wxID_HELP
@@ -28,6 +29,7 @@ static const int IDB_SAVE_GESTURES = wxNewId();
 static const int IDB_SAVE_CSV = wxNewId();
 static const int IDB_SAVE_PITCHTIER = wxNewId();
 static const int IDB_CLEAR = wxNewId();
+static const int IDB_INIT_BOUNDS = wxNewId();
 
 /* Control IDs */
 //static const int IDC_TARGET_DISPLAY = wxNewId();
@@ -52,6 +54,8 @@ EVT_MENU(IDM_OPTIMIZE, OnOptimize)
 EVT_MENU(IDM_SAVE_GESTURES, OnSaveAsGesture)
 EVT_MENU(IDM_SAVE_CSV, OnSaveAsCsv)
 EVT_MENU(IDM_SAVE_PITCHTIER, OnSaveAsPitchTier)
+EVT_MENU(IDM_INIT_BOUNDS, OnInitBounds)
+
 EVT_MENU(wxID_HELP, OnHelp)
 EVT_MENU(wxID_ABOUT, OnAbout)
 EVT_MENU(wxID_EXIT, OnQuit)
@@ -63,6 +67,7 @@ EVT_BUTTON(IDB_OPTIMIZE, OnOptimize)
 EVT_BUTTON(IDB_SAVE_GESTURES, OnSaveAsGesture)
 EVT_BUTTON(IDB_SAVE_CSV, OnSaveAsCsv)
 EVT_BUTTON(IDB_SAVE_PITCHTIER, OnSaveAsPitchTier)
+EVT_BUTTON(IDB_INIT_BOUNDS, OnInitBounds)
 
 EVT_GRID_CMD_CELL_CHANGED(IDC_BOUNDARY_TABLE, OnBoundaryCellChanged)
 wxEND_EVENT_TABLE()
@@ -86,9 +91,10 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	menu->Append(IDM_OPEN_PITCHTIER, wxT("Open &PitchTier"));
 	menu->Append(IDM_OPTIMIZE, wxT("&Optimize"));
 	menu->Append(IDM_SAVE_GESTURES, wxT("Save as &GesturalScore"));
-	menu->Append(IDM_SAVE_CSV, wxT("Save as &CSV"));
-	menu->Append(IDM_SAVE_PITCHTIER, wxT("Save as P&itchTier"));
-	menu->Append(IDM_CLEAR, wxT("C&lear"));
+	menu->Append(IDM_INIT_BOUNDS, wxT("&Init Bounds"));
+	//menu->Append(IDM_SAVE_CSV, wxT("Save as &CSV"));
+	//menu->Append(IDM_SAVE_PITCHTIER, wxT("Save as P&itchTier"));
+	menu->Append(IDM_CLEAR, wxT("&Clear"));
 	menu->AppendSeparator();
 	menu->Append(wxID_EXIT, wxT("&Quit"));
 	menuBar->Append(menu, wxT("&File"));
@@ -124,14 +130,16 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_OPEN_PITCHTIER, wxT("Open PitchTier"));
 	actionsSizer->Add(button, buttonFlags);
+	button = new wxButton(this, IDB_INIT_BOUNDS, wxT("Init Bounds"));
+	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize"));
 	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_SAVE_GESTURES, wxT("Save as Gestural Score"));
 	actionsSizer->Add(button, buttonFlags);
-	button = new wxButton(this, IDB_SAVE_CSV, wxT("Save as CSV"));
-	actionsSizer->Add(button, buttonFlags);
-	button = new wxButton(this, IDB_SAVE_PITCHTIER, wxT("Save as PitchTier"));
-	actionsSizer->Add(button, buttonFlags);
+	//button = new wxButton(this, IDB_SAVE_CSV, wxT("Save as CSV"));
+	//actionsSizer->Add(button, buttonFlags);
+	//button = new wxButton(this, IDB_SAVE_PITCHTIER, wxT("Save as PitchTier"));
+	//actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_CLEAR, wxT("Clear"));
 	actionsSizer->Add(button, buttonFlags);
 
@@ -238,6 +246,35 @@ void MainWindow::OnHelp(wxCommandEvent& event)
 		"(3) Choose options and start optimization.\n"
 		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
 }
+
+void MainWindow::OnInitBounds(wxCommandEvent& event)
+{
+	std::cout << "begin fo time: " << Data::getInstance().originalF0.at(0).time << 
+	" end time: " << Data::getInstance().originalF0.back().time << std::endl;
+
+	auto options = optimizationOptions->getOptions();
+	std::cout << "number of init bounds: " << options.initBounds << std::endl;
+
+	double pitch_start = Data::getInstance().originalF0.at(0).time;
+	double pitch_end   = Data::getInstance().originalF0.back().time;
+	double pitch_interval = pitch_end - pitch_start;
+	double step = pitch_interval / (options.initBounds - 1);
+
+
+	std::vector<double> initBoundaries;
+	for (int i; i < options.initBounds; ++i)
+	{
+		initBoundaries.push_back( pitch_start + i * step );
+	}
+	Data::getInstance().syllableBoundaries = initBoundaries;
+	initBoundaries.clear();
+
+	isOptimized = false;
+	isTextGridLoaded = true;
+	updateWidgets();
+
+}
+
 
 void MainWindow::OnQuit(wxCommandEvent& event)
 {
@@ -369,14 +406,18 @@ void MainWindow::updateWidgets()
 	// Optimization is only available if all necessary files are loaded
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable(isTextGridLoaded && isPitchTierLoaded);
 	this->GetMenuBar()->Enable(IDM_OPTIMIZE, isTextGridLoaded && isPitchTierLoaded);
+
+	// Optimization is only available if all necessary files are loaded
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_INIT_BOUNDS))->Enable( isPitchTierLoaded );
+	this->GetMenuBar()->Enable(IDM_INIT_BOUNDS, isPitchTierLoaded);
 	
 	// Saving files is only available after optimization
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_GESTURES))->Enable(isOptimized);
 	this->GetMenuBar()->Enable(IDM_SAVE_GESTURES, isOptimized);
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_CSV))->Enable(isOptimized);
-	this->GetMenuBar()->Enable(IDM_SAVE_CSV, isOptimized);
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_PITCHTIER))->Enable(isOptimized);
-	this->GetMenuBar()->Enable(IDM_SAVE_PITCHTIER, isOptimized);
+	//static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_CSV))->Enable(isOptimized);
+	//this->GetMenuBar()->Enable(IDM_SAVE_CSV, isOptimized);
+	//static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_PITCHTIER))->Enable(isOptimized);
+	//this->GetMenuBar()->Enable(IDM_SAVE_PITCHTIER, isOptimized);
 	
 	// The pitch target display is only available after optimization
 	//static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);

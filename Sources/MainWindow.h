@@ -22,6 +22,7 @@ private:
     void OnBoundaryCellChanged(wxGridEvent& event);
     void OnClear(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
+    void OnInitBounds(wxCommandEvent& event);
     void OnOpenTextGrid(wxCommandEvent& event);
     void OnOpenPitchTier(wxCommandEvent& event);    
     void OnOptimize(wxCommandEvent& event);
