@@ -144,7 +144,9 @@ void MainWindow::clear()
 	isPitchTierLoaded = false;
 	isOptimized = false;
 
-	resultsTable->ClearGrid();
+	resultsTable->DeleteCols(0, resultsTable->GetNumberCols());
+	resultsTable->InsertCols(0, 1);
+	resultsTable->SetColLabelValue(0, wxEmptyString);
 	this->SetTitle("Target Optimizer");
 }
 
