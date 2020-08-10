@@ -361,6 +361,11 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		wxMessageBox(wxT("Error: 0 is not a valid search space parameter!"), wxT("Parameter error"), wxICON_ERROR);
 		return;
 	}
+	if ( Data::getInstance().syllableBoundaries.size() <= 1 )
+	{
+		wxMessageBox(wxT("Error: There must be at least two boundaries!"), wxT("Parameter error"), wxICON_ERROR);
+		return;
+	}
 
 	OptimizationProblem problem(options,
 		Data::getInstance().originalF0,

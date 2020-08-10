@@ -6,7 +6,7 @@
 
 void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 {
-	std::cout << "BobyqaOptimizer line 9" << std::endl;
+	//std::cout << "BobyqaOptimizer line 9" << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
 	ParameterSet ps = op.getParameters();
 	bool optimizeBoundaries = ps.optimizeBoundaries;//(ps.deltaBoundary != 0);
@@ -69,10 +69,10 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 
 	// optmization setup
 	long npt(2 * lowerBound.size() + 1);	// number of interpolation points
-	const double rho_begint = (trustRegion - 1.0) / 2.0; // initial trust region radius
-	std::cout << "rho_begint"<< rho_begint << std::endl;
+	const double rho_begin = (trustRegion - 1.0) / 2.0; // initial trust region radius
+	//std::cout << "rho_begint"<< rho_begint << std::endl;
 
-	const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
+	//const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
 	std::cout << "rho_begin"<< rho_begin << std::endl;
 	const double rho_end(1e-6); // stopping trust region radius -> accuracy
 	const long max_f_evals(1e6); // max number of objective function evaluations
@@ -108,7 +108,7 @@ std::cout << "BobyqaOptimizer line 102" << std::endl;
 		{
 			// optimization algorithm: BOBYQA
 			ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
-			std::cout << "ftmp" << ftmp << std::endl;
+			//std::cout << "ftmp" << ftmp << std::endl;
 		}
 		catch (dlib::bobyqa_failure & err)
 		{

@@ -106,9 +106,9 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 		pt.offset = arg(m_parameters.numberOptVar * i + 1);
 		pt.tau = arg(m_parameters.numberOptVar * i + 2);
 		//pt.duration = m_bounds[i + 1] - m_bounds[i];// (m_bounds[i] + arg(4 * i +3)/1000);
-		std::cout << "b: opt bound false? " << m_parameters.optimizeBoundaries << std::endl;
-		if (m_parameters.optimizeBoundaries)
+		if ( m_parameters.optimizeBoundaries == true )
 		{
+			std::cout << "b: opt bound true " << m_parameters.optimizeBoundaries << std::endl;
 			boundaries.push_back( m_bounds[i] + arg(m_parameters.numberOptVar * i +3)/1000 );
 			pt.duration = ( m_bounds[i + 1] + arg(m_parameters.numberOptVar * (i+1) +3)/1000 ) - boundaries[i];
 		}
