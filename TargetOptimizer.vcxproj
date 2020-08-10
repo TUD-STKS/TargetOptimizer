@@ -322,6 +322,7 @@
   <ItemGroup>
     <ClCompile Include="dlib\all\source.cpp" />
     <ClCompile Include="Sources\BasicPicture.cpp" />
+    <ClCompile Include="Sources\BoundaryPage.cpp" />
     <ClCompile Include="Sources\CdlpFilter.cpp" />
     <ClCompile Include="Sources\CsvWriter.cpp" />
     <ClCompile Include="Sources\GestureWriter.cpp" />
@@ -337,14 +338,17 @@
     <ClCompile Include="Sources\PlotRegion.cpp" />
     <ClCompile Include="Sources\Point.cpp" />
     <ClCompile Include="Sources\RegularizationPage.cpp" />
+    <ClCompile Include="Sources\ResultPage.cpp" />
     <ClCompile Include="Sources\SearchSpacePage.cpp" />
     <ClCompile Include="Sources\TamModelF0.cpp" />
+    <ClCompile Include="Sources\TargetsNotebook.cpp" />
     <ClCompile Include="Sources\TextGrid.cpp" />
     <ClCompile Include="Sources\TextGridReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BasicPicture.h" />
     <ClInclude Include="Sources\BobyqaOptimizer.h" />
+    <ClInclude Include="Sources\BoundaryPage.h" />
     <ClInclude Include="Sources\CdlpFilter.h" />
     <ClInclude Include="Sources\CsvWriter.h" />
     <ClInclude Include="Sources\Data.h" />
@@ -361,9 +365,11 @@
     <ClInclude Include="Sources\PlotRegion.h" />
     <ClInclude Include="Sources\Point.h" />
     <ClInclude Include="Sources\RegularizationPage.h" />
+    <ClInclude Include="Sources\ResultPage.h" />
     <ClInclude Include="Sources\SearchSpacePage.h" />
     <ClInclude Include="Sources\StringHelper.h" />
     <ClInclude Include="Sources\TamModelF0.h" />
+    <ClInclude Include="Sources\TargetsNotebook.h" />
     <ClInclude Include="Sources\TextGrid.h" />
     <ClInclude Include="Sources\TextGridReader.h" />
     <ClInclude Include="Sources\Tier.h" />

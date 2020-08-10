@@ -324,7 +324,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 					Data::getInstance().syllableBoundaries = tg.getBounds();
 				}
 			}
-			catch (std::runtime_error & e)
+			catch (std::runtime_error &e)
 			{
 				wxMessageBox(wxString(e.what()), wxT("Error"), wxICON_ERROR);
 			}
