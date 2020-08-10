@@ -255,7 +255,7 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 
 
 	std::vector<double> initBoundaries;
-	for (int i; i < options.initBounds; ++i)
+	for (int i = 0; i < options.initBounds; ++i)
 	{
 		initBoundaries.push_back( pitch_start + i * step );
 	}
