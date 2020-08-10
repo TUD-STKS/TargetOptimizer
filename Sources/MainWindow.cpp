@@ -226,8 +226,14 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 				wxT("Please pick the interval tier that holds the initial target boundaries"),
 					wxT("Pick boundary tier"),
 					choices);
-			intervalChoiceDialog.ShowModal();
-			Data::getInstance().syllableBoundaries = tg.getBounds(std::string(intervalChoiceDialog.GetStringSelection().utf8_str()));
+			if (intervalChoiceDialog.ShowModal() == wxOK)
+			{
+				Data::getInstance().syllableBoundaries = tg.getBounds(std::string(intervalChoiceDialog.GetStringSelection().utf8_str()));
+			}			
+			else
+			{
+				Data::getInstance().syllableBoundaries = tg.getBounds();
+			}
 			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
 
 			isOptimized = false;
