@@ -13,7 +13,12 @@ TextGridReader::TextGridReader(const std::string& textGridFile)
 std::vector<double> TextGridReader::getBounds(std::string tierName) const
 {
 	IntervalTier boundsTier;
-	boundsTier = tg.intervalTiers.find(tierName)->second;
+	auto it = tg.intervalTiers.find(tierName);
+	if (it == tg.intervalTiers.end())
+	{
+		throw std::runtime_error("Could not find an interval tier named " + tierName + "!");
+	}
+	boundsTier = it->second;
 	std::vector<double> bounds;
 	for (const auto& boundInterval : boundsTier)
 	{	
