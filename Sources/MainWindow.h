@@ -7,6 +7,7 @@
 #include "OptionsNotebook.h"
 #include "TargetsNotebook.h"
 #include "Data.h"
+#include "dataio.h"
 #include "OptimizationProblem.h"
 
 
@@ -22,15 +23,13 @@ private:
     void OnBoundaryCellChanged(wxGridEvent& event);
     void OnClear(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
-    void OnInitBounds(wxCommandEvent& event);
-    void OnOpenTextGrid(wxCommandEvent& event);
-    void OnOpenPitchTier(wxCommandEvent& event);    
+    void OnInitBounds(wxCommandEvent& event);   
+    void OnOpen(wxCommandEvent& event);
     void OnOptimize(wxCommandEvent& event);
-    void OnSaveAsGesture(wxCommandEvent& event);
-    void OnSaveAsCsv(wxCommandEvent& event);
-    void OnSaveAsPitchTier(wxCommandEvent& event);
+    void OnSaveAs(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void updateWidgets();
+
 
 private:
     //TODO: Replace flags with proper progress manager

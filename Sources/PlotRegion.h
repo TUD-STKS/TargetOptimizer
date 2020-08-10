@@ -3,7 +3,8 @@
 
 #include "BasicPicture.h"
 #include "Graph.h"
-#include "dataio.h"
+#include "Data.h"
+
 
 class PlotRegion :
 	public BasicPicture
@@ -21,6 +22,7 @@ private:
 	void drawOptimalF0(wxDC& dc);
 	void drawOriginalF0(wxDC& dc);
 	void drawTargets(wxDC& dc);	
+	void setAxesLimits();
 
 private:
 	const BoundaryVector& m_boundaries;

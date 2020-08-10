@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "PitchTierReader.h"
 #include "Data.h"
 
 class PitchTierReader {

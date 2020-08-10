@@ -3,7 +3,7 @@
 
 // global constants
 const unsigned FILTERORDER(5);			// TAM
-const unsigned RANDOMITERATIONS(5);		// BOBYQA
+const unsigned RANDOMITERATIONS(10);		// BOBYQA
 const unsigned SAMPLERATE(200); 		// Hz
 
 // vector of syllable bounds

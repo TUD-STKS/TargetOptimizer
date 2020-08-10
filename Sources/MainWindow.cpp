@@ -1,33 +1,30 @@
 #ifdef USE_WXWIDGETS
 #include <iostream>
-#include <wx/notebook.h>
-#include <wx/spinctrl.h>
 #include <wx/filename.h>
+#include <wx/notebook.h>
+#include <wx/progdlg.h>
+#include <wx/spinctrl.h>
 #include "MainWindow.h"
 #include "BobyqaOptimizer.h"
 
 
 /* Menu IDs */
-static const int IDM_OPEN_TEXTGRID = wxNewId();
-static const int IDM_OPEN_PITCHTIER = wxNewId();
+static const int IDM_OPEN = wxNewId();
 static const int IDM_OPTIMIZE = wxNewId();
-static const int IDM_SAVE_GESTURES = wxNewId();
-static const int IDM_SAVE_CSV = wxNewId();
-static const int IDM_SAVE_PITCHTIER = wxNewId();
+static const int IDM_SAVE_AS = wxNewId();
 static const int IDM_CLEAR = wxNewId();
+
 static const int IDM_INIT_BOUNDS = wxNewId();
+
 /* Buit-in IDs in use */
 // wxID_EXIT
 // wxID_HELP
 // wxID_ABOUT
 
 /* Button IDs */
-static const int IDB_OPEN_TEXTGRID = wxNewId();
-static const int IDB_OPEN_PITCHTIER = wxNewId();
+static const int IDB_OPEN = wxNewId();
 static const int IDB_OPTIMIZE = wxNewId();
-static const int IDB_SAVE_GESTURES = wxNewId();
-static const int IDB_SAVE_CSV = wxNewId();
-static const int IDB_SAVE_PITCHTIER = wxNewId();
+static const int IDB_SAVE_AS = wxNewId();
 static const int IDB_CLEAR = wxNewId();
 static const int IDB_INIT_BOUNDS = wxNewId();
 
@@ -48,52 +45,45 @@ static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(IDM_CLEAR, OnClear)
-EVT_MENU(IDM_OPEN_TEXTGRID, OnOpenTextGrid)
-EVT_MENU(IDM_OPEN_PITCHTIER, OnOpenPitchTier)
+EVT_MENU(IDM_OPEN, OnOpen)
 EVT_MENU(IDM_OPTIMIZE, OnOptimize)
-EVT_MENU(IDM_SAVE_GESTURES, OnSaveAsGesture)
-EVT_MENU(IDM_SAVE_CSV, OnSaveAsCsv)
-EVT_MENU(IDM_SAVE_PITCHTIER, OnSaveAsPitchTier)
 EVT_MENU(IDM_INIT_BOUNDS, OnInitBounds)
+EVT_MENU(IDM_SAVE_AS, OnSaveAs)
 
 EVT_MENU(wxID_HELP, OnHelp)
 EVT_MENU(wxID_ABOUT, OnAbout)
 EVT_MENU(wxID_EXIT, OnQuit)
 
 EVT_BUTTON(IDB_CLEAR, OnClear)
-EVT_BUTTON(IDB_OPEN_TEXTGRID, OnOpenTextGrid)
-EVT_BUTTON(IDB_OPEN_PITCHTIER, OnOpenPitchTier)
+EVT_BUTTON(IDB_OPEN, OnOpen)
 EVT_BUTTON(IDB_OPTIMIZE, OnOptimize)
-EVT_BUTTON(IDB_SAVE_GESTURES, OnSaveAsGesture)
-EVT_BUTTON(IDB_SAVE_CSV, OnSaveAsCsv)
-EVT_BUTTON(IDB_SAVE_PITCHTIER, OnSaveAsPitchTier)
 EVT_BUTTON(IDB_INIT_BOUNDS, OnInitBounds)
+EVT_BUTTON(IDB_SAVE_AS, OnSaveAs)
 
 EVT_GRID_CMD_CELL_CHANGED(IDC_BOUNDARY_TABLE, OnBoundaryCellChanged)
+
 wxEND_EVENT_TABLE()
 
-MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size) 	
+MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size)
 	: wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
 	this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-	
+
 	// The top level sizer for the main window
 	wxBoxSizer* topLevelSizer(new wxBoxSizer(wxVERTICAL));
 
 	// The sizer for the bottom part of the window containing
 	wxBoxSizer* bottomSizer(new wxBoxSizer(wxHORIZONTAL));
-	
+
 	// Create the menu bar
 	wxMenuBar* menuBar(new wxMenuBar());
 	// File menu
 	wxMenu* menu(new wxMenu());
-	menu->Append(IDM_OPEN_TEXTGRID, wxT("Open &TextGrid"));
-	menu->Append(IDM_OPEN_PITCHTIER, wxT("Open &PitchTier"));
-	menu->Append(IDM_OPTIMIZE, wxT("&Optimize"));
-	menu->Append(IDM_SAVE_GESTURES, wxT("Save as &GesturalScore"));
+
+	menu->Append(IDM_OPEN, wxT("&Open File(s)..."));
+	menu->Append(IDM_OPTIMIZE, wxT("Optimize &Targets"));
+	menu->Append(IDM_SAVE_AS, wxT("&Save as..."));
 	menu->Append(IDM_INIT_BOUNDS, wxT("&Init Bounds"));
-	//menu->Append(IDM_SAVE_CSV, wxT("Save as &CSV"));
-	//menu->Append(IDM_SAVE_PITCHTIER, wxT("Save as P&itchTier"));
 	menu->Append(IDM_CLEAR, wxT("&Clear"));
 	menu->AppendSeparator();
 	menu->Append(wxID_EXIT, wxT("&Quit"));
@@ -105,7 +95,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	menuBar->Append(menu, wxT("&Help"));
 
 	this->SetMenuBar(menuBar);
-	
+
 
 	plotRegion->SetMinSize(wxSize(900, 600));
 	topLevelSizer->Add(plotRegion, wxSizerFlags().Expand().Border(wxALL, 10).Proportion(1));
@@ -124,22 +114,22 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 
 	// Actions
 	wxStaticBoxSizer* actionsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Actions"));
-	wxButton* button{ new wxButton(this, IDB_OPEN_TEXTGRID, wxT("Open TextGrid")) };
+	wxButton* button{ new wxButton(this, IDB_OPEN, wxT("Open File(s)")) };
 	wxSizerFlags buttonFlags;
 	buttonFlags.Expand().Border(wxALL, 5);
 	actionsSizer->Add(button, buttonFlags);
-	button = new wxButton(this, IDB_OPEN_PITCHTIER, wxT("Open PitchTier"));
-	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_INIT_BOUNDS, wxT("Init Bounds"));
 	actionsSizer->Add(button, buttonFlags);
-	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize"));
-	actionsSizer->Add(button, buttonFlags);
-	button = new wxButton(this, IDB_SAVE_GESTURES, wxT("Save as Gestural Score"));
-	actionsSizer->Add(button, buttonFlags);
+
 	//button = new wxButton(this, IDB_SAVE_CSV, wxT("Save as CSV"));
 	//actionsSizer->Add(button, buttonFlags);
 	//button = new wxButton(this, IDB_SAVE_PITCHTIER, wxT("Save as PitchTier"));
 	//actionsSizer->Add(button, buttonFlags);
+
+	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize Targets"));
+	actionsSizer->Add(button, buttonFlags);
+	button = new wxButton(this, IDB_SAVE_AS, wxT("Save as..."));
+	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_CLEAR, wxT("Clear"));
 	actionsSizer->Add(button, buttonFlags);
 
@@ -149,6 +139,7 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 
 	// Targets
 	wxStaticBoxSizer* targetsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
+
 	//// The notebook with optimization options
 	//targetOptions = new OptionsNotebook(this, wxID_ANY);
 	//targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
@@ -176,10 +167,11 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	//bottomSizer->Add(optionsSizer2, wxSizerFlags().Border(wxALL, 5).Expand());
 
 
+
 	bottomSizer->Add(targetsSizer, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
-	
+
 	topLevelSizer->Add(bottomSizer, wxSizerFlags().Expand());
-	
+
 	updateWidgets();
 	this->SetSizerAndFit(topLevelSizer);
 }
@@ -208,7 +200,7 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 	info.SetWebSite(wxT("https://github.com/TUD-STKS/TargetOptimizer"));
 	info.AddDeveloper(wxT("Paul Krug"));
 	info.AddDeveloper(wxT("Patrick Schmager"));
-	info.AddDeveloper(wxT("Simon Stone"));	
+	info.AddDeveloper(wxT("Simon Stone"));
 	info.AddDeveloper(wxT("Alexander Wilbrandt"));
 	wxAboutBox(info);
 }
@@ -246,6 +238,7 @@ void MainWindow::OnHelp(wxCommandEvent& event)
 		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
 }
 
+
 void MainWindow::OnInitBounds(wxCommandEvent& event)
 {
 	std::cout << "begin fo time: " << Data::getInstance().originalF0.at(0).time << 
@@ -275,52 +268,63 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 }
 
 
-void MainWindow::OnQuit(wxCommandEvent& event)
+void MainWindow::OnOpen(wxCommandEvent& event)
 {
-	Close(true);
-}
-
-void MainWindow::OnOpenTextGrid(wxCommandEvent& event)
-{
-	wxFileDialog openFileDialog(this, wxT("Open TextGrid file"), "", "",
-			"TextGrid files (*.TextGrid)|*.TextGrid", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
-	if (openFileDialog.ShowModal() == wxID_CANCEL)
-		return;     
-
-	if (isOptimized)
-	{
-		this->clear();
-	}
-	
-	TextGridReader tgreader(std::string(openFileDialog.GetPath().utf8_str()));
-	Data::getInstance().syllableBoundaries = tgreader.getBounds();
-	this->SetTitle(wxT("Target Optimizer - ") + wxFileName(openFileDialog.GetFilename()).GetName());
-
-
-	isOptimized = false;
-	isTextGridLoaded = true;
-	updateWidgets();
-}
-
-void MainWindow::OnOpenPitchTier(wxCommandEvent& event)
-{
-	wxFileDialog openFileDialog(this, wxT("Open PitchTier file"), "", "",
-		"PitchTier files (*.PitchTier)|*.PitchTier", wxFD_OPEN | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
+	wxFileDialog openFileDialog(this, wxT("Open TextGrid and/or PitchTier file"), "", "",
+		"TextGrid files and PitchTier files (*.TextGrid; *.PitchTier)|*.TextGrid;*.PitchTier", wxFD_OPEN | wxFD_MULTIPLE | wxFD_FILE_MUST_EXIST | wxFD_CHANGE_DIR);
 	if (openFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 
+	/* Check file selection */
+	wxArrayString selectedFiles;
+	openFileDialog.GetPaths(selectedFiles);
+	int numTextGrid = 0;
+	int numPitchTier = 0;
+	for (const auto& filename : selectedFiles)
+	{
+		numTextGrid += static_cast<int>(filename.EndsWith(wxT("TextGrid")));
+		numPitchTier += static_cast<int>(filename.EndsWith(wxT("PitchTier")));
+	}
+	if (numTextGrid > 1 || numPitchTier > 1)
+	{
+		wxMessageBox(wxT("Please select at most one TextGrid and one PitchTier file."),
+			wxT("Too many files"), wxICON_ERROR);
+		return;
+	}
+
+	/* File selection is legal, so clear plot and load files */
 	if (isOptimized)
 	{
 		this->clear();
 	}
-	PitchTierReader ptreader(std::string(openFileDialog.GetPath().utf8_str()));
-	Data::getInstance().originalF0 = ptreader.getF0();
-	this->SetTitle(wxT("Target Optimizer - ") + wxFileName(openFileDialog.GetFilename()).GetName());
-	
-	isOptimized = false;
-	isPitchTierLoaded = true;
-	
+
+	for (const auto& filepath : selectedFiles)
+	{
+		if (filepath.EndsWith("TextGrid"))
+		{
+			auto tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
+			Data::getInstance().syllableBoundaries = tg.getBounds();
+			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
+
+			isOptimized = false;
+			isTextGridLoaded = true;
+		}
+		if (filepath.EndsWith("PitchTier"))
+		{
+			auto ptreader = DataIO::readPitchTierFile(std::string(filepath.utf8_str()));
+			Data::getInstance().originalF0 = ptreader.getF0();
+			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
+
+			isOptimized = false;
+			isPitchTierLoaded = true;
+		}
+	}
 	updateWidgets();
+}
+
+void MainWindow::OnQuit(wxCommandEvent& event)
+{
+	Close(true);
 }
 
 void MainWindow::OnOptimize(wxCommandEvent& event)
@@ -337,15 +341,20 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		Data::getInstance().originalF0,
 		Data::getInstance().syllableBoundaries);
 	BobyqaOptimizer optimizer;
+	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
+	pd.Pulse();
 	try
 	{
 		optimizer.optimize(problem);
 	}
 	catch (const std::exception&)
 	{
+		pd.Close();
 		wxMessageBox(wxT("Something went wrong during the optimization. Did you choose matching TextGrid and PitchTier files?"), wxT("Error"), wxICON_ERROR);
 		return;
-	}	
+	}
+	pd.Close();
+	
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
@@ -359,42 +368,30 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	updateWidgets();
 }
 
-void MainWindow::OnSaveAsGesture(wxCommandEvent& event)
+void MainWindow::OnSaveAs(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
-	wxFileDialog saveFileDialog(this, wxT("Save Gestural Score file"), "", defaultName,
-			"Gestural Score files (*.ges)|*.ges", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+	wxFileDialog saveFileDialog(this, wxT("Save as..."), "", defaultName,
+		wxT("Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier|All supported files (*.ges, *.csv, *.PitchTier)|*.ges; *.csv; *.PitchTier"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
-
-	GestureWriter gwriter(std::string(saveFileDialog.GetPath().utf8_str()));
-	gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
+	{
+		DataIO::saveGesturalScore(std::string(saveFileDialog.GetPath().utf8_str()));
+	}
+	else if (saveFileDialog.GetPath().EndsWith(wxT("csv")))
+	{
+		DataIO::saveCsvFile(std::string(saveFileDialog.GetPath().utf8_str()));
+	}
+	else if (saveFileDialog.GetPath().EndsWith(wxT("PitchTier")))
+	{
+		DataIO::savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
+	}
+	else
+	{
+		wxMessageBox(wxT("Please use one of the supported file types!"), wxT("Unsupported file format"), wxICON_ERROR);
+	}
 }
-
-void MainWindow::OnSaveAsCsv(wxCommandEvent& event)
-{
-	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
-	wxFileDialog saveFileDialog(this, wxT("Save CSV file"), "", defaultName,
-		"CSV (*.csv)|*.csv", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
-	if (saveFileDialog.ShowModal() == wxID_CANCEL)
-		return;
-
-	CsvWriter cwriter(std::string(saveFileDialog.GetPath().utf8_str()));
-	cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
-}
-
-void MainWindow::OnSaveAsPitchTier(wxCommandEvent& event)
-{
-	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
-	wxFileDialog saveFileDialog(this, wxT("Save PitchTier file"), "", defaultName,
-		"PitchTier (*.PitchTier)|*.PitchTier", wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
-	if (saveFileDialog.ShowModal() == wxID_CANCEL)
-		return;
-	
-	PitchTierWriter pwriter(std::string(saveFileDialog.GetPath().utf8_str()));
-	pwriter.writeF0(Data::getInstance().optimalF0);
-}
-
 
 void MainWindow::updateWidgets()
 {
@@ -406,18 +403,17 @@ void MainWindow::updateWidgets()
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable(isTextGridLoaded && isPitchTierLoaded);
 	this->GetMenuBar()->Enable(IDM_OPTIMIZE, isTextGridLoaded && isPitchTierLoaded);
 
-	// Optimization is only available if all necessary files are loaded
+
+	// Init bounds available after pitchtier is loaded
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_INIT_BOUNDS))->Enable( isPitchTierLoaded );
 	this->GetMenuBar()->Enable(IDM_INIT_BOUNDS, isPitchTierLoaded);
 	
+
 	// Saving files is only available after optimization
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_GESTURES))->Enable(isOptimized);
-	this->GetMenuBar()->Enable(IDM_SAVE_GESTURES, isOptimized);
-	//static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_CSV))->Enable(isOptimized);
-	//this->GetMenuBar()->Enable(IDM_SAVE_CSV, isOptimized);
-	//static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_PITCHTIER))->Enable(isOptimized);
-	//this->GetMenuBar()->Enable(IDM_SAVE_PITCHTIER, isOptimized);
-	
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_AS))->Enable(isOptimized);
+	this->GetMenuBar()->Enable(IDM_SAVE_AS, isOptimized);
+
+
 	// The pitch target display is only available after optimization
 	//static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
 	targetOptions->boundaryPage->Enable(isTextGridLoaded);

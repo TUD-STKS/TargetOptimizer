@@ -2,6 +2,7 @@
 #include <string>
 #include <dlib/cmd_line_parser.h>
 #include "gui.h"
+#include "dataio.h"
 #include "BobyqaOptimizer.h"
 #include "TextGridReader.h"
 
@@ -97,11 +98,10 @@ int main(int argc, char* argv[])
 			}
 
 			// process TextGrid input
-			TextGridReader tgreader (parser[0]);
-			BoundaryVector bounds = tgreader.getBounds();
+			BoundaryVector bounds = DataIO::readTextGridFile(parser[0]).getBounds();
 
 			// process PitchTier input
-			PitchTierReader ptreader (parser[1]);
+			auto ptreader = DataIO::readPitchTierFile(parser[1]);
 			TimeSignal f0 = ptreader.getF0();
 			std::string fileName = ptreader.getFileName();
 
@@ -137,22 +137,19 @@ int main(int argc, char* argv[])
 			// process gesture-file output option
 			if (parser.option("g"))
 			{
-				GestureWriter gwriter (fileName + ".ges");
-				gwriter.writeTargets(onset, optTargets);
+				DataIO::saveGesturalScore(fileName + ".ges");
 			}
 
 			// process csv-file output option
 			if (parser.option("c"))
 			{
-				CsvWriter cwriter (fileName + ".csv");
-				cwriter.writeTargets(onset, optTargets);
+				DataIO::saveCsvFile(fileName + ".csv");
 			}
 
 			// process PitchTarget-file output option
 			if (parser.option("p"))
 			{
-				PitchTierWriter pwriter (fileName + "-tam.PitchTier");
-				pwriter.writeF0(optF0);
+				DataIO::savePitchTier(fileName + "-tam.PitchTier");
 			}
 
 			// print results
