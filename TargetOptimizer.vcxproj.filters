@@ -75,6 +75,15 @@
     <ClCompile Include="Sources\TextGrid.cpp">
       <Filter>Backend</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\BoundaryPage.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\ResultPage.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
+    <ClCompile Include="Sources\TargetsNotebook.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BobyqaOptimizer.h">
@@ -148,6 +157,15 @@
     </ClInclude>
     <ClInclude Include="Sources\Tier.h">
       <Filter>Backend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\BoundaryPage.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\ResultPage.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\TargetsNotebook.h">
+      <Filter>Frontend</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
