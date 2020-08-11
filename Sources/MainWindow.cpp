@@ -209,7 +209,15 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
 {
 	double Cell;
-	targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
+	auto Cell_Str = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() );
+	Cell_Str.ToDouble(&Cell);
+
+	if ( !Cell_Str.ToDouble(&Cell) or (Cell < 0) ) 
+	{
+		wxMessageBox(wxT("Error: The cell entries must be positive numbers!"), wxT("Parameter error"), wxICON_ERROR);
+		targetOptions->boundaryPage->setEntries( Data::getInstance().syllableBoundaries );
+		return;
+	}
 
 	Data::getInstance().syllableBoundaries.at( event.GetCol() ) = Cell;
 	//Data::getInstance().syllableBoundaries.at( event.GetCol() ) = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
