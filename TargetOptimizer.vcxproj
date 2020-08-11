@@ -331,6 +331,7 @@
     <ClCompile Include="Sources\main.cpp" />
     <ClCompile Include="Sources\MainWindow.cpp" />
     <ClCompile Include="Sources\OptimizationProblem.cpp" />
+    <ClCompile Include="Sources\OptimizerPage.cpp" />
     <ClCompile Include="Sources\OptionsNotebook.cpp" />
     <ClCompile Include="Sources\PitchTierWriter.cpp" />
     <ClCompile Include="Sources\PitchTierReader.cpp" />
@@ -359,6 +360,7 @@
     <ClInclude Include="Sources\Interval.h" />
     <ClInclude Include="Sources\MainWindow.h" />
     <ClInclude Include="Sources\OptimizationProblem.h" />
+    <ClInclude Include="Sources\OptimizerPage.h" />
     <ClInclude Include="Sources\OptionsNotebook.h" />
     <ClInclude Include="Sources\PitchTierReader.h" />
     <ClInclude Include="Sources\PitchTierWriter.h" />

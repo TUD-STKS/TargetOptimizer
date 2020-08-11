@@ -84,6 +84,9 @@
     <ClCompile Include="Sources\TargetsNotebook.cpp">
       <Filter>Frontend</Filter>
     </ClCompile>
+    <ClCompile Include="Sources\OptimizerPage.cpp">
+      <Filter>Frontend</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sources\BobyqaOptimizer.h">
@@ -165,6 +168,9 @@
       <Filter>Frontend</Filter>
     </ClInclude>
     <ClInclude Include="Sources\TargetsNotebook.h">
+      <Filter>Frontend</Filter>
+    </ClInclude>
+    <ClInclude Include="Sources\OptimizerPage.h">
       <Filter>Frontend</Filter>
     </ClInclude>
   </ItemGroup>

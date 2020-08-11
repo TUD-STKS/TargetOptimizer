@@ -2,7 +2,7 @@
 #include "OptionsNotebook.h"
 #include <iostream> //exclude again
 
-ParameterSet OptionsNotebook::getOptions()
+OptimizationOptions OptionsNotebook::getOptions()
 {
 	ParameterSet params;
 	auto searchParams = searchSpacePage->getParameters();
@@ -41,8 +41,9 @@ ParameterSet OptionsNotebook::getOptions()
 	}
 	params.meanOffset /= Data::getInstance().originalF0.size();
 
-
-	return params;
+	OptimizerOptions opts = optimizerPage->getParameters();
+	
+	return OptimizationOptions{ params, opts };
 }
 
 #endif // USE_WXWIDGETS
