@@ -245,17 +245,17 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 	std::cout << "begin fo time: " << Data::getInstance().originalF0.at(0).time << 
 	" end time: " << Data::getInstance().originalF0.back().time << std::endl;
 
-	auto options = optimizationOptions->getOptions();
-	std::cout << "number of init bounds: " << options.initBounds << std::endl;
+	auto problemParams = optimizationOptions->getOptions().problemParams;
+	std::cout << "number of init bounds: " << problemParams.initBounds << std::endl;
 
 	double pitch_start = Data::getInstance().originalF0.at(0).time;
 	double pitch_end   = Data::getInstance().originalF0.back().time;
 	double pitch_interval = pitch_end - pitch_start;
-	double step = pitch_interval / (options.initBounds - 1);
+	double step = pitch_interval / (problemParams.initBounds - 1);
 
 
 	std::vector<double> initBoundaries;
-	for (int i = 0; i < options.initBounds; ++i)
+	for (int i = 0; i < problemParams.initBounds; ++i)
 	{
 		initBoundaries.push_back( pitch_start + i * step );
 	}
@@ -355,8 +355,11 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 void MainWindow::OnOptimize(wxCommandEvent& event)
 {
 	auto options = optimizationOptions->getOptions();
+	auto parameters = options.problemParams;
+	// TODO: Use optimizer options in BobyqaOptimizer
+	auto optimizerOptions = options.optimizerOptions;
 
-	if (options.deltaOffset == 0 || options.deltaSlope == 0 || options.deltaTau == 0)
+	if (parameters.deltaOffset == 0 || parameters.deltaSlope == 0 || parameters.deltaTau == 0)
 	{
 		wxMessageBox(wxT("Error: 0 is not a valid search space parameter!"), wxT("Parameter error"), wxICON_ERROR);
 		return;
@@ -367,9 +370,10 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		return;
 	}
 
-	OptimizationProblem problem(options,
+	OptimizationProblem problem(parameters,
 		Data::getInstance().originalF0,
 		Data::getInstance().syllableBoundaries);
+	
 	BobyqaOptimizer optimizer;
 	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
 	pd.Pulse();

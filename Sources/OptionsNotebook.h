@@ -3,8 +3,15 @@
 #include <wx/notebook.h>
 #include "SearchSpacePage.h"
 #include "RegularizationPage.h"
+#include "OptimizerPage.h"
 #include "OptimizationProblem.h"
 
+
+struct OptimizationOptions
+{
+	ParameterSet problemParams;
+	OptimizerOptions optimizerOptions;
+};
 
 class OptionsNotebook :
 	public wxNotebook
@@ -15,12 +22,13 @@ public:
     OptionsNotebook(Args&&... args);
 
 public:
-	ParameterSet getOptions();
+	OptimizationOptions getOptions();
 
 private:
 	//TODO: Create an OptionsPage class
     SearchSpacePage *searchSpacePage;
     RegularizationPage* regularizationPage;
+	OptimizerPage* optimizerPage;
 };
 
 // Because it is templated, the constructor has to be in the header file
@@ -33,6 +41,9 @@ inline OptionsNotebook::OptionsNotebook(Args&& ...args) : wxNotebook(std::forwar
 	// The second page of the notebook with regularization options
 	regularizationPage = new RegularizationPage(this, wxID_ANY);
 	AddPage(regularizationPage, wxT("Regularization"));
+	// The third page of the notebook with optimizer options
+	optimizerPage = new OptimizerPage(this, wxID_ANY);
+	AddPage(optimizerPage, wxT("Optimizer"));
 }
 
 #endif // USE_WXWIDGETS
