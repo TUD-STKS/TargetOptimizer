@@ -13,8 +13,16 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	BoundaryVector initialBoundaries  = op.getBoundaries();
 	BoundaryVector tmpBoundaries = initialBoundaries;
 	BoundaryVector optBoundaries;
+	TargetVector   tmpTargets = op.getPitchTargets();
 
 	int number_optVar = ps.numberOptVar; // Optimize the 3 target parameters by default
+
+	double tmpMSE, tmpSCC;
+
+	double MSE_Threshold = 0.2 *0.2;
+	double SCC_Threshold = 0.99 * 0.99;
+
+	srand(1);
 
 
 	// precalculate search space bounds (ssp_bounds)
@@ -85,10 +93,11 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	// set up OpenMP
 	int numThreads = omp_get_max_threads();
 	omp_set_num_threads(numThreads);
-std::cout << "BobyqaOptimizer line 84" << std::endl;
+//std::cout << "BobyqaOptimizer line 84" << std::endl;
 #pragma omp parallel for schedule(dynamic)
 	for (unsigned it = 0; it < RANDOMITERATIONS; ++it)
 	{
+		std::cout << '\r' << "Iteration nr: "<< it << std::flush;
 		// random initialization
 		DlibVector x;
 		x.set_size(number_Targets * number_optVar);
@@ -103,7 +112,7 @@ std::cout << "BobyqaOptimizer line 84" << std::endl;
 			//x(4 * i + 2) = getRandomValue(tmin, tmax);
 			//x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
 		}
-std::cout << "BobyqaOptimizer line 102" << std::endl;
+//std::cout << "BobyqaOptimizer line 102" << std::endl;
 		try
 		{
 			// optimization algorithm: BOBYQA
@@ -118,7 +127,7 @@ std::cout << "BobyqaOptimizer line 102" << std::endl;
 #endif
 		}
 
-		std::cout << "BobyqaOptimizer line 116" << std::endl;
+		//std::cout << "BobyqaOptimizer line 116" << std::endl;
 
 		// write optimization results back
 #pragma omp critical (updateMinValue)
@@ -130,11 +139,31 @@ std::cout << "BobyqaOptimizer line 102" << std::endl;
 			{
 				for (unsigned i = 0; i <= number_Targets; ++i)
 				{
-					tmpBoundaries.at(i) += x(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
 				}
 				op.setBoundaries( tmpBoundaries );
 				optBoundaries = tmpBoundaries;
+			}//else{
+				//tmpBoundaries = initialBoundaries; Ist sowieso so, da bei optBound= FAlse die tmpbounds nicht geändert werden
+			//}
+			for (unsigned i = 0; i < number_Targets; ++i)
+			{
+				PitchTarget pt;
+				pt.slope = xtmp(number_optVar * i + 0);
+				pt.offset = xtmp(number_optVar * i + 1);
+				pt.tau = xtmp(number_optVar * i + 2);
+				pt.duration = tmpBoundaries.at(i+1) - tmpBoundaries.at(i);
+				tmpTargets.at(i) = pt;
 			}
+
+			std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+
+			if ( tmpMSE < MSE_Threshold || tmpSCC > SCC_Threshold)
+			{
+				it += RANDOMITERATIONS;
+				std::cout << "   Threshold reached!" << it << std::endl;
+			}
+
 		}
 	}
 
@@ -150,7 +179,7 @@ std::cout << "BobyqaOptimizer line 102" << std::endl;
 	{
 		optBoundaries = initialBoundaries;
 	}
-std::cout << "BobyqaOptimizer line 148" << std::endl;
+//std::cout << "BobyqaOptimizer line 148" << std::endl;
 	//BoundaryVector opt_boundaries = tmpBoundaries;
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
@@ -170,7 +199,7 @@ std::cout << "BobyqaOptimizer line 148" << std::endl;
 
 	// store optimum
 	op.setOptimum( optBoundaries, optTargets );
-std::cout << "BobyqaOptimizer line 168" << std::endl;
+//std::cout << "BobyqaOptimizer line 168" << std::endl;
 	// DEBUG message
 #ifdef DEBUG_MSG
 	std::cout << "\t[optimize] mse = " << fmin << std::endl;

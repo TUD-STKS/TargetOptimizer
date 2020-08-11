@@ -212,7 +212,7 @@ void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
 	auto Cell_Str = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() );
 	Cell_Str.ToDouble(&Cell);
 
-	if ( !Cell_Str.ToDouble(&Cell) or (Cell < 0) ) 
+	if ( !Cell_Str.ToDouble(&Cell) || (Cell < 0) ) 
 	{
 		wxMessageBox(wxT("Error: The cell entries must be positive numbers!"), wxT("Parameter error"), wxICON_ERROR);
 		targetOptions->boundaryPage->setEntries( Data::getInstance().syllableBoundaries );
@@ -220,15 +220,7 @@ void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
 	}
 
 	Data::getInstance().syllableBoundaries.at( event.GetCol() ) = Cell;
-	//Data::getInstance().syllableBoundaries.at( event.GetCol() ) = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() ).ToDouble(&Cell);
-	std::cout << "OnBoundaryCellChanged called! Cell = "<< Cell << " syllable: " << Data::getInstance().syllableBoundaries.at( event.GetCol() ) << std::endl;
-
-	//if(!number.ToDouble(&value)){ /* error! */ } // TODO: hiermit error abfangen falls jemand etwas anderes als eine Zahl eingibt!!
-
-	
-	//isOptimized = false;
-	//isPitchTierLoaded = true;
-	
+	//std::cout << "OnBoundaryCellChanged called! Cell = "<< Cell << " syllable: " << Data::getInstance().syllableBoundaries.at( event.GetCol() ) << std::endl;
 	updateWidgets();
 }
 

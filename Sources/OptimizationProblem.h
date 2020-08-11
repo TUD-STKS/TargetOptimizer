@@ -3,6 +3,8 @@
 #include "Data.h"
 #include "TamModelF0.h"
 
+#include <tuple>
+
 
 // parameter set defining an optimisation problem
 struct ParameterSet
@@ -43,10 +45,14 @@ public:
 	Sample getOnset() const;
 	double getCorrelationCoefficient() const;
 	double getRootMeanSquareError() const;
+	double getSquareCorrelationCoefficient( const TamModelF0& tamF0 ) const;
+	double getMeanSquareError( const TamModelF0& tamF0 ) const;
+	std::tuple<double, double> getOptStats( const BoundaryVector& boundaries, const TargetVector& targets ) const;
 
 	// operator called by optimizer
 	double operator() (const DlibVector& arg) const;
 	//BoundaryVector m_bounds;
+
 
 private:
 	// private member functions
