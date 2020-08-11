@@ -1,5 +1,6 @@
 #pragma once
 #include "OptimizationProblem.h"
+#include "OptimizerPage.h"
 
 
 // solver for an optimization problem utilizing BOBYQA algorithm
@@ -9,7 +10,7 @@ public:
 	BobyqaOptimizer() { };//srand(3);};//srand(time(NULL)); };
 
 	// public member functions
-	void optimize(OptimizationProblem& op) const;
+	void optimize(OptimizationProblem& op, OptimizerOptions optOpt) const;
 	//void optimize_targets_and_boundaries(OptimizationProblem& op) const;
 
 private:

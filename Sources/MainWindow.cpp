@@ -379,7 +379,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	pd.Pulse();
 	try
 	{
-		optimizer.optimize(problem);
+		optimizer.optimize( problem, optimizerOptions );
 	}
 	catch (const std::exception&)
 	{

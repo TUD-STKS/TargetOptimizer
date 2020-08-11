@@ -126,10 +126,12 @@ int main(int argc, char* argv[])
 			parameters.meanOffset = meanF0;
 			parameters.meanTau = 15.0;
 
+			OptimizerOptions optOpt;
+
 			// main functionality
 			OptimizationProblem problem (parameters, f0, bounds);
 			BobyqaOptimizer optimizer;
-			optimizer.optimize(problem);
+			optimizer.optimize(problem, optOpt);
 			TargetVector optTargets = problem.getPitchTargets();
 			TimeSignal optF0 = problem.getModelF0();
 			Sample onset = problem.getOnset();

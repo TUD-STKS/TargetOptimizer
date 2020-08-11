@@ -10,7 +10,7 @@ struct OptimizerOptions
 	int maxIterations{ 100 };
 	double correlationThreshold{ 0.99 };
 	bool useCorrelationThreshold{ true };
-	double rmseThreshold{ 0.1 };
+	double rmseThreshold{ 0.2 };
 	bool useRmseThreshold{ true };
 };
 

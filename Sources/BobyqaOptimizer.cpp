@@ -4,23 +4,35 @@
 #include "BobyqaOptimizer.h"
 #include <iostream> //eclude again
 
-void BobyqaOptimizer::optimize(OptimizationProblem& op) const
+
+void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
 {
-	//std::cout << "BobyqaOptimizer line 9" << std::endl;
+	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
-	ParameterSet ps = op.getParameters();
+	ParameterSet ps  = op.getParameters();
 	bool optimizeBoundaries = ps.optimizeBoundaries;//(ps.deltaBoundary != 0);
 	BoundaryVector initialBoundaries  = op.getBoundaries();
 	BoundaryVector tmpBoundaries = initialBoundaries;
 	BoundaryVector optBoundaries;
 	TargetVector   tmpTargets = op.getPitchTargets();
 
+
 	int number_optVar = ps.numberOptVar; // Optimize the 3 target parameters by default
 
 	double tmpMSE, tmpSCC;
 
-	double MSE_Threshold = 0.2 *0.2;
-	double SCC_Threshold = 0.99 * 0.99;
+	const unsigned RANDOMITERATIONS = optOpt.maxIterations;
+	const double MSE_Threshold = optOpt.rmseThreshold * optOpt.rmseThreshold;
+	const double SCC_Threshold = optOpt.correlationThreshold * optOpt.correlationThreshold;
+	bool useMSEThreshold = optOpt.useRmseThreshold;
+	bool useSCCThreshold = optOpt.useCorrelationThreshold;
+	bool use_MSE_SCC_Threshold = useMSEThreshold && useSCCThreshold;
+
+	if (useMSEThreshold)
+	{
+		useMSEThreshold = false;
+		useSCCThreshold = false;
+	}
 
 	srand(1);
 
@@ -94,76 +106,78 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op) const
 	int numThreads = omp_get_max_threads();
 	omp_set_num_threads(numThreads);
 //std::cout << "BobyqaOptimizer line 84" << std::endl;
-#pragma omp parallel for schedule(dynamic)
+	bool SearchFinished = false;
+	#pragma omp parallel for schedule(dynamic)
+
 	for (unsigned it = 0; it < RANDOMITERATIONS; ++it)
 	{
-		std::cout << '\r' << "Iteration nr: "<< it << std::flush;
-		// random initialization
-		DlibVector x;
-		x.set_size(number_Targets * number_optVar);
-		for (unsigned i = 0; i < number_Targets; ++i)
+		if (!SearchFinished)
 		{
-			for (unsigned ssp_bound = 0; ssp_bound < number_optVar; ++ssp_bound)
-			{
-				x(number_optVar * i + ssp_bound) = getRandomValue( min_bounds.at(ssp_bound), max_bounds.at(ssp_bound) );
-			}
-			//x(4 * i + 0) = getRandomValue(mmin, mmax);
-			//x(4 * i + 1) = getRandomValue(bmin, bmax);
-			//x(4 * i + 2) = getRandomValue(tmin, tmax);
-			//x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
-		}
-//std::cout << "BobyqaOptimizer line 102" << std::endl;
-		try
-		{
-			// optimization algorithm: BOBYQA
-			ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
-			//std::cout << "ftmp" << ftmp << std::endl;
-		}
-		catch (dlib::bobyqa_failure & err)
-		{
-			// DEBUG message
-#ifdef DEBUG_MSG
-			std::cout << "\t[optimize] WARNING: no convergence during optimization in iteration: " << it << std::endl << err.info << std::endl;
-#endif
-		}
-
-		//std::cout << "BobyqaOptimizer line 116" << std::endl;
-
-		// write optimization results back
-#pragma omp critical (updateMinValue)
-		if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
-		{
-			fmin = ftmp;
-			xtmp = x;
-			if (optimizeBoundaries)
-			{
-				for (unsigned i = 0; i <= number_Targets; ++i)
-				{
-					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
-				}
-				op.setBoundaries( tmpBoundaries );
-				optBoundaries = tmpBoundaries;
-			}//else{
-				//tmpBoundaries = initialBoundaries; Ist sowieso so, da bei optBound= FAlse die tmpbounds nicht geändert werden
-			//}
+			std::cout << '\r' << "Iteration nr: "<< it << std::flush;
+			// random initialization
+			DlibVector x;
+			x.set_size(number_Targets * number_optVar);
 			for (unsigned i = 0; i < number_Targets; ++i)
 			{
-				PitchTarget pt;
-				pt.slope = xtmp(number_optVar * i + 0);
-				pt.offset = xtmp(number_optVar * i + 1);
-				pt.tau = xtmp(number_optVar * i + 2);
-				pt.duration = tmpBoundaries.at(i+1) - tmpBoundaries.at(i);
-				tmpTargets.at(i) = pt;
+				for (unsigned ssp_bound = 0; ssp_bound < number_optVar; ++ssp_bound)
+				{
+					x(number_optVar * i + ssp_bound) = getRandomValue( min_bounds.at(ssp_bound), max_bounds.at(ssp_bound) );
+				}
+				//x(4 * i + 0) = getRandomValue(mmin, mmax);
+				//x(4 * i + 1) = getRandomValue(bmin, bmax);
+				//x(4 * i + 2) = getRandomValue(tmin, tmax);
+				//x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
 			}
-
-			std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-
-			if ( tmpMSE < MSE_Threshold || tmpSCC > SCC_Threshold)
+			try
 			{
-				it += RANDOMITERATIONS;
-				std::cout << "   Threshold reached!" << it << std::endl;
+				// optimization algorithm: BOBYQA
+				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
+				//std::cout << "ftmp" << ftmp << std::endl;
 			}
-
+			catch (dlib::bobyqa_failure & err)
+			{
+				// DEBUG message
+	#ifdef DEBUG_MSG
+				std::cout << "\t[optimize] WARNING: no convergence during optimization in iteration: " << it << std::endl << err.info << std::endl;
+	#endif
+			}
+			// write optimization results back
+	#pragma omp critical (updateMinValue)
+			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
+			{
+				fmin = ftmp;
+				xtmp = x;
+				if (optimizeBoundaries)
+				{
+					for (unsigned i = 0; i <= number_Targets; ++i)
+					{
+						tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+					}
+					op.setBoundaries( tmpBoundaries );
+					optBoundaries = tmpBoundaries;
+				}//else{
+					//tmpBoundaries = initialBoundaries; Ist sowieso so, da bei optBound= FAlse die tmpbounds nicht geändert werden
+				//}
+				for (unsigned i = 0; i < number_Targets; ++i)
+				{
+					PitchTarget pt;
+					pt.slope = xtmp(number_optVar * i + 0);
+					pt.offset = xtmp(number_optVar * i + 1);
+					pt.tau = xtmp(number_optVar * i + 2);
+					pt.duration = tmpBoundaries.at(i+1) - tmpBoundaries.at(i);
+					tmpTargets.at(i) = pt;
+				}
+				std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+				if ( (useMSEThreshold && (tmpMSE < MSE_Threshold)) || (useSCCThreshold && (tmpSCC > SCC_Threshold)) )
+				{
+					SearchFinished = true;
+					std::cout << "  fin reached " << std::endl;
+				}else if( use_MSE_SCC_Threshold && (tmpMSE < MSE_Threshold) && (tmpSCC > SCC_Threshold) )
+				{
+					SearchFinished = true;
+					std::cout << "  fin2 reached " << std::endl;
+				}
+			}
 		}
 	}
 

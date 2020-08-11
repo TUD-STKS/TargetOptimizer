@@ -31,7 +31,7 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 	useRmseThreshold = new wxCheckBox(this, wxID_ANY, wxT("RMSE [st] less than"));
 	useRmseThreshold->SetValue(true);
 	optionsSizer->Add(useRmseThreshold, labelFlags);
-	rmseThreshold = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.1"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, 0.1, 0.01);
+	rmseThreshold = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.2"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, 0.2, 0.01);
 	optionsSizer->Add(rmseThreshold, valueFlags);
 	
 	this->SetSizer(optionsSizer);
