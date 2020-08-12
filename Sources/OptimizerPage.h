@@ -7,11 +7,11 @@
 
 struct OptimizerOptions 
 {
-	int maxIterations{ 100 };
+	int maxIterations{ 10 };
 	double correlationThreshold{ 0.99 };
-	bool useCorrelationThreshold{ true };
+	bool useCorrelationThreshold{ false };
 	double rmseThreshold{ 0.2 };
-	bool useRmseThreshold{ true };
+	bool useRmseThreshold{ false };
 };
 
 class OptimizerPage :

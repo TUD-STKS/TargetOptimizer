@@ -43,6 +43,8 @@ public:
 	TargetVector getPitchTargets() const;
 	BoundaryVector getBoundaries() const;
 	Sample getOnset() const;
+	double getOriginalF0_Onset() const;
+	double getOriginalF0_Offset() const;
 	double getCorrelationCoefficient() const;
 	double getRootMeanSquareError() const;
 	double getSquareCorrelationCoefficient( const TamModelF0& tamF0 ) const;

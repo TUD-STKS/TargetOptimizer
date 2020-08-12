@@ -7,7 +7,7 @@
 class BobyqaOptimizer {
 public:
 	// constructors
-	BobyqaOptimizer() { };//srand(3);};//srand(time(NULL)); };
+	BobyqaOptimizer() { srand(time(NULL)); };//srand(3);};//srand(time(NULL)); };
 
 	// public member functions
 	void optimize(OptimizationProblem& op, OptimizerOptions optOpt) const;

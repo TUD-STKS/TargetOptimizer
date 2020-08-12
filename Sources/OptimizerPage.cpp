@@ -15,7 +15,7 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 
 	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("Maximum iterations:")) };
 	optionsSizer->Add(label, labelFlags);
-	maxIterations = new wxSpinCtrl(this, wxID_ANY, wxT("100"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1000, 100);
+	maxIterations = new wxSpinCtrl(this, wxID_ANY, wxT("10"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1000, 10);
 	optionsSizer->Add(maxIterations, valueFlags);
 
 	label = new wxStaticText(this, wxID_ANY, wxT("Early stopping"));
@@ -23,13 +23,13 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 	optionsSizer->AddSpacer(0);
 
 	useCorrelationThreshold = new wxCheckBox(this, wxID_ANY, wxT("Correlation higher than"));
-	useCorrelationThreshold->SetValue(true);
+	useCorrelationThreshold->SetValue(false);
 	optionsSizer->Add(useCorrelationThreshold, labelFlags.Border(wxRIGHT | wxLEFT));
 	correlationThreshold = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.99"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, 0.99, 0.01);
 	optionsSizer->Add(correlationThreshold, valueFlags);
 	
 	useRmseThreshold = new wxCheckBox(this, wxID_ANY, wxT("RMSE [st] less than"));
-	useRmseThreshold->SetValue(true);
+	useRmseThreshold->SetValue(false);
 	optionsSizer->Add(useRmseThreshold, labelFlags);
 	rmseThreshold = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.2"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, 0.2, 0.01);
 	optionsSizer->Add(rmseThreshold, valueFlags);

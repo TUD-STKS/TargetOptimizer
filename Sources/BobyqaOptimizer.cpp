@@ -34,7 +34,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 		useSCCThreshold = false;
 	}
 
-	srand(1);
+	//srand(1);
 
 
 	// precalculate search space bounds (ssp_bounds)
@@ -107,13 +107,15 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	omp_set_num_threads(numThreads);
 //std::cout << "BobyqaOptimizer line 84" << std::endl;
 	bool SearchFinished = false;
-	#pragma omp parallel for schedule(dynamic)
+	int boundaryResetCounter = 0;
+	int iteration = 0;
+//#pragma omp parallel for schedule(dynamic)
 
 	for (unsigned it = 0; it < RANDOMITERATIONS; ++it)
 	{
 		if (!SearchFinished)
 		{
-			std::cout << '\r' << "Iteration nr: "<< it << std::flush;
+			std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
 			// random initialization
 			DlibVector x;
 			x.set_size(number_Targets * number_optVar);
@@ -142,7 +144,10 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	#endif
 			}
 			// write optimization results back
-	#pragma omp critical (updateMinValue)
+//#pragma omp critical (updateMinValue)
+
+
+
 			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 			{
 				fmin = ftmp;
@@ -152,6 +157,14 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 					for (unsigned i = 0; i <= number_Targets; ++i)
 					{
 						tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+						if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
+						{
+							tmpBoundaries.at(0) = op.getOriginalF0_Onset();
+						}
+						if ( (i==number_Targets) && (tmpBoundaries.back() < op.getOriginalF0_Offset()) )
+						{
+							tmpBoundaries.back() = op.getOriginalF0_Offset();
+						}
 					}
 					op.setBoundaries( tmpBoundaries );
 					optBoundaries = tmpBoundaries;
@@ -178,6 +191,17 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 					std::cout << "  fin2 reached " << std::endl;
 				}
 			}
+
+			if (boundaryResetCounter == 10)
+			{
+				tmpBoundaries = initialBoundaries;
+				op.setBoundaries( initialBoundaries );
+				boundaryResetCounter = 0;
+				std::cout << "  reset boundaries " << std::endl;
+			}
+
+			++boundaryResetCounter;
+			++iteration;
 		}
 	}
 
@@ -193,8 +217,13 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	{
 		optBoundaries = initialBoundaries;
 	}
-//std::cout << "BobyqaOptimizer line 148" << std::endl;
+std::cout << "" << std::endl;
+std::cout << "BobyqaOptimizer line 148, xtmp.size: "<< xtmp.size() << std::endl;
 	//BoundaryVector opt_boundaries = tmpBoundaries;
+	for (unsigned i =0; i < xtmp.size(); ++i)
+	{
+		std::cout << "xtmp at: " << i << " is: " << xtmp(i) << std::endl;
+	}
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		//opt_boundaries.push_back( initialBoundaries[i] + xtmp(4 * i +3)/1000 );
