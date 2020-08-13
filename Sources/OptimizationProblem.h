@@ -8,7 +8,7 @@
 
 struct RegularizationParameters
 {
-	double lambda{ 0.0 };
+	double lambda{ 0.01 };
 	double weightSlope{ 1.0 };
 	double weightOffset{ 0.5 };
 	double weightTau{ 0.1 };
@@ -16,16 +16,16 @@ struct RegularizationParameters
 
 struct SearchSpaceParameters
 {
-	double deltaSlope{ 50 };
-	double deltaOffset{ 20 };
-	double deltaTau{ 15 };
-	double deltaBoundary{ 40 };
+	double deltaSlope{ 50.0 };
+	double deltaOffset{ 20.0 };
+	double deltaTau{ 5.0 };
+	double deltaBoundary{ 30.0 };
 	int    initBounds{ 0 };
 	bool   optimizeBoundaries{ deltaBoundary > 0 };
 	int    numberOptVar{ optimizeBoundaries ? 4 : 3 };
 	double meanSlope{ 0.0 };
 	double meanOffset{ 0.0 };
-	double meanTau{ 15.0 };
+	double meanTau{ 20.0 };
 };
 
 // parameter set defining an optimisation problem

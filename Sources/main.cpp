@@ -119,19 +119,19 @@ int main(int argc, char* argv[])
 
 			// process optional parameter options
 			ParameterSet parameters;
-			parameters.deltaSlope = get_option(parser,"m-range",50.0);
-			parameters.deltaOffset = get_option(parser,"b-range",20.0);
-			parameters.deltaTau = get_option(parser,"t-range",5.0);
-			parameters.weightSlope = get_option(parser,"m-weight",1.0);
-			parameters.weightOffset = get_option(parser,"b-weight",0.5);
-			parameters.weightTau = get_option(parser,"t-weight",0.1);
-			parameters.lambda = get_option(parser,"lambda",0.01);
-			parameters.meanSlope = 0.0;
-			parameters.meanOffset = meanF0;
-			parameters.meanTau = 15.0;
-			parameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
-			parameters.initBounds = get_option(parser, "initBounds", 0);
-			parameters.optimizeBoundaries = (parameters.deltaBoundary != 0);
+			//parameters.deltaSlope = get_option(parser,"m-range",50.0);
+			//parameters.deltaOffset = get_option(parser,"b-range",20.0);
+			//parameters.deltaTau = get_option(parser,"t-range",5.0);
+			//parameters.weightSlope = get_option(parser,"m-weight",1.0);
+			//parameters.weightOffset = get_option(parser,"b-weight",0.5);
+			//parameters.weightTau = get_option(parser,"t-weight",0.1);
+			//parameters.lambda = get_option(parser,"lambda",0.01);
+			//parameters.meanSlope = 0.0;
+			//parameters.meanOffset = meanF0;
+			//parameters.meanTau = 15.0;
+			//parameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
+			//parameters.initBounds = get_option(parser, "initBounds", 0);
+			//parameters.optimizeBoundaries = (parameters.deltaBoundary != 0);
 
 			OptimizerOptions optOpt;
 			//optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
