@@ -1,10 +1,18 @@
 #ifdef USE_WXWIDGETS
-
 #include "OptimizerPage.h"
 
+static const int ID_OPTION_VALUE = wxNewId();
+
+wxBEGIN_EVENT_TABLE(OptimizerPage, wxPanel)
+EVT_SPINCTRL(ID_OPTION_VALUE, OnChangeValue)
+EVT_SPINCTRLDOUBLE(ID_OPTION_VALUE, OnChangeValue)
+wxEND_EVENT_TABLE()
 
 OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
 {
+	// Get the default values of the OptimizerOptions
+	OptimizerOptions defaultOptions;
+
 	// A sizer to organize the option labels and values
 	wxFlexGridSizer* optionsSizer{ new wxFlexGridSizer(2) };
 	optionsSizer->AddGrowableCol(0);
@@ -15,38 +23,47 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 
 	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("Maximum iterations:")) };
 	optionsSizer->Add(label, labelFlags);
-	maxIterations = new wxSpinCtrl(this, wxID_ANY, wxT("10"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1000, 10);
+	maxIterations = new wxSpinCtrl(this, wxID_ANY, wxString::Format(wxT("%i"), defaultOptions.maxIterations), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1000, defaultOptions.maxIterations);
 	optionsSizer->Add(maxIterations, valueFlags);
 
-	label = new wxStaticText(this, wxID_ANY, wxT("Early stopping"));
-	optionsSizer->Add(label, labelFlags.Border(wxTOP, 10));
+	useEarlyStopping = new wxCheckBox(this, wxID_ANY, wxT("Use early stopping"));
+	useEarlyStopping->SetValue(defaultOptions.useEarlyStopping);
+	optionsSizer->Add(useEarlyStopping, labelFlags.Border(wxTOP, 10));
 	optionsSizer->AddSpacer(0);
 
-	useCorrelationThreshold = new wxCheckBox(this, wxID_ANY, wxT("Correlation higher than"));
-	useCorrelationThreshold->SetValue(false);
-	optionsSizer->Add(useCorrelationThreshold, labelFlags.Border(wxRIGHT | wxLEFT));
-	correlationThreshold = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.99"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, 0.99, 0.01);
-	optionsSizer->Add(correlationThreshold, valueFlags);
+	label = new wxStaticText(this, wxID_ANY, wxT("Optimization cost \U0001D700:"));
+	optionsSizer->Add(label, labelFlags.Border(wxRIGHT | wxLEFT, 10));
+	epsilon = new wxSpinCtrlDouble(this, ID_OPTION_VALUE, wxString::Format(wxT("%.2f"), defaultOptions.epsilon), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.epsilon, 0.001);
+	optionsSizer->Add(epsilon, valueFlags);
 	
-	useRmseThreshold = new wxCheckBox(this, wxID_ANY, wxT("RMSE [st] less than"));
-	useRmseThreshold->SetValue(false);
-	optionsSizer->Add(useRmseThreshold, labelFlags);
-	rmseThreshold = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.2"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, 0.2, 0.01);
-	optionsSizer->Add(rmseThreshold, valueFlags);
+	label = new wxStaticText(this, wxID_ANY, wxT("Patience"));
+	optionsSizer->Add(label, labelFlags);
+	
+	patience = new wxSpinCtrl(this, ID_OPTION_VALUE, wxString::Format(wxT("%i"), defaultOptions.patience), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, maxIterations->GetValue(), defaultOptions.patience);
+	optionsSizer->Add(patience, valueFlags);
 	
 	this->SetSizer(optionsSizer);
 }
 
-OptimizerOptions OptimizerPage::getParameters()
+OptimizerOptions OptimizerPage::getParameters() const
 {
 	OptimizerOptions opts;
 	opts.maxIterations = maxIterations->GetValue();
-	opts.correlationThreshold = correlationThreshold->GetValue();
-	opts.useCorrelationThreshold = useCorrelationThreshold->IsChecked();
-	opts.rmseThreshold = rmseThreshold->GetValue();
-	opts.useRmseThreshold = useRmseThreshold->IsChecked();
-
+	opts.useEarlyStopping = useEarlyStopping->IsChecked(); 
+	opts.epsilon = epsilon->GetValue();
+	opts.patience = patience->GetValue();
+	
 	return opts;
 }
 
-#endif
+void OptimizerPage::OnChangeValue(wxSpinEvent& event)
+{
+	useEarlyStopping->SetValue(true);
+}
+
+void OptimizerPage::OnChangeValue(wxSpinDoubleEvent& event)
+{
+	useEarlyStopping->SetValue(true);
+}
+
+#endif // USE_WXWIDGETS

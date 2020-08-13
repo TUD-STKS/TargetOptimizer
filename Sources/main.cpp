@@ -130,15 +130,15 @@ int main(int argc, char* argv[])
 			parameters.meanOffset = meanF0;
 			parameters.meanTau = 15.0;
 			parameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
-			parameters.initBounds = get_option(parser, "initBounds", 0)
-			parameters.optimizeBoundaries = (searchParams.boundaryDelta != 0);
+			parameters.initBounds = get_option(parser, "initBounds", 0);
+			parameters.optimizeBoundaries = (parameters.deltaBoundary != 0);
 
 			OptimizerOptions optOpt;
-			optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
-			optOpt.correlationThreshold{ 0.99 };
-			optOpt.useCorrelationThreshold{ false };
-			optOpt.rmseThreshold{ 0.2 };
-			optOpt.useRmseThreshold{ false };
+			//optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
+			//optOpt.correlationThreshold{ 0.99 };
+			//optOpt.useCorrelationThreshold{ false };
+			//optOpt.rmseThreshold{ 0.2 };
+			//optOpt.useRmseThreshold{ false };
 
 			// main functionality
 			OptimizationProblem problem (parameters, f0, bounds);

@@ -4,28 +4,27 @@
 #include <wx/wx.h>
 #include <wx/spinctrl.h>
 #include <wx/checkbox.h>
+#include "BobyqaOptimizer.h"
 
-struct OptimizerOptions 
-{
-	int maxIterations{ 10 };
-	double correlationThreshold{ 0.99 };
-	bool useCorrelationThreshold{ false };
-	double rmseThreshold{ 0.2 };
-	bool useRmseThreshold{ false };
-};
 
 class OptimizerPage :
 	public wxPanel
 {
 public:
-	OptimizerPage(wxWindow *parent, wxWindowID id);
-	OptimizerOptions getParameters();
+	OptimizerPage(wxWindow* parent, wxWindowID id);
+	OptimizerOptions getParameters() const;
+
+private:
+	void OnChangeValue(wxSpinEvent& event);
+	void OnChangeValue(wxSpinDoubleEvent& event);
+
 private:
 	wxSpinCtrl* maxIterations;
-	wxSpinCtrlDouble* correlationThreshold;
-	wxCheckBox* useCorrelationThreshold;
-	wxSpinCtrlDouble* rmseThreshold;
-	wxCheckBox* useRmseThreshold;
+	wxCheckBox* useEarlyStopping;
+	wxSpinCtrlDouble* epsilon;	
+	wxSpinCtrl* patience;
+
+	wxDECLARE_EVENT_TABLE();
 };
 
 #endif

@@ -1,7 +1,13 @@
 #pragma once
 #include "OptimizationProblem.h"
-#include "OptimizerPage.h"
 
+struct OptimizerOptions
+{
+	int maxIterations{ 10 };
+	bool useEarlyStopping{ false };
+	double epsilon{ 0.01 };
+	int patience{ 5 };
+};
 
 // solver for an optimization problem utilizing BOBYQA algorithm
 class BobyqaOptimizer {

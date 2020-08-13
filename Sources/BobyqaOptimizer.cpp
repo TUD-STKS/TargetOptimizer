@@ -6,15 +6,6 @@
 #include <chrono>
 
 
-struct OptimizerOptions
-{
-	int maxIterations{ 10 };
-	bool useEarlyStopping{ false };
-	double epsilon{ 0.01 };
-	int patience{ 5 };
-};
-
-
 void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
 {
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
