@@ -6,6 +6,14 @@
 #include <chrono>
 
 
+struct OptimizerOptions
+{
+	int maxIterations{ 10 };
+	bool useEarlyStopping{ false };
+	double epsilon{ 0.01 };
+	int patience{ 5 };
+};
+
 
 void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
 {
@@ -26,17 +34,10 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	//double minMSE = 1e6; //this is the mse corresponding to
 
 	const unsigned RANDOMITERATIONS = optOpt.maxIterations;
-	const double MSE_Threshold = optOpt.rmseThreshold * optOpt.rmseThreshold;
-	const double SCC_Threshold = optOpt.correlationThreshold * optOpt.correlationThreshold;
-	bool useMSEThreshold = optOpt.useRmseThreshold;
-	bool useSCCThreshold = optOpt.useCorrelationThreshold;
-	bool use_MSE_SCC_Threshold = useMSEThreshold && useSCCThreshold;
+	const int patience = optOpt.patience;
+	double epsilon = optOpt.epsilon;
+	bool useEarlyStopping = optOpt.useEarlyStopping;
 
-	if (useMSEThreshold)
-	{
-		useMSEThreshold = false;
-		useSCCThreshold = false;
-	}
 
 	//srand(1);
 
@@ -191,14 +192,10 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 				}
 				std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
 				std::cout << "  tmp cost: " << ftmp << " tmp MSE: " << tmpMSE << std::endl;
-				if ( (useMSEThreshold && (tmpMSE < MSE_Threshold)) || (useSCCThreshold && (tmpSCC > SCC_Threshold)) )
+				if ( useEarlyStopping )
 				{
-					SearchFinished = true;
-					std::cout << "  fin reached " << std::endl;
-				}else if( use_MSE_SCC_Threshold && (tmpMSE < MSE_Threshold) && (tmpSCC > SCC_Threshold) )
-				{
-					SearchFinished = true;
-					std::cout << "  fin2 reached " << std::endl;
+					// Implement the epsilon cancel
+					//SearchFinished = true;
 				}
 			}
 

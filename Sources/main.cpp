@@ -66,6 +66,9 @@ int main(int argc, char* argv[])
 			parser.add_option("m-weight","Specify regularization weight for slope parameter.",1);
 			parser.add_option("b-weight","Specify regularization weight for offset parameter.",1);
 			parser.add_option("t-weight","Specify regularization weight for time constant parameter.",1);
+			parser.add_option("boundaryDelta","Specify boundary delta.",1);
+			parser.add_option("initBounds","Specify how many bounds should be initialized.",1);
+			parser.add_option("maxIterations","Specify maximum number of optimizer iterations.",1);
 
 			// parse command line
 			parser.parse(argc,argv);
@@ -80,6 +83,7 @@ int main(int argc, char* argv[])
 			parser.check_option_arg_range("b-weight", 0.0, 1e9);
 			parser.check_option_arg_range("t-weight", 0.0, 1e9);
 			parser.check_option_arg_range("lambda", 0.0, 1e15);
+			parser.check_option_arg_range("boundaryDelta", 0.0, 100.0);
 
 			// process help option
 			if (parser.option("h"))
@@ -125,8 +129,16 @@ int main(int argc, char* argv[])
 			parameters.meanSlope = 0.0;
 			parameters.meanOffset = meanF0;
 			parameters.meanTau = 15.0;
+			parameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
+			parameters.initBounds = get_option(parser, "initBounds", 0)
+			parameters.optimizeBoundaries = (searchParams.boundaryDelta != 0);
 
 			OptimizerOptions optOpt;
+			optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
+			optOpt.correlationThreshold{ 0.99 };
+			optOpt.useCorrelationThreshold{ false };
+			optOpt.rmseThreshold{ 0.2 };
+			optOpt.useRmseThreshold{ false };
 
 			// main functionality
 			OptimizationProblem problem (parameters, f0, bounds);

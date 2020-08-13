@@ -358,7 +358,6 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	//{
 	auto options = optimizationOptions->getOptions();
 	auto parameters = options.problemParams;
-	// TODO: Use optimizer options in BobyqaOptimizer
 	auto optimizerOptions = options.optimizerOptions;
 
 	if (parameters.deltaOffset == 0 || parameters.deltaSlope == 0 || parameters.deltaTau == 0)
