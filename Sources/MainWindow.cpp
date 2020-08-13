@@ -354,6 +354,8 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 
 void MainWindow::OnOptimize(wxCommandEvent& event)
 {
+	//for (int i = 0; i<2;++i)
+	//{
 	auto options = optimizationOptions->getOptions();
 	auto parameters = options.problemParams;
 	// TODO: Use optimizer options in BobyqaOptimizer
@@ -377,6 +379,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	BobyqaOptimizer optimizer;
 	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
 	pd.Pulse();
+
 	try
 	{
 		optimizer.optimize( problem, optimizerOptions );
@@ -387,6 +390,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		wxMessageBox(wxT("Something went wrong during the optimization. Did you choose matching TextGrid and PitchTier files?"), wxT("Error"), wxICON_ERROR);
 		return;
 	}
+	
 	pd.Close();
 
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
@@ -400,6 +404,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	wxMessageBox(msg.str(), wxT("Information"));
 	isOptimized = true;
 	updateWidgets();
+	//}
 }
 
 void MainWindow::OnSaveAs(wxCommandEvent& event)

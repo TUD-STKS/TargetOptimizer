@@ -3,6 +3,8 @@
 #include <dlib/threads.h>
 #include "BobyqaOptimizer.h"
 #include <iostream> //eclude again
+#include <chrono>
+
 
 
 void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
@@ -19,7 +21,9 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	int number_optVar = ps.numberOptVar; // Optimize the 3 target parameters by default
 
-	double tmpMSE, tmpSCC;
+	double tmpMSE = 1e6;
+	double tmpSCC = 0;
+	//double minMSE = 1e6; //this is the mse corresponding to
 
 	const unsigned RANDOMITERATIONS = optOpt.maxIterations;
 	const double MSE_Threshold = optOpt.rmseThreshold * optOpt.rmseThreshold;
@@ -99,7 +103,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	// initialize
 	double fmin(1e6);
-	DlibVector xtmp; double ftmp;
+	DlibVector xtmp;
 	dlib::mutex mu;
 
 	// set up OpenMP
@@ -109,13 +113,15 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
-//#pragma omp parallel for schedule(dynamic)
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+
+#pragma omp parallel for schedule(dynamic)
 
 	for (unsigned it = 0; it < RANDOMITERATIONS; ++it)
 	{
+		double ftmp;
 		if (!SearchFinished)
 		{
-			std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
 			// random initialization
 			DlibVector x;
 			x.set_size(number_Targets * number_optVar);
@@ -144,7 +150,9 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	#endif
 			}
 			// write optimization results back
-//#pragma omp critical (updateMinValue)
+#pragma omp critical (updateMinValue)
+
+			std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
 
 
 
@@ -166,6 +174,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 							tmpBoundaries.back() = op.getOriginalF0_Offset();
 						}
 					}
+					std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
 					op.setBoundaries( tmpBoundaries );
 					optBoundaries = tmpBoundaries;
 				}//else{
@@ -181,6 +190,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 					tmpTargets.at(i) = pt;
 				}
 				std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+				std::cout << "  tmp cost: " << ftmp << " tmp MSE: " << tmpMSE << std::endl;
 				if ( (useMSEThreshold && (tmpMSE < MSE_Threshold)) || (useSCCThreshold && (tmpSCC > SCC_Threshold)) )
 				{
 					SearchFinished = true;
@@ -192,7 +202,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 				}
 			}
 
-			if (boundaryResetCounter == 10)
+			if ( (boundaryResetCounter >= 20) && (tmpMSE > 1.41) )
 			{
 				tmpBoundaries = initialBoundaries;
 				op.setBoundaries( initialBoundaries );
@@ -207,6 +217,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	if (fmin == 1e6)
 	{
+		std::cout << "  dlib error!!!!!!!!!!!!! " << std::endl;
 		throw dlib::error("[optimize] BOBYQA algorithms didn't converge! Try to increase number of evaluations");
 	}
 
@@ -218,12 +229,12 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 		optBoundaries = initialBoundaries;
 	}
 std::cout << "" << std::endl;
-std::cout << "BobyqaOptimizer line 148, xtmp.size: "<< xtmp.size() << std::endl;
-	//BoundaryVector opt_boundaries = tmpBoundaries;
-	for (unsigned i =0; i < xtmp.size(); ++i)
-	{
-		std::cout << "xtmp at: " << i << " is: " << xtmp(i) << std::endl;
-	}
+//std::cout << "BobyqaOptimizer line 148, xtmp.size: "<< xtmp.size() << std::endl;
+//	//BoundaryVector opt_boundaries = tmpBoundaries;
+//	for (unsigned i =0; i < xtmp.size(); ++i)
+//	{
+//		std::cout << "xtmp at: " << i << " is: " << xtmp(i) << std::endl;
+//	}
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		//opt_boundaries.push_back( initialBoundaries[i] + xtmp(4 * i +3)/1000 );
@@ -242,6 +253,8 @@ std::cout << "BobyqaOptimizer line 148, xtmp.size: "<< xtmp.size() << std::endl;
 
 	// store optimum
 	op.setOptimum( optBoundaries, optTargets );
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+std::cout << "Elapsed time = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
 //std::cout << "BobyqaOptimizer line 168" << std::endl;
 	// DEBUG message
 #ifdef DEBUG_MSG

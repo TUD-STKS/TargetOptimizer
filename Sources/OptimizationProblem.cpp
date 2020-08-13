@@ -188,6 +188,7 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 			modified_Bound = m_originalF0.back().time;
 		}
 		boundaries.push_back( modified_Bound );
+		std::sort( boundaries.begin(), boundaries.end() );
 		//boundaries.push_back( m_bounds.back() + arg(m_parameters.numberOptVar * (arg.size() / m_parameters.numberOptVar) +3)/1000 );
 	}
 	else
