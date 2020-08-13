@@ -11,14 +11,14 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
 	ParameterSet ps  = op.getParameters();
-	bool optimizeBoundaries = ps.optimizeBoundaries;//(ps.deltaBoundary != 0);
+	bool optimizeBoundaries = ps.searchSpaceParameters.optimizeBoundaries;//(ps.deltaBoundary != 0);
 	BoundaryVector initialBoundaries  = op.getBoundaries();
 	BoundaryVector tmpBoundaries = initialBoundaries;
 	BoundaryVector optBoundaries;
 	TargetVector   tmpTargets = op.getPitchTargets();
 
 
-	int number_optVar = ps.numberOptVar; // Optimize the 3 target parameters by default
+	int number_optVar = ps.searchSpaceParameters.numberOptVar; // Optimize the 3 target parameters by default
 
 	double tmpMSE = 1e6;
 	double tmpSCC = 0;
@@ -38,17 +38,17 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	std::vector<double> min_bounds;
 	std::vector<double> max_bounds;
-	min_bounds.push_back( ps.meanSlope - ps.deltaSlope ); //mmin
-	min_bounds.push_back( ps.meanOffset - ps.deltaOffset ); //bmin
-	min_bounds.push_back( ps.meanTau - ps.deltaTau ); //tmin
-	max_bounds.push_back( ps.meanSlope + ps.deltaSlope ); // mmax
-	max_bounds.push_back( ps.meanOffset + ps.deltaOffset ); //bmax
-	max_bounds.push_back( ps.meanTau + ps.deltaTau ); //tmax
+	min_bounds.push_back( ps.searchSpaceParameters.meanSlope - ps.searchSpaceParameters.deltaSlope ); //mmin
+	min_bounds.push_back( ps.searchSpaceParameters.meanOffset - ps.searchSpaceParameters.deltaOffset ); //bmin
+	min_bounds.push_back( ps.searchSpaceParameters.meanTau - ps.searchSpaceParameters.deltaTau ); //tmin
+	max_bounds.push_back( ps.searchSpaceParameters.meanSlope + ps.searchSpaceParameters.deltaSlope ); // mmax
+	max_bounds.push_back( ps.searchSpaceParameters.meanOffset + ps.searchSpaceParameters.deltaOffset ); //bmax
+	max_bounds.push_back( ps.searchSpaceParameters.meanTau + ps.searchSpaceParameters.deltaTau ); //tmax
 
 	if (optimizeBoundaries)
 	{
-		min_bounds.push_back( -1*ps.deltaBoundary ); //boundary_min
-		max_bounds.push_back(    ps.deltaBoundary ); //boundary_max
+		min_bounds.push_back( -1*ps.searchSpaceParameters.deltaBoundary ); //boundary_min
+		max_bounds.push_back(    ps.searchSpaceParameters.deltaBoundary ); //boundary_max
 	}
 
 	DlibVector lowerBound, upperBound;

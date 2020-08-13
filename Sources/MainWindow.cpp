@@ -246,16 +246,16 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 	" end time: " << Data::getInstance().originalF0.back().time << std::endl;
 
 	auto problemParams = optimizationOptions->getOptions().problemParams;
-	std::cout << "number of init bounds: " << problemParams.initBounds << std::endl;
+	std::cout << "number of init bounds: " << problemParams.searchSpaceParameters.initBounds << std::endl;
 
 	double pitch_start = Data::getInstance().originalF0.at(0).time;
 	double pitch_end   = Data::getInstance().originalF0.back().time;
 	double pitch_interval = pitch_end - pitch_start;
-	double step = pitch_interval / (problemParams.initBounds - 1);
+	double step = pitch_interval / (problemParams.searchSpaceParameters.initBounds - 1);
 
 
 	std::vector<double> initBoundaries;
-	for (int i = 0; i < problemParams.initBounds; ++i)
+	for (int i = 0; i < problemParams.searchSpaceParameters.initBounds; ++i)
 	{
 		initBoundaries.push_back( pitch_start + i * step );
 	}
@@ -360,7 +360,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	auto parameters = options.problemParams;
 	auto optimizerOptions = options.optimizerOptions;
 
-	if (parameters.deltaOffset == 0 || parameters.deltaSlope == 0 || parameters.deltaTau == 0)
+	if (parameters.searchSpaceParameters.deltaOffset == 0 || parameters.searchSpaceParameters.deltaSlope == 0 || parameters.searchSpaceParameters.deltaTau == 0)
 	{
 		wxMessageBox(wxT("Error: 0 is not a valid search space parameter!"), wxT("Parameter error"), wxICON_ERROR);
 		return;

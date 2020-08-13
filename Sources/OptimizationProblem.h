@@ -6,23 +6,33 @@
 #include <tuple>
 
 
+struct RegularizationParameters
+{
+	double lambda{ 0.0 };
+	double weightSlope{ 1.0 };
+	double weightOffset{ 0.5 };
+	double weightTau{ 0.1 };
+};
+
+struct SearchSpaceParameters
+{
+	double deltaSlope{ 50 };
+	double deltaOffset{ 20 };
+	double deltaTau{ 15 };
+	double deltaBoundary{ 40 };
+	int    initBounds{ 0 };
+	bool   optimizeBoundaries{ deltaBoundary > 0 };
+	int    numberOptVar{ optimizeBoundaries ? 4 : 3 };
+	double meanSlope{ 0.0 };
+	double meanOffset{ 0.0 };
+	double meanTau{ 15.0 };
+};
+
 // parameter set defining an optimisation problem
 struct ParameterSet
 {
-	double deltaSlope;
-	double deltaOffset;
-	double deltaTau;
-	double deltaBoundary;
-	int    initBounds;
-	double lambda; // regularisation coefficient
-	double weightSlope;
-	double weightOffset;
-	double weightTau;
-	double meanSlope;
-	double meanOffset;
-	double meanTau;
-	bool   optimizeBoundaries;
-	int    numberOptVar;
+	RegularizationParameters regularizationParameters;
+	SearchSpaceParameters searchSpaceParameters;
 };
 
 // dlib linear algebra column vector for optimization tasks

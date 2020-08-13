@@ -3,16 +3,8 @@
 
 #include <wx/wx.h>
 #include <wx/spinctrl.h>
+#include "OptimizationProblem.h"
 
-
-struct SearchSpaceParameters
-{
-	double slopeDelta{ 50 };
-	double offsetDelta{ 20 };
-	double tauDelta{ 15 };
-	double boundaryDelta{ 40 };
-	int    initBounds{ 0 };
-};
 
 class SearchSpacePage :
 	public wxPanel
@@ -22,10 +14,11 @@ public:
 	
 	SearchSpaceParameters getParameters();
 private:
-	wxSpinCtrlDouble *slopeDeltaCtrl;
-	wxSpinCtrlDouble *offsetDeltaCtrl;
-	wxSpinCtrlDouble *tauDeltaCtrl;
-	wxSpinCtrlDouble *boundaryDeltaCtrl;
+	wxSpinCtrlDouble *deltaSlopeCtrl;
+	wxSpinCtrlDouble *deltaOffsetCtrl;
+	wxSpinCtrlDouble *meanTauCtrl;
+	wxSpinCtrlDouble *deltaTauCtrl;
+	wxSpinCtrlDouble *deltaBoundaryCtrl;
 	wxSpinCtrl       *initBoundsCtrl;
 
 };

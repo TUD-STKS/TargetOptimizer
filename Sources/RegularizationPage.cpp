@@ -6,6 +6,9 @@
 
 RegularizationPage::RegularizationPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
 {
+	// Get default parameters
+	RegularizationParameters defaults;
+
 	// A sizer to organize the option labels and values
 	wxFlexGridSizer* optionsSizer{ new wxFlexGridSizer(2) };
 	optionsSizer->AddGrowableCol(0);
@@ -16,22 +19,22 @@ RegularizationPage::RegularizationPage(wxWindow* parent, wxWindowID id) : wxPane
 
 	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("lambda")) };
 	optionsSizer->Add(label, labelFlags);
-	lambda = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.01"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 0.01, 0.01);
+	lambda = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.lambda), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.lambda, 0.01);
 	optionsSizer->Add(lambda, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("weight-slope"));
 	optionsSizer->Add(label, labelFlags);	
-	weightSlope = new wxSpinCtrlDouble(this, wxID_ANY, wxT("1.0"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 1.0, 0.01);
+	weightSlope = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.weightSlope), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.weightSlope, 0.01);
 	optionsSizer->Add(weightSlope, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("weight-offset"));
 	optionsSizer->Add(label, labelFlags);
-	weightOffset = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.5"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 0.5, 0.01);
+	weightOffset = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.weightOffset), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.weightOffset, 0.01);
 	optionsSizer->Add(weightOffset, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("weight-tau"));
 	optionsSizer->Add(label, labelFlags);
-	weightTau = new wxSpinCtrlDouble(this, wxID_ANY, wxT("0.1"), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, 0.1, 0.01);
+	weightTau = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.weightTau), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.weightTau, 0.01);
 	optionsSizer->Add(weightTau, valueFlags);
 	
 	this->SetSizer(optionsSizer);
