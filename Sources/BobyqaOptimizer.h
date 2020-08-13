@@ -3,7 +3,7 @@
 
 struct OptimizerOptions
 {
-	int maxIterations{ 10 };
+	int maxIterations{ 30 };
 	bool useEarlyStopping{ false };
 	double epsilon{ 0.01 };
 	int patience{ 5 };

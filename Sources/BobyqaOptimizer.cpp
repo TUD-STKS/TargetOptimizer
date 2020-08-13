@@ -154,18 +154,27 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 				xtmp = x;
 				if (optimizeBoundaries)
 				{
-					for (unsigned i = 0; i <= number_Targets; ++i)
+					//tmpBoundaries.front() = op.getOriginalF0_Onset();
+					tmpBoundaries.back()  = op.getOriginalF0_Offset();
+					if ( number_Targets > 1 )
 					{
-						tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
-						if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
+						for (unsigned i = 0; i < number_Targets; ++i)
 						{
-							tmpBoundaries.at(0) = op.getOriginalF0_Onset();
-						}
-						if ( (i==number_Targets) && (tmpBoundaries.back() < op.getOriginalF0_Offset()) )
-						{
-							tmpBoundaries.back() = op.getOriginalF0_Offset();
+							tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
 						}
 					}
+					//for (unsigned i = 0; i <= number_Targets; ++i)
+					//{
+					//	tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+					//	if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
+					//	{
+					//		tmpBoundaries.at(0) = op.getOriginalF0_Onset();
+					//	}
+					//	if ( (i==number_Targets) && (tmpBoundaries.back() < op.getOriginalF0_Offset()) )
+					//	{
+					//		tmpBoundaries.back() = op.getOriginalF0_Offset();
+					//	}
+					//}
 					std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
 					op.setBoundaries( tmpBoundaries );
 					optBoundaries = tmpBoundaries;

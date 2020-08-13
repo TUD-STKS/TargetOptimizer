@@ -151,11 +151,16 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 {
 	// convert data
 	TargetVector targets;
-	BoundaryVector boundaries;
+	BoundaryVector boundaries = m_bounds;
+	//boundaries.front() = getOriginalF0_Onset();
+	boundaries.back()  = getOriginalF0_Offset();
+
+
+
 	double modified_Bound = 0.0;
-	double argLength = arg.size() / m_parameters.searchSpaceParameters.numberOptVar;
+	double number_Targets = arg.size() / m_parameters.searchSpaceParameters.numberOptVar;
 	//for (unsigned i = 0; i < arg.size() / m_parameters.numberOptVar; ++i)
-	for (unsigned i = 0; i < argLength; ++i)
+	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		PitchTarget pt;
 		pt.slope = arg(m_parameters.searchSpaceParameters.numberOptVar * i + 0);
@@ -164,13 +169,17 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 		//pt.duration = m_bounds[i + 1] - m_bounds[i];// (m_bounds[i] + arg(4 * i +3)/1000);
 		if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
 		{
+			//if ( (i >0) && (number_Targets > 1) )
+			//{
+				boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+			//}
 			//std::cout << "b: opt bound true " << m_parameters.optimizeBoundaries << std::endl;
-			modified_Bound = m_bounds[i] + arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
-			if ( (i==0) && (modified_Bound > m_originalF0[0].time))
-			{
-				modified_Bound = m_originalF0[0].time;
-			}
-			boundaries.push_back( modified_Bound );
+			//modified_Bound = m_bounds[i] + arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+			//if ( (i==0) && (modified_Bound > m_originalF0[0].time))
+			//{
+			//	modified_Bound = m_originalF0[0].time;
+			//}
+			//boundaries.push_back( modified_Bound );
 			//boundaries.push_back( m_bounds[i] + arg(m_parameters.numberOptVar * i +3)/1000 );
 			pt.duration = ( m_bounds[i + 1] + arg(m_parameters.searchSpaceParameters.numberOptVar * (i+1) +3)/1000 ) - boundaries[i];
 		}
@@ -182,12 +191,12 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	}
 	if (m_parameters.searchSpaceParameters.optimizeBoundaries) //(!m_bounds.empty()
 	{
-		modified_Bound = m_bounds.back() + arg(m_parameters.searchSpaceParameters.numberOptVar * argLength +3)/1000;
-		if ( modified_Bound < m_originalF0.back().time )
-		{
-			modified_Bound = m_originalF0.back().time;
-		}
-		boundaries.push_back( modified_Bound );
+		//modified_Bound = m_bounds.back() + arg(m_parameters.searchSpaceParameters.numberOptVar * number_Targets +3)/1000;
+		//if ( modified_Bound < m_originalF0.back().time )
+		//{
+		//	modified_Bound = m_originalF0.back().time;
+		//}
+		//boundaries.push_back( modified_Bound );
 		std::sort( boundaries.begin(), boundaries.end() );
 		//boundaries.push_back( m_bounds.back() + arg(m_parameters.numberOptVar * (arg.size() / m_parameters.numberOptVar) +3)/1000 );
 	}
