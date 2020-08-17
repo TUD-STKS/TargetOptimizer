@@ -10,13 +10,13 @@ TextGridReader::TextGridReader(const std::string& textGridFile)
 	tg = TextGrid::readTextGridFile(textGridFile);
 }
 
-std::vector<double> TextGridReader::getBounds(std::string tierName) const
+std::vector<double> TextGridReader::getBounds() const
 {
 	IntervalTier boundsTier;
-	auto it = tg.intervalTiers.find(tierName);
+	auto it = tg.intervalTiers.find(syllableBoundaryTierName);
 	if (it == tg.intervalTiers.end())
 	{
-		throw std::runtime_error("Could not find an interval tier named " + tierName + "!");
+		throw std::runtime_error("Could not find an interval tier named " + syllableBoundaryTierName + "!");
 	}
 	boundsTier = it->second;
 	std::vector<double> bounds;

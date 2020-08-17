@@ -48,7 +48,7 @@ private:
     OptionsNotebook *optimizationOptions;
     OptionsNotebook *optimizationOptions2;
     TargetsNotebook *targetOptions;
-    //wxGrid *resultsTable;
+    TextGridReader tg;
 
     wxDECLARE_EVENT_TABLE();
 };

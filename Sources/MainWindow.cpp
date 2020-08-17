@@ -248,22 +248,28 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 	auto problemParams = optimizationOptions->getOptions().problemParams;
 	std::cout << "number of init bounds: " << problemParams.searchSpaceParameters.initBounds << std::endl;
 
-	double pitch_start = Data::getInstance().originalF0.at(0).time;
-	double pitch_end   = Data::getInstance().originalF0.back().time;
-	double pitch_interval = pitch_end - pitch_start;
-	double step = pitch_interval / (problemParams.searchSpaceParameters.initBounds - 1);
-
-
-	std::vector<double> initBoundaries;
-	for (int i = 0; i < problemParams.searchSpaceParameters.initBounds; ++i)
+	if (problemParams.searchSpaceParameters.initBounds > 0)
 	{
-		initBoundaries.push_back( pitch_start + i * step );
-	}
-	Data::getInstance().syllableBoundaries = initBoundaries;
-	initBoundaries.clear();
+		double pitch_start = Data::getInstance().originalF0.at(0).time;
+		double pitch_end = Data::getInstance().originalF0.back().time;
+		double pitch_interval = pitch_end - pitch_start;
+		double step = pitch_interval / (problemParams.searchSpaceParameters.initBounds - 1);
 
+
+		std::vector<double> initBoundaries;
+		for (int i = 0; i < problemParams.searchSpaceParameters.initBounds; ++i)
+		{
+			initBoundaries.push_back(pitch_start + i * step);
+		}
+		Data::getInstance().syllableBoundaries = initBoundaries;
+		initBoundaries.clear();
+	}
+	else // Initialize with TextGrid boundaries again
+	{
+		Data::getInstance().syllableBoundaries = tg.getBounds();
+	}
+	
 	isOptimized = false;
-	isTextGridLoaded = true;
 	updateWidgets();
 
 }
@@ -303,7 +309,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 	{
 		if (filepath.EndsWith("TextGrid"))
 		{
-			auto tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
+			tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
 			wxArrayString choices;
 			for (const auto& tierName : tg.getIntervalTierNames())
 			{
@@ -317,12 +323,13 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 			{
 				if (intervalChoiceDialog.ShowModal() == wxID_OK)
 				{
-					Data::getInstance().syllableBoundaries = tg.getBounds(std::string(intervalChoiceDialog.GetStringSelection().utf8_str()));
+					tg.syllableBoundaryTierName = std::string(intervalChoiceDialog.GetStringSelection().utf8_str());
 				}
 				else
 				{
-					Data::getInstance().syllableBoundaries = tg.getBounds();
+
 				}
+				Data::getInstance().syllableBoundaries = tg.getBounds();
 			}
 			catch (std::runtime_error &e)
 			{
