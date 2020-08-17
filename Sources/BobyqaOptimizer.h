@@ -9,7 +9,7 @@ struct OptimizerOptions
 	double epsilon{ 0.01 };
 	int patience{ 5 };
 	long maxCostEvaluations{ 1e6 };
-	double rhoEnd{ 1e-6 }
+	double rhoEnd{ 1e-6 };
 };
 
 // solver for an optimization problem utilizing BOBYQA algorithm
