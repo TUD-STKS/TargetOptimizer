@@ -39,7 +39,7 @@ std::cout << "max cost begin" << std::endl;
 std::cout << "rho end begin" << std::endl;
 	label = new wxStaticText(this, wxID_ANY, wxT("Rho end (precision):"));
 	optionsSizer->Add(label, labelFlags);
-	rhoEnd = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.6lf"), defaultOptions.rhoEnd), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.rhoEnd, 0.001);
+	rhoEnd = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.6lf"), defaultOptions.rhoEnd), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.rhoEnd, 0.000001);
 	optionsSizer->Add(rhoEnd, valueFlags);
 	std::cout << "rho end end" << std::endl;
 	useEarlyStopping = new wxCheckBox(this, wxID_ANY, wxT("Use early stopping"));
