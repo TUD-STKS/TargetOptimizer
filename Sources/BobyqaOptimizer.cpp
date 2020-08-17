@@ -8,7 +8,7 @@
 #include <chrono>
 
 
-void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH = "" ) const
+void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH ) const
 {
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
