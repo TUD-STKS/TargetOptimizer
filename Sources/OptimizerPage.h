@@ -20,6 +20,8 @@ private:
 
 private:
 	wxSpinCtrl* maxIterations;
+	wxSpinCtrlDouble* rhoEnd;
+	wxSpinCtrl* maxCostEvaluations;
 	wxCheckBox* useEarlyStopping;
 	wxSpinCtrlDouble* epsilon;	
 	wxSpinCtrl* patience;
