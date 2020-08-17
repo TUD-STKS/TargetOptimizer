@@ -169,63 +169,63 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			{
 				fmin = ftmp;
 				xtmp = x;
+			}
 
 				//minMSE = tmpMSE;
 				//minSCC = tmpSCC;
 
-				if (optimizeBoundaries)
-				{
-					//tmpBoundaries.front() = op.getOriginalF0_Onset();
-					tmpBoundaries.back()  = op.getOriginalF0_Offset();
-					if ( number_Targets > 1 )
-					{
-						for (unsigned i = 0; i < number_Targets; ++i)
-						{
-							tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
-						}
-					}
-					//for (unsigned i = 0; i <= number_Targets; ++i)
-					//{
-					//	tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
-					//	if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
-					//	{
-					//		tmpBoundaries.at(0) = op.getOriginalF0_Onset();
-					//	}
-					//	if ( (i==number_Targets) && (tmpBoundaries.back() < op.getOriginalF0_Offset()) )
-					//	{
-					//		tmpBoundaries.back() = op.getOriginalF0_Offset();
-					//	}
-					//}
-					std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
-					op.setBoundaries( tmpBoundaries );
-					optBoundaries = tmpBoundaries;
-				}//else{
+//				if (optimizeBoundaries)
+//				{
+//					//tmpBoundaries.front() = op.getOriginalF0_Onset();
+//					tmpBoundaries.back()  = op.getOriginalF0_Offset();
+//					if ( number_Targets > 1 )
+//					{
+//						for (unsigned i = 0; i < number_Targets; ++i)
+//						{
+//							tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+//						}
+//					}
+//					//for (unsigned i = 0; i <= number_Targets; ++i)
+//					//{
+//					//	tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+//					//	if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
+//					//	{
+//					//		tmpBoundaries.at(0) = op.getOriginalF0_Onset();
+//					//	}
+//					//	if ( (i==number_Targets) && (tmpBoundaries.back() < op.getOriginalF0_Offset()) )
+//					//	{
+//					//		tmpBoundaries.back() = op.getOriginalF0_Offset();
+//					//	}
+//					//}
+//					std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
+//					op.setBoundaries( tmpBoundaries );
+//					optBoundaries = tmpBoundaries;
+//				}//else{
 					//tmpBoundaries = initialBoundaries; Ist sowieso so, da bei optBound= FAlse die tmpbounds nicht geändert werden
 				//}
-				for (unsigned i = 0; i < number_Targets; ++i)
-				{
-					PitchTarget pt;
-					pt.slope = xtmp(number_optVar * i + 0);
-					pt.offset = xtmp(number_optVar * i + 1);
-					pt.tau = xtmp(number_optVar * i + 2);
-					pt.duration = tmpBoundaries.at(i+1) - tmpBoundaries.at(i);
-					tmpTargets.at(i) = pt;
-				}
-				std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-				//std::cout << "  tmp cost: " << ftmp << " tmp MSE: " << tmpMSE << std::endl;
-				//LOG << ftmp << << <<<"Writing this to a file.\n";
-
-				if ( useEarlyStopping )
-				{
-					// Implement the epsilon cancel
-					//SearchFinished = true;
-				}
-			}
-			if ( writeLOG )
-			{
-				LOG << fmin << " " << ftmp << " " << tmpMSE << " " << tmpSCC << " " << 
-				std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() << "\n";
-			}
+//				for (unsigned i = 0; i < number_Targets; ++i)
+//				{
+//					PitchTarget pt;
+//					pt.slope = xtmp(number_optVar * i + 0);
+//					pt.offset = xtmp(number_optVar * i + 1);
+//					pt.tau = xtmp(number_optVar * i + 2);
+//					pt.duration = tmpBoundaries.at(i+1) - tmpBoundaries.at(i);
+//					tmpTargets.at(i) = pt;
+//				}
+//				std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+//				//std::cout << "  tmp cost: " << ftmp << " tmp MSE: " << tmpMSE << std::endl;
+//				//LOG << ftmp << << <<<"Writing this to a file.\n";
+//				if ( useEarlyStopping )
+//				{
+//					// Implement the epsilon cancel
+//					//SearchFinished = true;
+//				}
+//			}
+//			if ( writeLOG )
+//			{
+//				LOG << fmin << " " << ftmp << " " << tmpMSE << " " << tmpSCC << " " << 
+//				std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() << "\n";
+//			}
 			
 
 			//if ( (boundaryResetCounter >= 20) && (tmpMSE > 1.41) )
@@ -261,6 +261,15 @@ std::cout << "" << std::endl;
 //	{
 //		std::cout << "xtmp at: " << i << " is: " << xtmp(i) << std::endl;
 //	}
+
+	tmpBoundaries.back()  = op.getOriginalF0_Offset();
+	for (unsigned i = 0; i < number_Targets; ++i)
+	{
+		tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+	}
+	std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
+	op.setBoundaries( tmpBoundaries );
+	optBoundaries = tmpBoundaries;
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		//opt_boundaries.push_back( initialBoundaries[i] + xtmp(4 * i +3)/1000 );

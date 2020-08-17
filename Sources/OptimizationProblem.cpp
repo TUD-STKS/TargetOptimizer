@@ -153,57 +153,70 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	TargetVector targets;
 	BoundaryVector boundaries = m_bounds;
 	//boundaries.front() = getOriginalF0_Onset();
-	boundaries.back()  = getOriginalF0_Offset();
+	//boundaries.back()  = getOriginalF0_Offset();
 
 
 
 	double modified_Bound = 0.0;
 	double number_Targets = arg.size() / m_parameters.searchSpaceParameters.numberOptVar;
 	//for (unsigned i = 0; i < arg.size() / m_parameters.numberOptVar; ++i)
+	if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
+	{
+		boundaries.back()  = getOriginalF0_Offset();
+		for (unsigned i = 0; i < number_Targets; ++i)
+		{
+			boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+		}
+		std::sort( boundaries.begin(), boundaries.end() );
+		boundaries.back()  = getOriginalF0_Offset();
+	}
+
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		PitchTarget pt;
 		pt.slope = arg(m_parameters.searchSpaceParameters.numberOptVar * i + 0);
 		pt.offset = arg(m_parameters.searchSpaceParameters.numberOptVar * i + 1);
 		pt.tau = arg(m_parameters.searchSpaceParameters.numberOptVar * i + 2);
+		pt.duration = ( boundaries.at(i+1) - boundaries.at(i) );
 		//pt.duration = m_bounds[i + 1] - m_bounds[i];// (m_bounds[i] + arg(4 * i +3)/1000);
-		if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
-		{
-			//if ( (i >0) && (number_Targets > 1) )
-			//{
-				boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
-			//}
-			//std::cout << "b: opt bound true " << m_parameters.optimizeBoundaries << std::endl;
-			//modified_Bound = m_bounds[i] + arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
-			//if ( (i==0) && (modified_Bound > m_originalF0[0].time))
-			//{
-			//	modified_Bound = m_originalF0[0].time;
-			//}
-			//boundaries.push_back( modified_Bound );
-			//boundaries.push_back( m_bounds[i] + arg(m_parameters.numberOptVar * i +3)/1000 );
-			pt.duration = ( m_bounds[i + 1] + arg(m_parameters.searchSpaceParameters.numberOptVar * (i+1) +3)/1000 ) - boundaries[i];
-		}
-		else{
-			//std::cout << "b: opt bound false " << m_parameters.optimizeBoundaries << std::endl;
-			pt.duration = m_bounds[i + 1] - m_bounds[i];
-		}
+//		if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
+//		{
+//			//if ( (i >0) && (number_Targets > 1) )
+//			//{
+//				//boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+//			//}
+//			//std::cout << "b: opt bound true " << m_parameters.optimizeBoundaries << std::endl;
+//			//modified_Bound = m_bounds[i] + arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+//			//if ( (i==0) && (modified_Bound > m_originalF0[0].time))
+//			//{
+//			//	modified_Bound = m_originalF0[0].time;
+//			//}
+//			//boundaries.push_back( modified_Bound );
+//			//boundaries.push_back( m_bounds[i] + arg(m_parameters.numberOptVar * i +3)/1000 );
+//			//pt.duration = ( m_bounds[i + 1] + arg(m_parameters.searchSpaceParameters.numberOptVar * (i+1) +3)/1000 ) - boundaries[i];
+//			pt.duration = ( boundaries.at(i+1) - boundaries.at(i) )
+//		}
+//		else{
+//			//std::cout << "b: opt bound false " << m_parameters.optimizeBoundaries << std::endl;
+//			pt.duration = m_bounds[i + 1] - m_bounds[i];
+//		}
 		targets.push_back(pt);
 	}
-	if (m_parameters.searchSpaceParameters.optimizeBoundaries) //(!m_bounds.empty()
-	{
-		//modified_Bound = m_bounds.back() + arg(m_parameters.searchSpaceParameters.numberOptVar * number_Targets +3)/1000;
-		//if ( modified_Bound < m_originalF0.back().time )
-		//{
-		//	modified_Bound = m_originalF0.back().time;
-		//}
-		//boundaries.push_back( modified_Bound );
-		std::sort( boundaries.begin(), boundaries.end() );
-		//boundaries.push_back( m_bounds.back() + arg(m_parameters.numberOptVar * (arg.size() / m_parameters.numberOptVar) +3)/1000 );
-	}
-	else
-	{
-		boundaries = m_bounds;
-	}
+//	if (m_parameters.searchSpaceParameters.optimizeBoundaries) //(!m_bounds.empty()
+//	{
+//		//modified_Bound = m_bounds.back() + arg(m_parameters.searchSpaceParameters.numberOptVar * number_Targets +3)/1000;
+//		//if ( modified_Bound < m_originalF0.back().time )
+//		//{
+//		//	modified_Bound = m_originalF0.back().time;
+//		//}
+//		//boundaries.push_back( modified_Bound );
+//		std::sort( boundaries.begin(), boundaries.end() );
+//		//boundaries.push_back( m_bounds.back() + arg(m_parameters.numberOptVar * (arg.size() / m_parameters.numberOptVar) +3)/1000 );
+//	}
+//	else
+//	{
+//		boundaries = m_bounds;
+//	}
 	//std::cout << "b: " << boundaries.at(0) << " "<< boundaries.at(1) << " "<< boundaries.at(2) << " "<< boundaries.at(3) 
 	//std::cout << " m: " << m_bounds.at(0) << " "<< m_bounds.at(1) << " " << m_bounds.at(2)<< " " << m_bounds.at(3) << std::endl;
 
