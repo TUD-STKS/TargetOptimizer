@@ -28,7 +28,7 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 
 	label = new wxStaticText(this, wxID_ANY, wxT("Maximum cost function\nevaluations(per iteration):"));
 	optionsSizer->Add(label, labelFlags);
-	maxCostEvaluations = new wxSpinCtrl(this, wxID_ANY, wxString::Format(wxT("%i"), defaultOptions.maxCostEvaluations), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1000, defaultOptions.maxCostEvaluations);
+	maxCostEvaluations = new wxSpinCtrl(this, wxID_ANY, wxString::Format(wxT("%i"), defaultOptions.maxCostEvaluations), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1000000, defaultOptions.maxCostEvaluations);
 	optionsSizer->Add(maxCostEvaluations, valueFlags);
 
 	label = new wxStaticText(this, wxID_ANY, wxT("Rho end (precision):"));
