@@ -34,6 +34,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool useEarlyStopping = optOpt.useEarlyStopping;
 
 	const long max_f_evals = optOpt.maxCostEvaluations;
+	const double rho_end   = optOpt.rhoEnd;
 
 	bool writeLOG = (LOG_PATH != "");
 
@@ -98,7 +99,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	//const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
 	std::cout << "rho_begin"<< rho_begin << std::endl;
-	const double rho_end(1e-6); // stopping trust region radius -> accuracy
+	//const double rho_end(1e-6); // stopping trust region radius -> accuracy
 	//const long max_f_evals(1e6); // max number of objective function evaluations
 
 	// initialize
