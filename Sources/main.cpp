@@ -6,6 +6,8 @@
 #include "BobyqaOptimizer.h"
 #include "TextGridReader.h"
 
+#include <fstream>
+
 #ifdef USE_WXWIDGETS
 #include <wx/wx.h>
 
@@ -59,6 +61,7 @@ int main(int argc, char* argv[])
 			parser.add_option("c","Choose for csv table file.");
 			parser.add_option("p","Choose for PitchTier file.");
 			parser.set_group_name("Additional Parameter Options");
+			parser.add_option("tg","Specify a TextGrid file.",1);
 			parser.add_option("lambda","Specify regularization parameter.",1);
 			parser.add_option("m-range","Specify search space for slope parameter.",1);
 			parser.add_option("b-range","Specify search space for offset parameter.",1);
@@ -84,11 +87,12 @@ int main(int argc, char* argv[])
 			parser.check_option_arg_range("t-weight", 0.0, 1e9);
 			parser.check_option_arg_range("lambda", 0.0, 1e15);
 			parser.check_option_arg_range("boundaryDelta", 0.0, 100.0);
+			parser.check_option_arg_range("maxIterations",5,200);
 
 			// process help option
 			if (parser.option("h"))
 			{
-				std::cout << "Usage: TargetOptimizer <TextGrid-file> <PitchTier-file> { <options> | <arg> }\n";
+				std::cout << "Usage: TargetOptimizer <PitchTier-file> <LOG-name> { <options> | <arg> }\n";
 				parser.print_options();
 				return EXIT_SUCCESS;
 			}
@@ -96,18 +100,37 @@ int main(int argc, char* argv[])
 			// check number of default arguments
 			if (parser.number_of_arguments() != 2)
 			{
-				std::cout << "Error in command line:\n   You must specify two input files.\n";
+				std::cout << "Error in command line:\n   You must specify a PitchTier file and the LOG name.\n";
 				std::cout << "\nTry the -h option for more information." << std::endl;
 				return EXIT_FAILURE;
 			}
 
-			// process TextGrid input
-			BoundaryVector bounds = DataIO::readTextGridFile(parser[0]).getBounds();
+			// process optional parameter options
+			ParameterSet parameters;
+			parameters.searchSpaceParameters.initBounds = get_option(parser, "initBounds", 0);
+
+			BoundaryVector bounds;
+			std::string TextGrid = get_option(parser,"tg","");
+			if ( TextGrid != "")
+			{
+				// process TextGrid input
+				bounds = DataIO::readTextGridFile( TextGrid ).getBounds();
+			}else if ( parameters.searchSpaceParameters.initBounds < 2 )
+			{
+				std::cout << "You need at least two boundaries! Specify a TextGrid file or set initBounds >=2." << std::endl;
+				return EXIT_FAILURE;
+			}
+
 
 			// process PitchTier input
-			auto ptreader = DataIO::readPitchTierFile(parser[1]);
+			auto ptreader = DataIO::readPitchTierFile(parser[0]);
 			TimeSignal f0 = ptreader.getF0();
 			std::string fileName = ptreader.getFileName();
+
+
+			std::string LOG_PATH = parser[1] + ".txt";
+			std::string LOG_F0_PATH = parser[1] + "_F0.txt";
+
 
 			//calculate mean f0
 			double meanF0 = 0.0;
@@ -117,36 +140,84 @@ int main(int argc, char* argv[])
 			}
 			meanF0 /= f0.size();
 
-			// process optional parameter options
-			ParameterSet parameters;
-			//parameters.deltaSlope = get_option(parser,"m-range",50.0);
-			//parameters.deltaOffset = get_option(parser,"b-range",20.0);
-			//parameters.deltaTau = get_option(parser,"t-range",5.0);
-			//parameters.weightSlope = get_option(parser,"m-weight",1.0);
-			//parameters.weightOffset = get_option(parser,"b-weight",0.5);
-			//parameters.weightTau = get_option(parser,"t-weight",0.1);
-			//parameters.lambda = get_option(parser,"lambda",0.01);
-			//parameters.meanSlope = 0.0;
-			//parameters.meanOffset = meanF0;
-			//parameters.meanTau = 15.0;
-			//parameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
-			//parameters.initBounds = get_option(parser, "initBounds", 0);
-			//parameters.optimizeBoundaries = (parameters.deltaBoundary != 0);
+
+			
+
+			parameters.regularizationParameters.weightSlope = get_option(parser,"m-weight",1.0);
+			parameters.regularizationParameters.weightOffset = get_option(parser,"b-weight",0.5);
+			parameters.regularizationParameters.weightTau = get_option(parser,"t-weight",0.1);
+			parameters.regularizationParameters.lambda = get_option(parser,"lambda",0.01);
+
+			parameters.searchSpaceParameters.deltaSlope = get_option(parser,"m-range",50.0);
+			parameters.searchSpaceParameters.deltaOffset = get_option(parser,"b-range",20.0);
+			parameters.searchSpaceParameters.deltaTau = get_option(parser,"t-range",5.0);
+			parameters.searchSpaceParameters.meanSlope = 0.0;
+			parameters.searchSpaceParameters.meanOffset = meanF0;
+			parameters.searchSpaceParameters.meanTau = 15.0;
+			parameters.searchSpaceParameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
+			
+			parameters.searchSpaceParameters.optimizeBoundaries = ( parameters.searchSpaceParameters.deltaBoundary != 0 );
+			parameters.searchSpaceParameters.numberOptVar = ( parameters.searchSpaceParameters.optimizeBoundaries ? 4 : 3 );
 
 			OptimizerOptions optOpt;
-			//optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
-			//optOpt.correlationThreshold{ 0.99 };
-			//optOpt.useCorrelationThreshold{ false };
-			//optOpt.rmseThreshold{ 0.2 };
-			//optOpt.useRmseThreshold{ false };
+			optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
+			optOpt.useEarlyStopping = false;
+			optOpt.epsilon = 0.01;
+			optOpt.patience = 5;
+
+
+
+
+			if ( parameters.searchSpaceParameters.initBounds != 0 )
+			{
+				std::cout << "bounds init" << std::endl;
+				double pitch_start = f0.at(0).time;
+				double pitch_end   = f0.back().time;
+				double pitch_interval = pitch_end - pitch_start;
+				double step = pitch_interval / (parameters.searchSpaceParameters.initBounds - 1);
+
+
+				std::vector<double> initBoundaries;
+				for (int i = 0; i < parameters.searchSpaceParameters.initBounds; ++i)
+				{
+					initBoundaries.push_back( pitch_start + i * step );
+				}
+				bounds = initBoundaries;
+				initBoundaries.clear();
+			}
 
 			// main functionality
 			OptimizationProblem problem (parameters, f0, bounds);
 			BobyqaOptimizer optimizer;
-			optimizer.optimize(problem, optOpt);
+			optimizer.optimize(problem, optOpt, LOG_PATH);
 			TargetVector optTargets = problem.getPitchTargets();
+			BoundaryVector optBoundaries = problem.getBoundaries();
 			TimeSignal optF0 = problem.getModelF0();
 			Sample onset = problem.getOnset();
+
+			std::ofstream LOG_F0;
+			LOG_F0.open ( LOG_F0_PATH );
+			for (unsigned i = 0; i < f0.size(); ++i)
+			{
+				LOG_F0 << "ORI_F0 " << f0.at(i).time << " " << f0.at(i).value << "\n";
+			}
+			for (unsigned i = 0; i < bounds.size(); ++i)
+			{
+				LOG_F0 << "ORI_BOUNDS " << bounds.at(i) <<  "\n";
+			}
+			for (unsigned i = 0; i < optF0.size(); ++i)
+			{
+				LOG_F0 << "OPT_F0 " << optF0.at(i).time << " " << optF0.at(i).value << "\n";
+			}
+			for (unsigned i = 0; i < optTargets.size(); ++i)
+			{
+				LOG_F0 << "OPT_TARGETS " << optTargets.at(i).slope << " " << optTargets.at(i).offset << " " << optTargets.at(i).tau << " " << optTargets.at(i).duration << " " <<  "\n";
+			}
+			for (unsigned i = 0; i < optBoundaries.size(); ++i)
+			{
+				LOG_F0 << "OPT_BOUNDS " << optBoundaries.at(i) <<  "\n";
+			}
+			LOG_F0.close();
 
 			// process gesture-file output option
 			if (parser.option("g"))

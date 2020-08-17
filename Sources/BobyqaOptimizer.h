@@ -1,5 +1,6 @@
 #pragma once
 #include "OptimizationProblem.h"
+#include <string>
 
 struct OptimizerOptions
 {
@@ -16,7 +17,7 @@ public:
 	BobyqaOptimizer() { srand(time(NULL)); };//srand(3);};//srand(time(NULL)); };
 
 	// public member functions
-	void optimize(OptimizationProblem& op, OptimizerOptions optOpt) const;
+	void optimize(OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH = "" ) const;
 	//void optimize_targets_and_boundaries(OptimizationProblem& op) const;
 
 private:

@@ -3,10 +3,12 @@
 #include <dlib/threads.h>
 #include "BobyqaOptimizer.h"
 #include <iostream> //eclude again
+//#include <string>
+#include <fstream>
 #include <chrono>
 
 
-void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
+void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH = "" ) const
 {
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
@@ -21,13 +23,17 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	int number_optVar = ps.searchSpaceParameters.numberOptVar; // Optimize the 3 target parameters by default
 
 	double tmpMSE = 1e6;
+	//double minMSE = 1e6;
 	double tmpSCC = 0;
+	//double minSCC = 0;
 	//double minMSE = 1e6; //this is the mse corresponding to
 
 	const unsigned RANDOMITERATIONS = optOpt.maxIterations;
 	const int patience = optOpt.patience;
 	double epsilon = optOpt.epsilon;
 	bool useEarlyStopping = optOpt.useEarlyStopping;
+
+	bool writeLOG = (LOG_PATH != "");
 
 
 	//srand(1);
@@ -105,6 +111,15 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
+
+	std::ofstream LOG;
+
+	if ( writeLOG )
+	{
+  		LOG.open ( LOG_PATH );
+  		LOG << "fmin ftmp tmpMSE tmpSCC time" << "\n";
+	}
+
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
 #pragma omp parallel for schedule(dynamic)
@@ -146,12 +161,18 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 			std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
 
+			//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+
 
 
 			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 			{
 				fmin = ftmp;
 				xtmp = x;
+
+				//minMSE = tmpMSE;
+				//minSCC = tmpSCC;
+
 				if (optimizeBoundaries)
 				{
 					//tmpBoundaries.front() = op.getOriginalF0_Onset();
@@ -191,21 +212,29 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 					tmpTargets.at(i) = pt;
 				}
 				std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-				std::cout << "  tmp cost: " << ftmp << " tmp MSE: " << tmpMSE << std::endl;
+				//std::cout << "  tmp cost: " << ftmp << " tmp MSE: " << tmpMSE << std::endl;
+				//LOG << ftmp << << <<<"Writing this to a file.\n";
+
 				if ( useEarlyStopping )
 				{
 					// Implement the epsilon cancel
 					//SearchFinished = true;
 				}
 			}
-
-			if ( (boundaryResetCounter >= 20) && (tmpMSE > 1.41) )
+			if ( writeLOG )
 			{
-				tmpBoundaries = initialBoundaries;
-				op.setBoundaries( initialBoundaries );
-				boundaryResetCounter = 0;
-				std::cout << "  reset boundaries " << std::endl;
+				LOG << fmin << " " << ftmp << " " << tmpMSE << " " << tmpSCC << " " << 
+				std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() << "\n";
 			}
+			
+
+			//if ( (boundaryResetCounter >= 20) && (tmpMSE > 1.41) )
+			//{
+			//	tmpBoundaries = initialBoundaries;
+			//	op.setBoundaries( initialBoundaries );
+			//	boundaryResetCounter = 0;
+			//	std::cout << "  reset boundaries " << std::endl;
+			//}
 
 			++boundaryResetCounter;
 			++iteration;
@@ -252,6 +281,12 @@ std::cout << "" << std::endl;
 	op.setOptimum( optBoundaries, optTargets );
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 std::cout << "Elapsed time = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
+
+if ( writeLOG )
+{
+	LOG.close();
+}
+
 //std::cout << "BobyqaOptimizer line 168" << std::endl;
 	// DEBUG message
 #ifdef DEBUG_MSG
