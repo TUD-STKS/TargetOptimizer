@@ -225,6 +225,7 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	TamModelF0 tamF0(boundaries, m_originalF0[0].value);
 	tamF0.setPitchTargets(targets);
 
+
 	return costFunction(tamF0);
 }
 

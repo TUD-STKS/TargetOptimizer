@@ -33,6 +33,8 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	double epsilon = optOpt.epsilon;
 	bool useEarlyStopping = optOpt.useEarlyStopping;
 
+	const long max_f_evals = optOpt.maxCostEvaluations;
+
 	bool writeLOG = (LOG_PATH != "");
 
 
@@ -97,7 +99,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	//const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
 	std::cout << "rho_begin"<< rho_begin << std::endl;
 	const double rho_end(1e-6); // stopping trust region radius -> accuracy
-	const long max_f_evals(1e6); // max number of objective function evaluations
+	//const long max_f_evals(1e6); // max number of objective function evaluations
 
 	// initialize
 	double fmin(1e6);
@@ -124,7 +126,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 #pragma omp parallel for schedule(dynamic)
 
-	for (unsigned it = 0; it < RANDOMITERATIONS; ++it)
+	for (int it = 0; it < RANDOMITERATIONS; ++it)
 	{
 		double ftmp;
 		if (!SearchFinished)
