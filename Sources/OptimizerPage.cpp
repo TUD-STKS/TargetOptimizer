@@ -33,7 +33,7 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 
 	label = new wxStaticText(this, wxID_ANY, wxT("Rho end (precision):"));
 	optionsSizer->Add(label, labelFlags);
-	rhoEnd = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.6f"), defaultOptions.rhoEnd), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.rhoEnd, 0.001);
+	rhoEnd = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.6lf"), defaultOptions.rhoEnd), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.rhoEnd, 0.001);
 	optionsSizer->Add(rhoEnd, valueFlags);
 	
 	useEarlyStopping = new wxCheckBox(this, wxID_ANY, wxT("Use early stopping"));
@@ -43,7 +43,7 @@ OptimizerPage::OptimizerPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, 
 
 	label = new wxStaticText(this, wxID_ANY, wxT("Optimization cost \U0001D700:"));
 	optionsSizer->Add(label, labelFlags.Border(wxRIGHT | wxLEFT, 10));
-	epsilon = new wxSpinCtrlDouble(this, ID_EARLY_STOPPING_OPTION_VALUE, wxString::Format(wxT("%.2f"), defaultOptions.epsilon), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.epsilon, 0.001);
+	epsilon = new wxSpinCtrlDouble(this, ID_EARLY_STOPPING_OPTION_VALUE, wxString::Format(wxT("%.2lf"), defaultOptions.epsilon), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 1, defaultOptions.epsilon, 0.001);
 	optionsSizer->Add(epsilon, valueFlags);
 	
 	label = new wxStaticText(this, wxID_ANY, wxT("Patience"));
