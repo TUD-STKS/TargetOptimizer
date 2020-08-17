@@ -264,9 +264,11 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 		Data::getInstance().syllableBoundaries = initBoundaries;
 		initBoundaries.clear();
 	}
-	else // Initialize with TextGrid boundaries again
+	else if(isTextGridLoaded) // Initialize with TextGrid boundaries again
 	{
-		Data::getInstance().syllableBoundaries = tg.getBounds();
+		Data::getInstance().pitchTargets.clear();
+		Data::getInstance().optimalF0.clear();
+		Data::getInstance().syllableBoundaries = tg.getBounds();		
 	}
 	
 	isOptimized = false;
