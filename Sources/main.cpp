@@ -72,6 +72,9 @@ int main(int argc, char* argv[])
 			parser.add_option("boundaryDelta","Specify boundary delta.",1);
 			parser.add_option("initBounds","Specify how many bounds should be initialized.",1);
 			parser.add_option("maxIterations","Specify maximum number of optimizer iterations.",1);
+			parser.add_option("maxCostEvaluations","Specify maximum number of costfunction evaluations.",1);
+			parser.add_option("rhoEnd","Specify the rho_end parameter.",1);
+			parser.add_option("logf0", "Outputs f0, targets, boundaries, etc. to a single text file.");
 
 			// parse command line
 			parser.parse(argc,argv);
@@ -164,6 +167,9 @@ int main(int argc, char* argv[])
 			optOpt.useEarlyStopping = false;
 			optOpt.epsilon = 0.01;
 			optOpt.patience = 5;
+			optOpt.maxCostEvaluations = get_option(parser,"maxCostEvaluations", 1e6);
+			optOpt.rhoEnd = get_option(parser, "rhoEnd", 1e-6);
+
 
 
 
@@ -195,29 +201,31 @@ int main(int argc, char* argv[])
 			TimeSignal optF0 = problem.getModelF0();
 			Sample onset = problem.getOnset();
 
-			std::ofstream LOG_F0;
-			LOG_F0.open ( LOG_F0_PATH );
-			for (unsigned i = 0; i < f0.size(); ++i)
-			{
-				LOG_F0 << "ORI_F0 " << f0.at(i).time << " " << f0.at(i).value << "\n";
+			if ( parser.option("logf0") ){
+				std::ofstream LOG_F0;
+				LOG_F0.open ( LOG_F0_PATH );
+				for (unsigned i = 0; i < f0.size(); ++i)
+				{
+					LOG_F0 << "ORI_F0 " << f0.at(i).time << " " << f0.at(i).value << "\n";
+				}
+				for (unsigned i = 0; i < bounds.size(); ++i)
+				{
+					LOG_F0 << "ORI_BOUNDS " << bounds.at(i) <<  "\n";
+				}
+				for (unsigned i = 0; i < optF0.size(); ++i)
+				{
+					LOG_F0 << "OPT_F0 " << optF0.at(i).time << " " << optF0.at(i).value << "\n";
+				}
+				for (unsigned i = 0; i < optTargets.size(); ++i)
+				{
+					LOG_F0 << "OPT_TARGETS " << optTargets.at(i).slope << " " << optTargets.at(i).offset << " " << optTargets.at(i).tau << " " << optTargets.at(i).duration << " " <<  "\n";
+				}
+				for (unsigned i = 0; i < optBoundaries.size(); ++i)
+				{
+					LOG_F0 << "OPT_BOUNDS " << optBoundaries.at(i) <<  "\n";
+				}
+				LOG_F0.close();
 			}
-			for (unsigned i = 0; i < bounds.size(); ++i)
-			{
-				LOG_F0 << "ORI_BOUNDS " << bounds.at(i) <<  "\n";
-			}
-			for (unsigned i = 0; i < optF0.size(); ++i)
-			{
-				LOG_F0 << "OPT_F0 " << optF0.at(i).time << " " << optF0.at(i).value << "\n";
-			}
-			for (unsigned i = 0; i < optTargets.size(); ++i)
-			{
-				LOG_F0 << "OPT_TARGETS " << optTargets.at(i).slope << " " << optTargets.at(i).offset << " " << optTargets.at(i).tau << " " << optTargets.at(i).duration << " " <<  "\n";
-			}
-			for (unsigned i = 0; i < optBoundaries.size(); ++i)
-			{
-				LOG_F0 << "OPT_BOUNDS " << optBoundaries.at(i) <<  "\n";
-			}
-			LOG_F0.close();
 
 			// process gesture-file output option
 			if (parser.option("g"))
