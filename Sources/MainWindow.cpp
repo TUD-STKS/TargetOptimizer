@@ -183,6 +183,7 @@ void MainWindow::clear()
 	// Reset data
 	Data::getInstance().reset();
 	isTextGridLoaded = false;
+	isBoundariesInit = false;
 	isPitchTierLoaded = false;
 	isOptimized = false;
 
@@ -261,8 +262,11 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 		{
 			initBoundaries.push_back(pitch_start + i * step);
 		}
+		Data::getInstance().pitchTargets.clear();
+		Data::getInstance().optimalF0.clear();
 		Data::getInstance().syllableBoundaries = initBoundaries;
 		initBoundaries.clear();
+		isBoundariesInit = true;
 	}
 	else if( (problemParams.searchSpaceParameters.initBounds <= 1) && (!isTextGridLoaded) )
 	{
@@ -446,13 +450,13 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 
 void MainWindow::updateWidgets()
 {
-	// Clear is only available when any of the files are loaded
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_CLEAR))->Enable(isTextGridLoaded || isPitchTierLoaded);
-	this->GetMenuBar()->Enable(IDM_CLEAR, isTextGridLoaded || isPitchTierLoaded);
+	// Clear is only available when any of the files are loaded or boundaries are initialized
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_CLEAR))->Enable(isTextGridLoaded || isPitchTierLoaded || isBoundariesInit);
+	this->GetMenuBar()->Enable(IDM_CLEAR, isTextGridLoaded || isPitchTierLoaded || isBoundariesInit);
 
 	// Optimization is only available if all necessary files are loaded
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable(isTextGridLoaded && isPitchTierLoaded);
-	this->GetMenuBar()->Enable(IDM_OPTIMIZE, isTextGridLoaded && isPitchTierLoaded);
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable((isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
+	this->GetMenuBar()->Enable(IDM_OPTIMIZE, (isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
 
 
 	// Init bounds available after pitchtier is loaded

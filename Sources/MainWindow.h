@@ -34,6 +34,7 @@ private:
 private:
     //TODO: Replace flags with proper progress manager
     bool isTextGridLoaded{ false };
+    bool isBoundariesInit{ false };
     bool isPitchTierLoaded{ false };
     bool isOptimized{ false };
 
