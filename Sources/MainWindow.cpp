@@ -216,12 +216,27 @@ void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
 	if ( !Cell_Str.ToDouble(&Cell) || (Cell < 0) ) 
 	{
 		wxMessageBox(wxT("Error: The cell entries must be positive numbers!"), wxT("Parameter error"), wxICON_ERROR);
-		targetOptions->boundaryPage->setEntries( Data::getInstance().optimalBoundaries );
+		if (isOptimized)
+		{
+			targetOptions->boundaryPage->setEntries(Data::getInstance().optimalBoundaries);
+		}
+		else
+		{
+			targetOptions->boundaryPage->setEntries(Data::getInstance().initialBoundaries);
+		}
+		
 		return;
 	}
 
-	Data::getInstance().optimalBoundaries.at( event.GetCol() ) = Cell;
-	//std::cout << "OnBoundaryCellChanged called! Cell = "<< Cell << " syllable: " << Data::getInstance().syllableBoundaries.at( event.GetCol() ) << std::endl;
+	if (isOptimized)
+	{
+		Data::getInstance().optimalBoundaries.at(event.GetCol()) = Cell;
+	}
+	else
+	{
+		Data::getInstance().initialBoundaries.at(event.GetCol()) = Cell;
+	}
+	
 	updateWidgets();
 }
 
@@ -479,6 +494,10 @@ void MainWindow::updateWidgets()
 	{
 		//std::cout << Data::getInstance().syllableBoundaries.at(0) << std::endl;
 		targetOptions->boundaryPage->setEntries( Data::getInstance().optimalBoundaries );
+	}
+	else if (!Data::getInstance().initialBoundaries.empty())
+	{
+		targetOptions->boundaryPage->setEntries(Data::getInstance().initialBoundaries);
 	}
 
 	targetOptions->resultPage->Enable(isOptimized);
