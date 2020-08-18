@@ -41,8 +41,9 @@ private:
     // The picture area containing the plots ("figure" in MATLAB parlance)
     PlotRegion* plotRegion{
         new PlotRegion(this,
-        Data::getInstance().syllableBoundaries,
+        Data::getInstance().initialBoundaries,
         Data::getInstance().originalF0,
+        Data::getInstance().optimalBoundaries,
         Data::getInstance().pitchTargets,
         Data::getInstance().optimalF0
         )};

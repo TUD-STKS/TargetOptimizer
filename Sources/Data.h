@@ -50,7 +50,8 @@ public:
 	}
 	void reset()
 	{
-		syllableBoundaries.clear();
+		initialBoundaries.clear();
+		optimalBoundaries.clear();
 		pitchTargets.clear();
 		optimalF0.clear();
 		originalF0.clear();
@@ -58,7 +59,8 @@ public:
 
 
 public:
-	BoundaryVector syllableBoundaries;
+	BoundaryVector initialBoundaries;
+	BoundaryVector optimalBoundaries;
 	std::vector<PitchTarget> pitchTargets;
 	Sample onset;
 	TimeSignal optimalF0;

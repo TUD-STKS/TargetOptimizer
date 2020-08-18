@@ -216,11 +216,11 @@ void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
 	if ( !Cell_Str.ToDouble(&Cell) || (Cell < 0) ) 
 	{
 		wxMessageBox(wxT("Error: The cell entries must be positive numbers!"), wxT("Parameter error"), wxICON_ERROR);
-		targetOptions->boundaryPage->setEntries( Data::getInstance().syllableBoundaries );
+		targetOptions->boundaryPage->setEntries( Data::getInstance().optimalBoundaries );
 		return;
 	}
 
-	Data::getInstance().syllableBoundaries.at( event.GetCol() ) = Cell;
+	Data::getInstance().optimalBoundaries.at( event.GetCol() ) = Cell;
 	//std::cout << "OnBoundaryCellChanged called! Cell = "<< Cell << " syllable: " << Data::getInstance().syllableBoundaries.at( event.GetCol() ) << std::endl;
 	updateWidgets();
 }
@@ -264,7 +264,8 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 		}
 		Data::getInstance().pitchTargets.clear();
 		Data::getInstance().optimalF0.clear();
-		Data::getInstance().syllableBoundaries = initBoundaries;
+		Data::getInstance().initialBoundaries = initBoundaries;
+		Data::getInstance().optimalBoundaries.clear();
 		initBoundaries.clear();
 		isBoundariesInit = true;
 	}
@@ -276,7 +277,8 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 	{
 		Data::getInstance().pitchTargets.clear();
 		Data::getInstance().optimalF0.clear();
-		Data::getInstance().syllableBoundaries = tg.getBounds();		
+		Data::getInstance().initialBoundaries = tg.getBounds();		
+		Data::getInstance().optimalBoundaries.clear();
 	}
 	
 	isOptimized = false;
@@ -339,7 +341,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 				{
 
 				}
-				Data::getInstance().syllableBoundaries = tg.getBounds();
+				Data::getInstance().initialBoundaries = tg.getBounds();
 			}
 			catch (std::runtime_error &e)
 			{
@@ -382,7 +384,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		wxMessageBox(wxT("Error: 0 is not a valid search space parameter!"), wxT("Parameter error"), wxICON_ERROR);
 		return;
 	}
-	if ( Data::getInstance().syllableBoundaries.size() <= 1 )
+	if ( Data::getInstance().initialBoundaries.size() <= 1 )
 	{
 		wxMessageBox(wxT("Error: There must be at least two boundaries!"), wxT("Parameter error"), wxICON_ERROR);
 		return;
@@ -390,7 +392,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 
 	OptimizationProblem problem(parameters,
 		Data::getInstance().originalF0,
-		Data::getInstance().syllableBoundaries);
+		Data::getInstance().initialBoundaries);
 	
 	BobyqaOptimizer optimizer;
 	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
@@ -412,7 +414,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
-	Data::getInstance().syllableBoundaries = problem.getBoundaries();
+	Data::getInstance().optimalBoundaries = problem.getBoundaries();
 
 
 	std::ostringstream msg;
@@ -473,10 +475,10 @@ void MainWindow::updateWidgets()
 	//static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
 	targetOptions->boundaryPage->Enable(isTextGridLoaded);
 
-	if (!Data::getInstance().syllableBoundaries.empty())
+	if (!Data::getInstance().optimalBoundaries.empty())
 	{
 		//std::cout << Data::getInstance().syllableBoundaries.at(0) << std::endl;
-		targetOptions->boundaryPage->setEntries( Data::getInstance().syllableBoundaries );
+		targetOptions->boundaryPage->setEntries( Data::getInstance().optimalBoundaries );
 	}
 
 	targetOptions->resultPage->Enable(isOptimized);
