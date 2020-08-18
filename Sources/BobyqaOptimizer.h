@@ -8,7 +8,7 @@ struct OptimizerOptions
 	bool useEarlyStopping{ false };
 	double epsilon{ 0.01 };
 	int patience{ 5 };
-	int maxCostEvaluations{ 1000000 };
+	int maxCostEvaluations{ 100000 };
 	double rhoEnd{ 0.000001 };
 };
 

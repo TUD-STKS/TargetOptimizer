@@ -248,7 +248,7 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 	auto problemParams = optimizationOptions->getOptions().problemParams;
 	std::cout << "number of init bounds: " << problemParams.searchSpaceParameters.initBounds << std::endl;
 
-	if (problemParams.searchSpaceParameters.initBounds > 0)
+	if (problemParams.searchSpaceParameters.initBounds > 1)
 	{
 		double pitch_start = Data::getInstance().originalF0.at(0).time;
 		double pitch_end = Data::getInstance().originalF0.back().time;
@@ -263,6 +263,10 @@ void MainWindow::OnInitBounds(wxCommandEvent& event)
 		}
 		Data::getInstance().syllableBoundaries = initBoundaries;
 		initBoundaries.clear();
+	}
+	else if( (problemParams.searchSpaceParameters.initBounds <= 1) && (!isTextGridLoaded) )
+	{
+		wxMessageBox(wxT("Error: There must be at least two boundaries!"), wxT("Parameter error"), wxICON_ERROR);
 	}
 	else if(isTextGridLoaded) // Initialize with TextGrid boundaries again
 	{

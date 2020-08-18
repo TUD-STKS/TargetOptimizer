@@ -117,11 +117,11 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	std::ofstream LOG;
 
-	if ( writeLOG )
-	{
-  		LOG.open ( LOG_PATH );
-  		LOG << "fmin ftmp tmpMSE tmpSCC time" << "\n";
-	}
+//	if ( writeLOG )
+//	{
+//  		LOG.open ( LOG_PATH );
+//  		LOG << "fmin ftmp tmpMSE tmpSCC time" << "\n";
+//	}
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
@@ -278,6 +278,10 @@ std::cout << "" << std::endl;
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+		if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
+		{
+			tmpBoundaries.at(0) = op.getOriginalF0_Onset();
+		}
 	}
 	std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
 	tmpBoundaries.back()  = op.getOriginalF0_Offset();
@@ -306,6 +310,11 @@ std::cout << "Elapsed time = " << std::chrono::duration_cast<std::chrono::second
 
 if ( writeLOG )
 {
+	//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+	LOG.open ( LOG_PATH );
+  	LOG << "fmin fMSE fSCC time" << "\n";
+	LOG << fmin << " "  << op.getRootMeanSquareError() << " " << op.getCorrelationCoefficient() << " " << 
+	std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "\n";
 	LOG.close();
 }
 

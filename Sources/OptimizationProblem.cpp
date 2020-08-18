@@ -166,6 +166,10 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 		for (unsigned i = 0; i < number_Targets; ++i)
 		{
 			boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+			if ( (i==0) && (boundaries.at(0) > m_originalF0[0].time))
+			{
+				boundaries.at(0) = m_originalF0[0].time;
+			}
 		}
 		std::sort( boundaries.begin(), boundaries.end() );
 		boundaries.back()  = getOriginalF0_Offset();
