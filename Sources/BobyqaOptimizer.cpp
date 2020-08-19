@@ -169,7 +169,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 			//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
 
-			std::cout << "Iteration nr: " << iteration << " fmin: " << fmin << " ftmp: " << ftmp << " eps b: " << fmin-fmin*epsilon << " " << fmin-fmin*epsilon << std::endl;
+			std::cout << "Iteration nr: " << iteration << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
 			if ( useEarlyStopping )
 			{
 				//if ( ( (fmin-fmin*epsilon) < ftmp ) && ( (fmin+fmin*epsilon) > ftmp) )//( (fmin-ftmp) < (fmin * epsilon) )
