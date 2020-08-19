@@ -19,7 +19,7 @@ struct SearchSpaceParameters
 	double deltaSlope{ 50.0 };
 	double deltaOffset{ 20.0 };
 	double deltaTau{ 5.0 };
-	double deltaBoundary{ 30.0 };
+	double deltaBoundary{ 100.0 };
 	int    initBounds{ 0 };
 	bool   optimizeBoundaries{ deltaBoundary > 0 };
 	int    numberOptVar{ optimizeBoundaries ? 4 : 3 };

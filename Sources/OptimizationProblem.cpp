@@ -154,18 +154,40 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	BoundaryVector boundaries = m_bounds;
 	//boundaries.front() = getOriginalF0_Onset();
 	//boundaries.back()  = getOriginalF0_Offset();
+	bool relativeDelta = true;
 
 
 
 	double modified_Bound = 0.0;
 	double number_Targets = arg.size() / m_parameters.searchSpaceParameters.numberOptVar;
+	double number_optVar = m_parameters.searchSpaceParameters.numberOptVar;
 	//for (unsigned i = 0; i < arg.size() / m_parameters.numberOptVar; ++i)
 	if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
 	{
 		boundaries.back()  = getOriginalF0_Offset();
 		for (unsigned i = 0; i < number_Targets; ++i)
 		{
-			boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+			if ( relativeDelta ){
+				if ( arg(number_optVar * i + 3) >= 0)
+				{
+					boundaries.at(i) += arg(number_optVar * i + 3)*( m_bounds.at(i+1)-m_bounds.at(i) )*0.01;
+				}
+				else
+				{
+					if ( i==0 )
+					{
+						boundaries.at(i) += arg(number_optVar * i + 3)*0.1*0.01;
+					}
+					else
+					{
+						boundaries.at(i) += arg(number_optVar * i + 3)*( m_bounds.at(i)-m_bounds.at(i-1) ) *0.01;
+					}
+				}
+			}
+			else
+			{
+				boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
+			}
 			if ( (i==0) && (boundaries.at(0) > m_originalF0[0].time))
 			{
 				boundaries.at(0) = m_originalF0[0].time;

@@ -38,6 +38,8 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	bool writeLOG = (LOG_PATH != "");
 
+	bool relativeDelta = true;
+
 
 	//srand(1);
 
@@ -114,6 +116,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
+	int convergence = 0;
 
 	std::ofstream LOG;
 
@@ -167,14 +170,33 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
 
 
-
+			if ( useEarlyStopping )
+			{
+				//if ( ( (fmin-fmin*epsilon) < ftmp ) && ( (fmin+fmin*epsilon) > ftmp) )//( (fmin-ftmp) < (fmin * epsilon) )
+				//{
+				//	convergence += 1;
+				//}
+				//else
+				//{
+				//	convergence = 0;
+				//}
+				//if ( convergence >= patience )
+				//{
+				//	SearchFinished = true;
+				//	std::cout << "" << std::endl;
+				//	std::cout << "Search stopped early!" << std::endl;
+				//}
+			}
 			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 			{
 				fmin = ftmp;
 				xtmp = x;
+				std::cout << "ftmp: " << ftmp << std::endl;
 			}
+			++iteration;
+		}
+	}
 			
-
 				//minMSE = tmpMSE;
 				//minSCC = tmpSCC;
 
@@ -248,10 +270,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			//	std::cout << "  reset boundaries " << std::endl;
 			//}
 
-			++boundaryResetCounter;
-			++iteration;
-		}
-	}
+			
 
 	if (fmin == 1e6)
 	{
@@ -277,7 +296,27 @@ std::cout << "" << std::endl;
 	tmpBoundaries.back()  = op.getOriginalF0_Offset();
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
-		tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+		if ( relativeDelta ){
+			if ( xtmp(number_optVar * i + 3) >= 0)
+			{
+				tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)*( initialBoundaries.at(i+1)-initialBoundaries.at(i) )*0.01;
+			}
+			else
+			{
+				if ( i==0 )
+				{
+					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)*0.1*0.01;
+				}
+				else
+				{
+					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)*( initialBoundaries.at(i)-initialBoundaries.at(i-1) ) *0.01;
+				}
+			}
+		}
+		else
+		{
+			tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
+		}
 		if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
 		{
 			tmpBoundaries.at(0) = op.getOriginalF0_Onset();
