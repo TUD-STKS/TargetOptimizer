@@ -116,6 +116,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
+	int seed_it = 2;
 	int convergence = 0;
 
 	std::ofstream LOG;
@@ -135,19 +136,25 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 		double ftmp;
 		if (!SearchFinished)
 		{
-			// random initialization
 			DlibVector x;
-			x.set_size(number_Targets * number_optVar);
-			for (unsigned i = 0; i < number_Targets; ++i)
+			#pragma omp critical (getRandomValues)
 			{
-				for (unsigned ssp_bound = 0; ssp_bound < number_optVar; ++ssp_bound)
+				// random initialization
+				srand( seed_it );
+				x.set_size(number_Targets * number_optVar);
+				for (unsigned i = 0; i < number_Targets; ++i)
 				{
-					x(number_optVar * i + ssp_bound) = getRandomValue( min_bounds.at(ssp_bound), max_bounds.at(ssp_bound) );
+					for (unsigned ssp_bound = 0; ssp_bound < number_optVar; ++ssp_bound)
+					{
+						x(number_optVar * i + ssp_bound) = getRandomValue( min_bounds.at(ssp_bound), max_bounds.at(ssp_bound) );
+					}
+					
+					//x(4 * i + 0) = getRandomValue(mmin, mmax);
+					//x(4 * i + 1) = getRandomValue(bmin, bmax);
+					//x(4 * i + 2) = getRandomValue(tmin, tmax);
+					//x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
 				}
-				//x(4 * i + 0) = getRandomValue(mmin, mmax);
-				//x(4 * i + 1) = getRandomValue(bmin, bmax);
-				//x(4 * i + 2) = getRandomValue(tmin, tmax);
-				//x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
+				++seed_it;
 			}
 			try
 			{
@@ -163,37 +170,36 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	#endif
 			}
 			// write optimization results back
-#pragma omp critical (updateMinValue)
-
-			//std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
-
-			//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-
-			std::cout << "Iteration nr: " << iteration << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
-			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
+			#pragma omp critical (updateMinValue)
 			{
-				if (fmin-ftmp < fmin*epsilon){++convergence;}
-				else {convergence = 0;}
-				fmin = ftmp;
-				xtmp = x;
-				//std::cout << "ftmp: " << ftmp << std::endl;
-			}
-			else
-			{
-				++convergence;
-			}
-			if ( useEarlyStopping )
-			{
-				if ( convergence >= patience )
+				//std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
+				//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+				std::cout << "Iteration nr: " << iteration << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
+				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 				{
-					SearchFinished = true;
-					//std::cout << "" << std::endl;
-					//std::cout << "Search stopped early!" << std::endl;
-				}else{
-					SearchFinished = false;
+					if (fmin-ftmp < fmin*epsilon){++convergence;}
+					else {convergence = 0;}
+					fmin = ftmp;
+					xtmp = x;
+					//std::cout << "ftmp: " << ftmp << std::endl;
 				}
+				else
+				{
+					++convergence;
+				}
+				if ( useEarlyStopping )
+				{
+					if ( convergence >= patience )
+					{
+						SearchFinished = true;
+						//std::cout << "" << std::endl;
+						//std::cout << "Search stopped early!" << std::endl;
+					}else{
+						SearchFinished = false;
+					}
+				}
+				++iteration;
 			}
-			++iteration;
 		}
 	}
 			
