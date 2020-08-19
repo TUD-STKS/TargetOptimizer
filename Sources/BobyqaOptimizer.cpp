@@ -165,11 +165,11 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			// write optimization results back
 #pragma omp critical (updateMinValue)
 
-			std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
+			//std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
 
 			//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
 
-
+			std::cout << "Iteration nr: " << iteration << " fmin: " << fmin << " ftmp: " << ftmp << " eps b: " << fmin-fmin*epsilon << " " << fmin-fmin*epsilon << std::endl;
 			if ( useEarlyStopping )
 			{
 				//if ( ( (fmin-fmin*epsilon) < ftmp ) && ( (fmin+fmin*epsilon) > ftmp) )//( (fmin-ftmp) < (fmin * epsilon) )
@@ -180,18 +180,26 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 				//{
 				//	convergence = 0;
 				//}
-				//if ( convergence >= patience )
-				//{
-				//	SearchFinished = true;
-				//	std::cout << "" << std::endl;
-				//	std::cout << "Search stopped early!" << std::endl;
-				//}
+				if ( convergence >= patience )
+				{
+					SearchFinished = true;
+					//std::cout << "" << std::endl;
+					//std::cout << "Search stopped early!" << std::endl;
+				}else{
+					SearchFinished = false;
+				}
 			}
 			if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 			{
+				if (fmin-ftmp < fmin*epsilon){++convergence;}
+				else {convergence = 0;}
 				fmin = ftmp;
 				xtmp = x;
-				std::cout << "ftmp: " << ftmp << std::endl;
+				//std::cout << "ftmp: " << ftmp << std::endl;
+			}
+			else
+			{
+				++convergence;
 			}
 			++iteration;
 		}

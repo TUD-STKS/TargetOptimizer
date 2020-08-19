@@ -4,10 +4,10 @@
 
 struct OptimizerOptions
 {
-	int maxIterations{ 30 };
-	bool useEarlyStopping{ false };
+	int maxIterations{ 100 };
+	bool useEarlyStopping{ true };
 	double epsilon{ 0.01 };
-	int patience{ 5 };
+	int patience{ 10 };
 	int maxCostEvaluations{ 100000 };
 	double rhoEnd{ 0.000001 };
 };
