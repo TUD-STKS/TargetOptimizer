@@ -16,7 +16,7 @@ struct OptimizerOptions
 class BobyqaOptimizer {
 public:
 	// constructors
-	BobyqaOptimizer() { srand(1); };//srand(3);};//srand(time(NULL)); };
+	BobyqaOptimizer() = default;
 
 	// public member functions
 	void optimize(OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH = "" ) const;

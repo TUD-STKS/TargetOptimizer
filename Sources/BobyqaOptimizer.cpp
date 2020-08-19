@@ -116,7 +116,6 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
-	int seed_it = 2;
 	int convergence = 0;
 
 	std::ofstream LOG;
@@ -140,7 +139,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			#pragma omp critical (getRandomValues)
 			{
 				// random initialization
-				srand( seed_it );
+				srand( it );
 				x.set_size(number_Targets * number_optVar);
 				for (unsigned i = 0; i < number_Targets; ++i)
 				{
@@ -148,19 +147,12 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 					{
 						x(number_optVar * i + ssp_bound) = getRandomValue( min_bounds.at(ssp_bound), max_bounds.at(ssp_bound) );
 					}
-					
-					//x(4 * i + 0) = getRandomValue(mmin, mmax);
-					//x(4 * i + 1) = getRandomValue(bmin, bmax);
-					//x(4 * i + 2) = getRandomValue(tmin, tmax);
-					//x(4 * i + 3) = getRandomValue(boundary_min, boundary_max);
 				}
-				++seed_it;
 			}
 			try
 			{
 				// optimization algorithm: BOBYQA
 				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
-				//std::cout << "ftmp" << ftmp << std::endl;
 			}
 			catch (dlib::bobyqa_failure & err)
 			{
@@ -172,9 +164,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			// write optimization results back
 			#pragma omp critical (updateMinValue)
 			{
-				//std::cout << '\r' << "Iteration nr: "<< iteration << std::flush;
-				//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-				std::cout << "Iteration nr: " << iteration << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
+				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
 				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 				{
 					if (fmin-ftmp < fmin*epsilon){++convergence;}
