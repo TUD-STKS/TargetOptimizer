@@ -8,7 +8,7 @@
 #include <chrono>
 
 
-void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH ) const
+void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
 {
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
@@ -36,7 +36,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	const long max_f_evals = optOpt.maxCostEvaluations;
 	const double rho_end   = optOpt.rhoEnd;
 
-	bool writeLOG = (LOG_PATH != "");
+	//bool writeLOG = (LOG_PATH != "");
 
 	bool relativeDelta = true;
 
@@ -118,6 +118,9 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	int iteration = 0;
 	int convergence = 0;
 
+	std::vector<double> ftmp_vector(RANDOMITERATIONS, -1.0);
+	//v.size(); //returns RANDOMITERATIONS
+
 	std::ofstream LOG;
 
 //	if ( writeLOG )
@@ -164,6 +167,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			// write optimization results back
 			#pragma omp critical (updateMinValue)
 			{
+				ftmp_vector.at( it ) = ftmp;
 				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
 				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 				{
@@ -339,19 +343,21 @@ std::cout << "" << std::endl;
 	//opt_boundaries.push_back( initialBoundaries.at( number_Targets )  );
 
 	// store optimum
-	op.setOptimum( optBoundaries, optTargets );
+	//op.setOptimum( optBoundaries, optTargets );
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	double computationTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+	op.setOptimum( optBoundaries, optTargets, computationTime, ftmp_vector );
 std::cout << "Elapsed time = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
 
-if ( writeLOG )
-{
-	//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-	LOG.open ( LOG_PATH );
-  	LOG << "fmin fMSE fSCC time" << "\n";
-	LOG << fmin << " "  << op.getRootMeanSquareError() << " " << op.getCorrelationCoefficient() << " " << 
-	std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "\n";
-	LOG.close();
-}
+//if ( writeLOG )
+//{
+//	//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+//	LOG.open ( LOG_PATH );
+//  	LOG << "fmin fMSE fSCC time" << "\n";
+//	LOG << fmin << " "  << op.getRootMeanSquareError() << " " << op.getCorrelationCoefficient() << " " << 
+//	std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "\n";
+//	LOG.close();
+//}
 
 //std::cout << "BobyqaOptimizer line 168" << std::endl;
 	// DEBUG message

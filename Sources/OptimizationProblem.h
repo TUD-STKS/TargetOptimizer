@@ -45,7 +45,8 @@ public:
 	OptimizationProblem(const ParameterSet& parameters, const TimeSignal& originalF0, const BoundaryVector& bounds);
 
 	// public member functions
-	void setOptimum(const BoundaryVector& boundaries, const TargetVector& targets);
+	void setOptimum(const BoundaryVector& boundaries, const TargetVector& targets,
+	                const double computationTime, const std::vector<double> optimizationSolutions);
 	void setBoundaries(const BoundaryVector& boundaries);
 
 	ParameterSet getParameters() const;
@@ -55,11 +56,14 @@ public:
 	Sample getOnset() const;
 	double getOriginalF0_Onset() const;
 	double getOriginalF0_Offset() const;
+	double getComputationTime() const;
 	double getCorrelationCoefficient() const;
+	double getCostFunction() const;
 	double getRootMeanSquareError() const;
 	double getSquareCorrelationCoefficient( const TamModelF0& tamF0 ) const;
 	double getMeanSquareError( const TamModelF0& tamF0 ) const;
 	std::tuple<double, double> getOptStats( const BoundaryVector& boundaries, const TargetVector& targets ) const;
+	std::vector<double> getOptimizationSolutions() const;
 
 	// operator called by optimizer
 	double operator() (const DlibVector& arg) const;
@@ -76,6 +80,8 @@ private:
 	ParameterSet m_parameters;
 	TimeSignal m_originalF0;
 	BoundaryVector m_bounds;
+	double m_computationTime;
+	std::vector<double> m_optimizationSolutions;
 	//BoundaryVector m_bounds;
 
 	// store result

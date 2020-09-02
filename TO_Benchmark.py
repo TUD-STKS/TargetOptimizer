@@ -1,21 +1,31 @@
 import os
 import subprocess
 import argparse
+from argparse import Namespace
+import itertools
+from copy import deepcopy
 
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-from matplotlib.transforms import Affine2D
 import pandas as pd 
 
+try:
+	import matplotlib
+	import matplotlib.pyplot as plt
+	from matplotlib.transforms import Affine2D
+	matplotlib_loaded = True
+except Exception:
+	matplotlib_loaded = False
 
-example_list = ['Aesthetik', 'Akkordeon', 'Analog-digital-Wandler',
-                'Betriebssportgemeinschaft', 'Bratsche',  
-                'Dateienunterverzeichnis','Schwarzweiss-Malerei']
 
-bounds_list = [4,5,9,7,3,9,6]
 
-test_list = ['Aesthetik']
+
+example_file_list = ['Aesthetik', 'Akkordeon', 'Analog-digital-Wandler',
+                     'Betriebssportgemeinschaft', 'Bratsche', 'Buch',
+                     'Dateienunterverzeichnis','Schwarzweiss-Malerei']
+
+example_bounds_list = [4,5,9,7,3,2,9,6]
+
+test_list = ['Analog-digital-Wandler']
 
 inputPath  = './Examples/'
 outputPath = './Benchmark/'
@@ -26,195 +36,220 @@ logPath    = './LOG/'
 
 #####################################################################################################################################################
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-class TO_Benchamrks():
+class TO_Benchmarks():
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 	"""A class for TO_Benchamrks"""
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def __init__( self, args ):
-		self.args = args
+	def __init__( self ):
+		#self.args = args
 		if ( not os.path.exists( logPath ) ):
 			os.mkdir( logPath )
-		if ( not self.args.files ):
-				self.args.files = example_list
+		#if ( not self.args.files ):
+		#		self.args.files = example_list
 		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def get_bin( self, value, x_min, steps):
-		return round((value - x_min )/steps )
+	def eval_hyper_hyper( self ):
+		maxIterations_list = [1000]
+		maxCostEvaluations_list = [1e5 * x for x in range(1,11)]
+		minRhoEnd_list = [1e-3,1e-4,1e-5,1e-6]
+		args = Namespace( maxIterations      = ['--maxIterations', maxIterations_list],
+			              maxCostEvaluations = ['--maxCostEvaluations', maxCostEvaluations_list],
+			              minRhoEnd          = ['--rhoEnd', minRhoEnd_list],
+			            )
+		self.run( files = example_file_list, bounds = example_bounds_list, args= args )
+		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def get_average_from_last( self, df_list, column ):
-		avg = 0
-		for df in df_list:
-			avg += df.loc[df.index[-1],column]
-		return avg / len(df_list)
+	def eval_test( self ):
+		#maxIterations_list = [2]
+		#minRhoEnd_list =[1e-3, 1e-4]
+		#args = Namespace( maxIterations = ['--maxIterations', maxIterations_list], minRhoEnd = ['--rhoEnd', minRhoEnd_list], )
+		self.run( files = ['Analog-digital-Wandler'], bounds = [9], args = None )
+		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def get_values_from_runs( self, df_list, column ):
-		last = []
-		for df in df_list:
-			last.append(df.loc[df.index[-1],column])
-		return pd.DataFrame(last)
+	def eval_hyper_hyper_test( self ):
+		maxIterations_list = [1]
+		maxCostEvaluations_list = [1e5 * x for x in range(1,11)]
+		minRhoEnd_list = [1e-3,1e-4,1e-5,1e-6]
+		args = Namespace( maxIterations      = ['--maxIterations', maxIterations_list],
+			              maxCostEvaluations = ['--maxCostEvaluations', maxCostEvaluations_list],
+			              minRhoEnd          = ['--rhoEnd', minRhoEnd_list],
+			            )
+		self.run( files = example_file_list, bounds = example_bounds_list, args= args )
+		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def get_weighted_average_and_error_from_last( self, df_list_list, column, bins = 10 ):
-		x_min = 1e6
-		x_max = 0
-		for df_list in df_list_list:
-			for df in df_list:
-				if df[column].min() < x_min:
-					x_min = df[column].min()
-				if df[column].max() > x_max:
-					x_max = df[column].max()
-		#if x_max > 5:
-		#	x_max = 5
-		#if x_min < 0:
-		#	x_min = 0
-		binning = []
-		steps = (x_max-x_min)/bins 
-		for i in range (0, bins+1):
-			binning.append( ( x_min - (steps/2) ) + steps * i)
 
-
-
-		spreads = []
-		weighted_averages = []
-		for df_list in df_list_list:
-			values = self.get_values_from_runs( df_list, column )
-			spreads.append( [values.iloc[:,0].min(), values.iloc[:,0].max()] )
-			#print(values)
-			weights = values.iloc[:,0].value_counts(bins=binning, sort = False)
-			#print(weights)
-			weighted_avg = 0	
-			sum_of_weights = 0
-			weights_list =[]
-			for weight in weights:
-				weights_list.append(weight)
-			#print(weights_list)
-			for index, value in enumerate(values.iloc[:,0]):
-				#print('value: {} bin: {},'.format(value,self.get_bin(value, x_min, steps)))
-				if (self.get_bin(value, x_min, steps) >=10):
-					weight = 0
-				else:
-					weight = weights_list[self.get_bin(value, x_min, steps)]
-				if value >= 5:
-				 weight = 0
-				#print('value: {} bin: {}, weight: {}'.format(value,self.get_bin(value, x_min, steps),weight))
-				weighted_avg += weight * value
-				sum_of_weights += weight
-			weighted_avg /= sum_of_weights
-			weighted_averages.append( weighted_avg )
-
-
-		return weighted_averages, spreads
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def plot_benchmark( self, y_list, y_err_list, outputName ="name"): #RMSE and Time
-		y_list = np.array(y_list).T
-		y_err_list = np.array(y_err_list).T
-		print(y_list)
-		print(y_err_list)
-		fig, ax = plt.subplots()
-		trans1 = Affine2D().translate(-0.2, 0.0) + ax.transData
-		trans2 = Affine2D().translate(+0.2, 0.0) + ax.transData
-		#trans2 = Affine2D().translate(0.0, 0.0) + ax.transData
-		ax.vlines( example_list, y_err_list[0][0] ,y_err_list[1][0], transform=trans1 )
-		ax.vlines( example_list, y_err_list[0][1] ,y_err_list[1][1] )
-		ax.vlines( example_list, y_err_list[0][2] ,y_err_list[1][2], transform=trans2 )
+	def pd_str_to_np( self, df_entry ):
+		return np.array( df_entry.split(' ') ).astype(np.float)
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+	def plot_demo( self, file = 'LOG_Example.csv'):
+		assert matplotlib_loaded, 'ERROR in "plot_demo()": matplotlib could not be loaded. Is it installed?'
+		assert os.path.exists( file ), 'ERROR in "plot_demo()": the specified file {:} does not exist.'
+		df = self.read_LOG( file )
+		fig, axes = plt.subplots(2,2)
 
-		ax.plot( example_list, y_list[0], marker="o", linestyle="none", transform=trans1 , label = 'TO1')
-		ax.plot(example_list,  y_list[1], marker="o", linestyle="none", label = 'BOUND')
-		ax.plot(example_list,  y_list[2], marker= "o", linestyle="none", transform=trans2, label= 'INIT')
+		axes[0,0].plot( self.pd_str_to_np( df['res_ftmp_array'][0] ) )
 
-		#ax.vline( example_list, y_err[0][0] ,y_err[0][1] )
-		#er1 = ax.errorbar(example_list, y[0], yerr = np.array([[y_err[0][0] ,y_err[0][1]]]).T, marker="o", linestyle="none", transform=trans1)
-		#er2 = ax.errorbar(example_list, y[1], yerr = np.array([[y_err[1][0] ,y_err[1][1]]]).T, marker="o", linestyle="none")
-		#e3 = ax.errorbar(example_list, y[2], yerr = np.array([[y_err[2][0] ,y_err[2][1]]]).T, marker= "o", linestyle="none", transform=trans2)
-		plt.xticks(rotation=45, ha="right")
-		plt.gcf().subplots_adjust(bottom=0.4)
-		plt.ylim(0,2)
-		plt.ylabel("MSE")
-		#plt.title(Title)
-		plt.legend(loc='upper right')
+		axes[0,1].plot( self.pd_str_to_np( df['res_f0_time_array'][0] ), self.pd_str_to_np( df['res_f0_value_array'][0] ), color = 'navy' )
+		axes[0,1].scatter( self.pd_str_to_np( df['ini_f0_time_array'][0] ), self.pd_str_to_np( df['ini_f0_value_array'][0] ), color = 'orange')
+		for boundary in self.pd_str_to_np( df['res_boundary_array'][0] ):
+			axes[0,1].axvspan( boundary, boundary, ymax=0.9, color = 'lightgray', ls='--', alpha = 0.5)
+
+		for boundary in self.pd_str_to_np( df['ini_boundary_array'][0] ):
+			axes[0,1].axvspan( boundary, boundary, ymin = 0.9, color = 'black', alpha = 0.5)
+
+		slopes     = self.pd_str_to_np( df['res_t_slope_array'][0] )
+		offsets    = self.pd_str_to_np( df['res_t_offset_array'][0] )
+		boundaries = self.pd_str_to_np( df['res_boundary_array'][0] )
+		assert len(slopes) == len(offsets) == len(boundaries)-1, 'FATAl ERROR, the target slopes and offsets and/or boundary sizes do nnot match!'
+		for index, slope in enumerate( slopes ):
+			print(offsets[index])
+			x = [ boundaries[index], boundaries[index+1] ]
+			y = [ slopes[index]* (x[0]-boundaries[index]) + offsets[index], slopes[index]* (x[1]-boundaries[index]) + offsets[index] ]
+			axes[0,1].plot( x, y, color ='lightgray')
+
+
+
+		ax_labels = [ [['Iteration', 'ftmp'], ['Time [s]', 'F0 [Hz]']], [['Iteration', 'fmin'], ['Iteration', 'fmin']] ]
+		for i, axs in enumerate( axes ):
+			for j, ax in enumerate( axs ):
+				ax.set( xlabel = ax_labels[i][j][0], ylabel = ax_labels[i][j][1] )
+		ftmp_min = 1e6
+		fmin = []
+		for ftmp in self.pd_str_to_np( df['res_ftmp_array'][0] ):
+			if ftmp < ftmp_min:
+				ftmp_min = ftmp
+				fmin.append(ftmp_min)
+			else:
+				fmin.append( min(fmin) )
+		axes[1,0].plot( fmin )
+
+		axes[1,1].get_xaxis().set_visible(False)
+		axes[1,1].get_yaxis().set_visible(False)
+		axes[1,1].text(0.05, 0.9, 'file: {}'.format(df['utterance'][0]))
+		axes[1,1].text(0.05, 0.8, 'SS:')
+		axes[1,1].text(0.05, 0.7, r'$\Delta m$: {}'.format(df['par_s_slope_delta'][0]))
+		axes[1,1].text(0.05, 0.6, r'$\Delta b$: {}'.format(df['par_s_offset_delta'][0]))
+		axes[1,1].text(0.05, 0.5, r'$\tau$: {}'.format(df['par_s_tau_mean'][0]))
+		axes[1,1].text(0.05, 0.4, r'$\Delta \tau$: {}'.format(df['par_s_tau_delta'][0]))
+		axes[1,1].text(0.05, 0.3, r'$\Delta B$: {}'.format(df['par_s_boundary_delta'][0]))
+		axes[1,1].text(0.05, 0.2, r'$B_N$: {}'.format(df['par_s_initbounds'][0]))
+		axes[1,1].text(0.35, 0.8, 'Reg:')
+		axes[1,1].text(0.35, 0.7, r'$\lambda$: {}'.format(df['par_r_lambda'][0]))
+		axes[1,1].text(0.35, 0.6, r'$m_w$: {}'.format(df['par_r_slope_weight'][0]))
+		axes[1,1].text(0.35, 0.5, r'$b_w$: {}'.format(df['par_r_offset_weight'][0]))
+		axes[1,1].text(0.35, 0.4, r'$\tau_w$: {}'.format(df['par_r_tau_weight'][0]))
+		axes[1,1].text(0.65, 0.8, 'Opt:')
+		axes[1,1].text(0.65, 0.7, r'$it$: {}'.format(df['par_o_maxiter'][0]))
+		axes[1,1].text(0.65, 0.6, r'$C$: {:.0e}'.format(df['par_o_maxcost'][0]) ) 
+		axes[1,1].text(0.65, 0.5, r'$\rho_E$: {:.0e}'.format(df['par_o_rhoend'][0]) )
+		axes[1,1].text(0.65, 0.4, r'$S$: {}'.format(df['par_o_earlystop'][0]))
+		axes[1,1].text(0.65, 0.3, r'$\epsilon$: {}'.format(df['par_o_epsilon'][0]))
+		axes[1,1].text(0.65, 0.2, r'$P$: {}'.format(df['par_o_patience'][0]))
+		axes[1,1].axhline(0.15, color='lightgray',ls='--')
+		axes[1,1].text(0.05, 0.05, r'$\sigma$: {}'.format(round( df['res_rmse'][0], 2 ) ) )
+		axes[1,1].text(0.35, 0.05, r'$\rho$: {}'.format(round( df['res_corr'][0], 2 ) ) )
+		axes[1,1].text(0.65, 0.05, r'$t$: {}'.format( round(df['res_time'][0]/1000, 1)) )
+
+		fig.tight_layout()
+		filePath = file.rsplit('.',1)[0]
+		if '/' in filePath:
+			filePath = file.rsplit('/',1)[1]
+		plt.savefig('Plot_Demo_{}.pdf'.format(filePath))
 		plt.show()
-		return
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def plot_performance( self ):
-		file_mse_avg  = []
-		file_time_avg = []
-		y_list =[]
-		y_err_list=[]
-
-		t_list =[]
-		t_err_list=[]
-		for file in self.args.files:
-			df_list = []
-			df_list_BOUND = []
-			df_list_INIT = []
-			for index in range(0, self.args.iterations):
-				print(file + " " + str(index))
-				df_list.append( pd.read_csv( logPath + 'LOG_{}_RUN_{}.txt'.format( file, index ), sep = ' ') )
-				df_list_BOUND.append( pd.read_csv( logPath + 'LOG_{}_RUN_{}_BOUND.txt'.format( file, index ), sep = ' ') )
-				df_list_INIT.append( pd.read_csv( logPath + 'LOG_{}_RUN_{}_INIT.txt'.format( file, index ), sep = ' ') )
-
-			self.plot_dfs( df_list )
-			self.plot_dfs( df_list_BOUND )
-			self.plot_dfs( df_list_INIT )
-
-			y, y_err = self.get_weighted_average_and_error_from_last( [df_list, df_list_BOUND, df_list_INIT], "tmpMSE")
-			y_list.append(y)
-			y_err_list.append(y_err)
-
-			#t, t_err = self.get_weighted_average_and_error_from_last( [df_list, df_list_BOUND, df_list_INIT], "time")
-			#t_list.append(t)
-			#t_err_list.append(t_err)
-			#self.plot_benchmark( y, y_err )
-
-			#min_mse_avg       = self.get_average_from_last( df_list, "tmpMSE")
-			#min_mse_avg_bound = self.get_average_from_last( df_list_BOUND, "tmpMSE")
-			#min_mse_avg_init  = self.get_average_from_last( df_list_INIT, "tmpMSE")
-			#max_time_avg       = self.get_average_from_last( df_list, "time")
-			#max_time_avg_bound = self.get_average_from_last( df_list_BOUND, "time")
-			#max_time_avg_init  = self.get_average_from_last( df_list_INIT, "time")
-
-			#file_mse_avg.append( [min_mse_avg, min_mse_avg_bound, min_mse_avg_init] )
-			#file_time_avg.append( [max_time_avg, max_time_avg_bound, max_time_avg_init] )
-
-
-
-		self.plot_benchmark( y_list, y_err_list, "name")
-		#self.plot_benchmark( t_list, t_err_list, "name")
-		#elf.plot_benchmark( file_time_avg,"name" )
-		return
-#---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def plot_dfs( self, df_list, X_Label = 'Time [s]', Y_Label = 'Costfunction', Title = 'Costfunction'):
-		for index, df in enumerate(df_list):
-		#for index, _ in enumerate(df.columns):
-		#	if labels == None:
-		#		LABEL = index
-		#	else:
-		#		LABEL = labels[index]
-			plt.scatter( df["time"]/1000, df['fmin'], label = 'RUN {}'.format(index) )#,linestyle="",marker="o")
-		plt.xlabel(X_Label)
-		plt.ylabel(Y_Label)
-		plt.title(Title)
-		plt.legend(loc='upper right')
-		plt.savefig('Test.pdf',bbox_inches='tight')
-		#plt.show()
 		plt.close()
 		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
-	def run( self ):
-		#os.chdir( './Sources/' )
+	def read_LOG( self, file ):
+		return pd.read_csv( file, sep='\s*,\s*', engine = 'python')
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+	def get_command_options( self, args ):
+		commands = []
 
-		for fileIndex, file in enumerate(self.args.files):
-			print('bounds: {}'.format( bounds_list[fileIndex] ))
+		for arg_list in args.__dict__:
+			command = []
+			if len( args.__dict__[arg_list] ) != 2:
+				raise SystemExit('FATAL ERROR: args passed to the run() function must have the form [ [\"--option\"], [list of arguments] ].')
+			for item in args.__dict__[ arg_list ][ 1 ]:
+				command.append( [ args.__dict__[ arg_list ][ 0 ], item ] )
+			commands.append( command )
+		cmd_list = list( itertools.product(*commands) )
+		print('Will perform runs with following options: {}'.format( cmd_list ) )
+		print('Will perform {} runs with different options.'.format(len(cmd_list)) )
+		return cmd_list
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+	def run( self, files, bounds = None, args = None):
+
+		for fileIndex, file in enumerate( files ):
+
 			filePath = inputPath + file
-			for index in range(0, self.args.iterations):
-				subprocess.call( ['./TargetOptimizer_CMD', filePath + '.PitchTier', logPath + 'LOG_{}_RUN_{}'.format( file, index ), '--tg', filePath + '.TextGrid', '--boundaryDelta',"0"] )
-				subprocess.call( ['./TargetOptimizer_CMD', filePath + '.PitchTier', logPath + 'LOG_{}_RUN_{}_BOUND'.format( file, index ), '--tg', filePath + '.TextGrid'] )
-				subprocess.call( ['./TargetOptimizer_CMD', filePath + '.PitchTier', logPath + 'LOG_{}_RUN_{}_INIT'.format( file, index ), '--initBounds', str(bounds_list[ fileIndex ]) ] )
+			CMD_options = []
+			if args != None:
+				CMD_options.extend( self.get_command_options( args ) )
+			else:
+				CMD_options.append(1)
+
+			for cmd_option_list in CMD_options:
+				CMD = ['--log', '--utterance', str( file ) ]
+
+				if args != None:
+					for option in cmd_option_list:
+						for e_index, element in enumerate(option):
+							#print('Option: {}, is str instance: {}'.format(element, isinstance(option, str) ) )
+							if not isinstance(element, str):
+								option[ e_index ] = str(element)
+						CMD.extend(  option  )
+
+				CMD_TO1 = deepcopy( CMD )
+				CMD_BND = deepcopy( CMD )
+
+				CMD_TO1.extend( ['--tg', filePath + '.TextGrid', '--boundaryDelta',"0"] )
+				CMD_BND.extend( ['--tg', filePath + '.TextGrid'] )
+
+				CMDS = []
+				CMDS.append( CMD_TO1 )
+				CMDS.append( CMD_BND )
+
+				if bounds != None:
+					assert len(files) == len(bounds), 'Error: Length of file list and length of bounds list do not match.'
+					CMD_INI = deepcopy( CMD )
+					CMD_INI.extend( ['--initBounds', str( bounds[ fileIndex ] ) ] )
+					CMDS.append( CMD_INI )
+
+				for cmd in CMDS:
+					file_nr = 0
+					while os.path.exists( logPath + 'LOG_{}.csv'.format( file_nr ) ):
+						file_nr += 1
+					CMD = ['./Sources/TargetOptimizer', filePath + '.PitchTier', logPath + 'LOG_{}.csv'.format( file_nr ),'--log']
+					CMD.extend( cmd )
+					print(CMD)
+					subprocess.call( CMD )
+
 		print('Done.')
 		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
+
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
 
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
+def main( args ):
 
+	TO_Benchmark = TO_Benchmarks()
+
+	if args.test:
+		TO_Benchmark.eval_test()
+
+	if args.demo != None:
+		TO_Benchmark.plot_demo( args.demo )
+
+	if args.hyper:
+		TO_Benchmark.eval_hyper_hyper()
+
+	return
+#---------------------------------------------------------------------------------------------------------------------------------------------------#
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################
@@ -222,13 +257,15 @@ class TO_Benchamrks():
 
 if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description='Description of the TO benchamark class:')
-	parser.add_argument('--files', nargs='+', type=str,   help='The files to evaluate.')
-	parser.add_argument('--iterations', type=int,  help='The iterations for each file.')
-	parser.add_argument('--outFilePaths', nargs='+', type=str, help='The produced plot will be written to ~/Output/ [Argument]')
+	#parser.add_argument('--utterances', nargs='+', type=str,   help='The utterances to evaluate.')
+	#parser.add_argument('--bounds',     nargs='+', type=str,   help='The bounds of the utterances to evaluate.')
+	parser.add_argument('--test',       action='store_true',  help='Runs test example.')
+	parser.add_argument('--demo',       nargs='?', type= str, const='LOG_Example.csv',  help='Plot demo.')
+	parser.add_argument('--hyper',      action='store_true',  help='Runs hyper parameter evaluation on the example samples.')
+
+
 	args = parser.parse_args()
-	TO_Benchmark = TO_Benchamrks( args )
-	#TO_Benchmark.run(  )
-	TO_Benchmark.plot_performance()
+	main( args )
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 #####################################################################################################################################################

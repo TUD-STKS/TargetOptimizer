@@ -3,12 +3,20 @@
 
 
 OptimizationProblem::OptimizationProblem(const ParameterSet& parameters, const TimeSignal& originalF0, const BoundaryVector& bounds)
-	: m_parameters(parameters), m_originalF0(originalF0), m_bounds(bounds), m_modelOptimalF0(bounds, originalF0[0].value) {};
+	: m_computationTime(-1.0), m_parameters(parameters), m_originalF0(originalF0), m_bounds(bounds), m_modelOptimalF0(bounds, originalF0[0].value) {};
 
-void OptimizationProblem::setOptimum(const BoundaryVector& boundaries, const TargetVector& targets)
+void OptimizationProblem::setOptimum( const BoundaryVector& boundaries, const TargetVector& targets,
+                                      const double computationTime, const std::vector<double> optimizationSolutions )
 {
 	m_modelOptimalF0.setBoundaries( boundaries );
 	m_modelOptimalF0.setPitchTargets(targets);
+	m_computationTime = computationTime;
+	m_optimizationSolutions = optimizationSolutions;
+}
+
+double OptimizationProblem::getComputationTime() const
+{
+	return m_computationTime;
 }
 
 ParameterSet OptimizationProblem::getParameters() const
@@ -41,6 +49,11 @@ void OptimizationProblem::setBoundaries( const BoundaryVector& boundaries )
 Sample OptimizationProblem::getOnset() const
 {
 	return m_modelOptimalF0.getOnset();
+}
+
+std::vector<double> OptimizationProblem::getOptimizationSolutions() const
+{
+	return m_optimizationSolutions;
 }
 
 double OptimizationProblem::getOriginalF0_Onset() const
@@ -108,6 +121,11 @@ double OptimizationProblem::getSquareCorrelationCoefficient( const TamModelF0& t
 	DlibVector y = model - dlib::mean(model);
 	return dlib::dot(x, y) * dlib::dot(x, y) / ( dlib::sum(dlib::squared(x)) * dlib::sum(dlib::squared(y)) );
 
+}
+
+double OptimizationProblem::getCostFunction() const
+{
+	return costFunction(m_modelOptimalF0);
 }
 
 double OptimizationProblem::getRootMeanSquareError() const

@@ -74,7 +74,12 @@ int main(int argc, char* argv[])
 			parser.add_option("maxIterations","Specify maximum number of optimizer iterations.",1);
 			parser.add_option("maxCostEvaluations","Specify maximum number of costfunction evaluations.",1);
 			parser.add_option("rhoEnd","Specify the rho_end parameter.",1);
-			parser.add_option("logf0", "Outputs f0, targets, boundaries, etc. to a single text file.");
+			parser.add_option("epsilon", "Specify the epsilon for early stopping", 1);
+			parser.add_option("patience", "Specify the patience for early stopping", 1);
+			parser.add_option("log", "Outputs f0, targets, boundaries, etc. to a single text file.");
+			parser.add_option("useEarlyStopping", "Stop the search early if fmin-ftmp < epsilon for x times (x=patience).");
+			parser.add_option("utterance","Name of the utterance to optimize.",1);
+
 
 			// parse command line
 			parser.parse(argc,argv);
@@ -90,7 +95,7 @@ int main(int argc, char* argv[])
 			parser.check_option_arg_range("t-weight", 0.0, 1e9);
 			parser.check_option_arg_range("lambda", 0.0, 1e15);
 			parser.check_option_arg_range("boundaryDelta", 0.0, 100.0);
-			parser.check_option_arg_range("maxIterations",5,200);
+			parser.check_option_arg_range("maxIterations",1,20000);
 
 			// process help option
 			if (parser.option("h"))
@@ -131,8 +136,10 @@ int main(int argc, char* argv[])
 			std::string fileName = ptreader.getFileName();
 
 
-			std::string LOG_PATH = parser[1] + ".txt";
-			std::string LOG_F0_PATH = parser[1] + "_F0.txt";
+			std::string LOG_PATH = parser[1];
+			std::string UTTERANCE = get_option(parser,"utterance","default_str");
+
+			std::cout << "log path: " << LOG_PATH << std::endl;
 
 
 			//calculate mean f0
@@ -156,17 +163,22 @@ int main(int argc, char* argv[])
 			parameters.searchSpaceParameters.deltaTau = get_option(parser,"t-range",5.0);
 			parameters.searchSpaceParameters.meanSlope = 0.0;
 			parameters.searchSpaceParameters.meanOffset = meanF0;
-			parameters.searchSpaceParameters.meanTau = 15.0;
-			parameters.searchSpaceParameters.deltaBoundary = get_option(parser, "boundaryDelta", 40.0);
+			parameters.searchSpaceParameters.meanTau = 20.0;
+			parameters.searchSpaceParameters.deltaBoundary = get_option(parser, "boundaryDelta", 100.0);
 			
 			parameters.searchSpaceParameters.optimizeBoundaries = ( parameters.searchSpaceParameters.deltaBoundary != 0 );
 			parameters.searchSpaceParameters.numberOptVar = ( parameters.searchSpaceParameters.optimizeBoundaries ? 4 : 3 );
 
 			OptimizerOptions optOpt;
 			optOpt.maxIterations = get_option(parser,"maxIterations",50.0);
-			optOpt.useEarlyStopping = false;
-			optOpt.epsilon = 0.01;
-			optOpt.patience = 5;
+			if ( parser.option("useEarlyStopping") )
+			{
+				optOpt.useEarlyStopping = true;
+			}else{
+				optOpt.useEarlyStopping = false;
+			}
+			optOpt.epsilon = get_option(parser,"epsilon", 0.01);
+			optOpt.patience = get_option(parser,"patience", 10);
 			optOpt.maxCostEvaluations = get_option(parser,"maxCostEvaluations", 1e6);
 			optOpt.rhoEnd = get_option(parser, "rhoEnd", 1e-6);
 
@@ -195,36 +207,151 @@ int main(int argc, char* argv[])
 			// main functionality
 			OptimizationProblem problem (parameters, f0, bounds);
 			BobyqaOptimizer optimizer;
-			optimizer.optimize(problem, optOpt, LOG_PATH);
+			optimizer.optimize(problem, optOpt);
 			TargetVector optTargets = problem.getPitchTargets();
 			BoundaryVector optBoundaries = problem.getBoundaries();
 			TimeSignal optF0 = problem.getModelF0();
 			Sample onset = problem.getOnset();
+			std::vector<double> ftmp_vector = problem.getOptimizationSolutions();
 
-			if ( parser.option("logf0") ){
-				std::ofstream LOG_F0;
-				LOG_F0.open ( LOG_F0_PATH );
+			if ( parser.option("log") )
+			{
+				std::ofstream LOG;
+				LOG.open ( LOG_PATH );
+				LOG << "utterance, ";
+				LOG << "par_s_slope_delta, ";
+				LOG << "par_s_offset_delta, ";
+				LOG << "par_s_tau_mean, ";
+				LOG << "par_s_tau_delta, ";
+				LOG << "par_s_boundary_delta, ";
+				LOG << "par_s_initbounds, ";
+				LOG << "par_r_lambda, ";
+				LOG << "par_r_slope_weight, ";
+				LOG << "par_r_offset_weight, ";
+				LOG << "par_r_tau_weight, ";
+				LOG << "par_o_maxiter, ";
+				LOG << "par_o_maxcost, ";
+				LOG << "par_o_rhoend, ";
+				LOG << "par_o_earlystop, ";
+				LOG << "par_o_epsilon, ";
+				LOG << "par_o_patience, ";
+				LOG << "ini_f0_time_array, ";
+				LOG << "ini_f0_value_array, ";
+				LOG << "ini_boundary_array, ";
+				LOG << "res_fmin, ";
+				LOG << "res_rmse, ";
+				LOG << "res_corr, ";
+				LOG << "res_time, ";
+				LOG << "res_ftmp_array, ";
+				LOG << "res_f0_time_array, ";
+				LOG << "res_f0_value_array, ";
+				LOG << "res_boundary_array, ";
+				LOG << "res_t_slope_array, ";
+				LOG << "res_t_offset_array, ";
+				LOG << "res_t_tau_array, ";
+				LOG << "res_t_duration_array ";
+				LOG << "\n";
+
+				LOG << UTTERANCE << ", ";
+				LOG << parameters.searchSpaceParameters.deltaSlope << ", ";
+				LOG << parameters.searchSpaceParameters.deltaOffset << ", ";
+				LOG << parameters.searchSpaceParameters.meanTau << ", ";
+				LOG << parameters.searchSpaceParameters.deltaTau << ", ";
+				LOG << parameters.searchSpaceParameters.deltaBoundary << ", ";
+				LOG << parameters.searchSpaceParameters.initBounds << ", ";
+				LOG << parameters.regularizationParameters.lambda << ", ";
+				LOG << parameters.regularizationParameters.weightSlope << ", ";
+				LOG << parameters.regularizationParameters.weightOffset << ", ";
+				LOG << parameters.regularizationParameters.weightTau << ", ";
+				LOG << optOpt.maxIterations<< ", ";
+				LOG << optOpt.maxCostEvaluations << ", ";
+				LOG << optOpt.rhoEnd << ", ";
+				LOG << optOpt.useEarlyStopping << ", ";
+				LOG << optOpt.epsilon << ", ";
+				LOG << optOpt.patience << ", ";
 				for (unsigned i = 0; i < f0.size(); ++i)
 				{
-					LOG_F0 << "ORI_F0 " << f0.at(i).time << " " << f0.at(i).value << "\n";
+					LOG << f0.at(i).time << " ";
 				}
+				LOG << ", ";
+				for (unsigned i = 0; i < f0.size(); ++i)
+				{
+					LOG << f0.at(i).value << " ";
+				}
+				LOG << ", ";
 				for (unsigned i = 0; i < bounds.size(); ++i)
 				{
-					LOG_F0 << "ORI_BOUNDS " << bounds.at(i) <<  "\n";
+					LOG << bounds.at(i)<< " ";
 				}
+				LOG << ", ";
+				LOG << problem.getCostFunction() << ", ";
+				LOG << problem.getRootMeanSquareError() << ", ";
+				LOG << problem.getCorrelationCoefficient() << ", ";
+				LOG << problem.getComputationTime() << ", ";
+				for (unsigned i = 0; i < ftmp_vector.size(); ++i)
+				{
+					LOG << ftmp_vector.at(i) << " ";
+				}
+				LOG << ", ";
 				for (unsigned i = 0; i < optF0.size(); ++i)
 				{
-					LOG_F0 << "OPT_F0 " << optF0.at(i).time << " " << optF0.at(i).value << "\n";
+					LOG << optF0.at(i).time << " ";
 				}
-				for (unsigned i = 0; i < optTargets.size(); ++i)
+				LOG << ", ";
+				for (unsigned i = 0; i < optF0.size(); ++i)
 				{
-					LOG_F0 << "OPT_TARGETS " << optTargets.at(i).slope << " " << optTargets.at(i).offset << " " << optTargets.at(i).tau << " " << optTargets.at(i).duration << " " <<  "\n";
+					LOG << optF0.at(i).value << " ";
 				}
+				LOG << ", ";
 				for (unsigned i = 0; i < optBoundaries.size(); ++i)
 				{
-					LOG_F0 << "OPT_BOUNDS " << optBoundaries.at(i) <<  "\n";
+					LOG << optBoundaries.at(i)<< " ";
 				}
-				LOG_F0.close();
+				LOG << ", ";
+				for (unsigned i = 0; i < optTargets.size(); ++i)
+				{
+					LOG << optTargets.at(i).slope << " ";
+				}
+				LOG << ", ";
+				for (unsigned i = 0; i < optTargets.size(); ++i)
+				{
+					LOG << optTargets.at(i).offset << " ";
+				}
+				LOG << ", ";
+				for (unsigned i = 0; i < optTargets.size(); ++i)
+				{
+					LOG << optTargets.at(i).tau << " ";
+				}
+				LOG << ", ";
+				for (unsigned i = 0; i < optTargets.size(); ++i)
+				{
+					LOG << optTargets.at(i).duration << " ";
+				}
+				LOG << "\n";
+
+
+
+//				for (unsigned i = 0; i < f0.size(); ++i)
+//				{
+//					LOG_F0 << "ORI_F0 " << f0.at(i).time << " " << f0.at(i).value << "\n";
+//				}
+//				for (unsigned i = 0; i < bounds.size(); ++i)
+//				{
+//					LOG_F0 << "ORI_BOUNDS " << bounds.at(i) <<  "\n";
+//				}
+//				for (unsigned i = 0; i < optF0.size(); ++i)
+//				{
+//					LOG_F0 << "OPT_F0 " << optF0.at(i).time << " " << optF0.at(i).value << "\n";
+//				}
+//				for (unsigned i = 0; i < optTargets.size(); ++i)
+//				{
+//					LOG_F0 << "OPT_TARGETS " << optTargets.at(i).slope << " " << optTargets.at(i).offset << " " << optTargets.at(i).tau << " " << optTargets.at(i).duration << " " <<  "\n";
+//				}
+//				for (unsigned i = 0; i < optBoundaries.size(); ++i)
+//				{
+//					LOG_F0 << "OPT_BOUNDS " << optBoundaries.at(i) <<  "\n";
+//				}
+				LOG.close();
 			}
 
 			// process gesture-file output option

@@ -19,7 +19,7 @@ public:
 	BobyqaOptimizer() = default;
 
 	// public member functions
-	void optimize(OptimizationProblem& op, OptimizerOptions optOpt, std::string LOG_PATH = "" ) const;
+	void optimize(OptimizationProblem& op, OptimizerOptions optOpt ) const;
 	//void optimize_targets_and_boundaries(OptimizationProblem& op) const;
 
 private:
