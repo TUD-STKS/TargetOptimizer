@@ -3,7 +3,7 @@ Required: python 3.x, pandas, numpy, matplotlib
 
 You can test the TO cmd functionality by running:
 
-``python TO_benchmarks.py --test``
+``python TO_Benchmark.py --test``
 
 This will run the TO on the utterance 'Analog-Digital-Wandler' three times: 
 1. Standard settings without boundary optimization.
