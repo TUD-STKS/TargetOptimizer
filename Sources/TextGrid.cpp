@@ -154,9 +154,9 @@ PointTier& TextGrid::getPointTier(std::string name)
 
 double TextGrid::getStart()
 {
-	double intervalMin = INFINITY;
-	double pointMin = INFINITY;
-	double tierMin = INFINITY;
+	double intervalMin = DBL_MAX;
+	double pointMin = DBL_MAX;
+	double tierMin = DBL_MAX;
 
 	if (this->intervalTiers.size() > 0) {
 		intervalMin = this->intervalTiers.begin()->second.getStartingTime();
