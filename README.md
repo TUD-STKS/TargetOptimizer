@@ -3,7 +3,7 @@ Required: python 3.x, pandas, numpy, matplotlib
 
 You can test the TO cmd functionality by running:
 
-``python TO_benchmarks.py --test``
+``python TO_Benchmark.py --test``
 
 This will run the TO on the utterance 'Analog-Digital-Wandler' three times: 
 1. Standard settings without boundary optimization.
@@ -67,7 +67,7 @@ For the GUI version (requires wxWidgets):
 ``g++ -std=c++14 -O3 -D USE_WXWIDGETS -I.. ../dlib/all/source.cpp -fopenmp -fpermissive -lpthread -lX11 *.cpp `wx-config --cxxflags --libs std` -o TargetOptimizer``
 
 For the command-line-only version:
-``g++ -std=c++11 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 *.cpp -o TargetOptimizer``
+``g++ -std=c++14 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 *.cpp -o TargetOptimizer``
 
 
 
