@@ -35,5 +35,11 @@ namespace DataIO
 		PitchTierWriter pwriter(filename);
 		pwriter.writeF0(Data::getInstance().optimalF0);
 	}
+
+	inline void saveTOFile(std::string filename)
+	{
+		//TOWriter twriter(filename);
+		//twriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+	}
 }
 
