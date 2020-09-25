@@ -2,7 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <regex>
-#include <float.h>
+#include <cfloat>
 #include "StringHelper.h"
 #include "TextGrid.h"
 

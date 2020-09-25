@@ -444,7 +444,7 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save as..."), "", defaultName,
-		wxT("Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier|All supported files (*.ges, *.csv, *.PitchTier)|*.ges; *.csv; *.PitchTier"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+		wxT("Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier|All supported files (*.ges, *.csv, *.PitchTier, *.TO)|*.ges; *.csv; *.PitchTier; *.TO"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
@@ -459,6 +459,10 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 	{
 		DataIO::savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
 	}
+	//else if (saveFileDialog.GetPath().EndsWith(wxT("TO")))
+	//{
+	//	DataIO::saveTOFile(std::string(saveFileDialog.GetPath().utf8_str()));
+	//}
 	else
 	{
 		wxMessageBox(wxT("Please use one of the supported file types!"), wxT("Unsupported file format"), wxICON_ERROR);

@@ -19,7 +19,11 @@ except Exception:
 
 
 
-example_file_list = ['Aesthetik', 'Akkordeon', 'Analog-digital-Wandler',
+#example_file_list = ['Aesthetik', 'Akkordeon', 'Analog-digital-Wandler',
+#                     'Betriebssportgemeinschaft', 'Bratsche', 'Buch',
+#                     'Dateienunterverzeichnis','Schwarzweiss-Malerei']
+
+example_file_list = ['Analog-digital-Wandler',
                      'Betriebssportgemeinschaft', 'Bratsche', 'Buch',
                      'Dateienunterverzeichnis','Schwarzweiss-Malerei']
 

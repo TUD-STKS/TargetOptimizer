@@ -11,7 +11,7 @@ PlotRegion::PlotRegion(wxWindow* parent, const BoundaryVector& initialBoundaries
     plot.initAbscissa(PQ_TIME, 0.0, 0.01,
         0.0, 0.0, 0.0, 0.1, 0.1, 0.1,
         1, 1, true, true, true);
-    plot.initLinearOrdinate(PQ_PITCH, 0.0, 0.01,
+    plot.initLinearOrdinate(PQ_ARBITRARY, 0.0, 0.01,
         0.0, 0.0, 50.0, 0.1, 0.1, 100,
         1, 1, true, true, true);
     }
@@ -227,8 +227,11 @@ void PlotRegion::setAxesLimits()
     /* Set the limits */
     plot.abscissa.positiveLimit = std::max({ maxTimeBoundary, maxTimeOriginalF0, maxTimeOptimalF0 }) + 0.1;
     plot.abscissa.negativeLimit = std::min({ minTimeBoundary, minTimeOriginalF0, minTimeOptimalF0 }) - 0.1;
-    plot.linearOrdinate.positiveLimit = std::max({ maxOriginalF0, maxOptimalF0 }) + 6;
-    plot.linearOrdinate.negativeLimit = std::min({ minOriginalF0, minOptimalF0 }) - 6;
+    double y_axis_limit_pos = std::max({ maxOriginalF0, maxOptimalF0 });
+    double y_axis_limit_neg = std::min({ minOriginalF0, minOptimalF0 });
+    double y_axis_limit_abs = std::abs( y_axis_limit_pos - y_axis_limit_neg );
+    plot.linearOrdinate.positiveLimit = y_axis_limit_pos + 0.1 * y_axis_limit_abs;
+    plot.linearOrdinate.negativeLimit = y_axis_limit_neg - 0.1 * y_axis_limit_abs;
 }
 
 #endif // USE_WXWIDGETS
