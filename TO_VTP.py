@@ -23,13 +23,9 @@ except Exception:
 #                     'Betriebssportgemeinschaft', 'Bratsche', 'Buch',
 #                     'Dateienunterverzeichnis','Schwarzweiss-Malerei']
 
-example_file_list = ['Analog-digital-Wandler',
-                     'Betriebssportgemeinschaft', 'Bratsche', 'Buch',
-                     'Dateienunterverzeichnis','Schwarzweiss-Malerei']
+example_file_list = ['vtp_LD']#['vtp_LP','vtp_LD','vtp_JA']
 
-#example_bounds_list = [4,5,9,7,3,2,9,6]
-
-example_bounds_list = [9,7,3,2,9,6]
+example_bounds_list = [7]#[7,7,7]
 
 test_list = ['Analog-digital-Wandler']
 
@@ -83,6 +79,12 @@ class TO_Benchmarks():
 		self.run( files = example_file_list, bounds = example_bounds_list, args= args )
 		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
+	def eval_vtp( self ):
+		maxIterations_list = [100]
+		#minRhoEnd_list =[1e-3, 1e-4]
+		args = Namespace( maxIterations = ['--maxIterations', maxIterations_list] )#, minRhoEnd = ['--rhoEnd', minRhoEnd_list], )
+		self.run_bounds_only( files = example_file_list, bounds = example_bounds_list, args = args )
+		return
 
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 	def pd_str_to_np( self, df_entry ):
@@ -184,6 +186,46 @@ class TO_Benchmarks():
 		print('Will perform {} runs with different options.'.format(len(cmd_list)) )
 		return cmd_list
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
+	def run_bounds_only( self, files, bounds, args = None):
+		for fileIndex, file in enumerate( files ):
+
+			filePath = inputPath + file
+			CMD_options = []
+			if args != None:
+				CMD_options.extend( self.get_command_options( args ) )
+			else:
+				CMD_options.append(1)
+
+			for cmd_option_list in CMD_options:
+				CMD = ['--log', '--utterance', str( file ) ]
+
+				if args != None:
+					for option in cmd_option_list:
+						for e_index, element in enumerate(option):
+							#print('Option: {}, is str instance: {}'.format(element, isinstance(option, str) ) )
+							if not isinstance(element, str):
+								option[ e_index ] = str(element)
+						CMD.extend(  option  )
+
+				CMDS = []
+
+				if bounds != None:
+					assert len(files) == len(bounds), 'Error: Length of file list and length of bounds list do not match.'
+					CMD_INI = deepcopy( CMD )
+					CMD_INI.extend( ['--initBounds', str( bounds[ fileIndex ] ) ] )
+					CMDS.append( CMD_INI )
+
+				for cmd in CMDS:
+					file_nr = 0
+					while os.path.exists( logPath + 'LOG_{}.csv'.format( file_nr ) ):
+						file_nr += 1
+					CMD = ['./Sources/TargetOptimizer', filePath + '.PitchTier', logPath + 'LOG_{}.csv'.format( file_nr ),'--log']
+					CMD.extend( cmd )
+					print(CMD)
+					subprocess.call( CMD )
+
+		print('Done.')
+		return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 	def run( self, files, bounds = None, args = None):
 
@@ -254,6 +296,9 @@ def main( args ):
 	if args.hyper:
 		TO_Benchmark.eval_hyper_hyper()
 
+	if args.vtp:
+		TO_Benchmark.eval_vtp()
+
 	return
 #---------------------------------------------------------------------------------------------------------------------------------------------------#
 
@@ -268,6 +313,7 @@ if __name__ == '__main__':
 	parser.add_argument('--test',       action='store_true',  help='Runs test example.')
 	parser.add_argument('--demo',       nargs='?', type= str, const='LOG_Example.csv',  help='Plot demo.')
 	parser.add_argument('--hyper',      action='store_true',  help='Runs hyper parameter evaluation on the example samples.')
+	parser.add_argument('--vtp',       action='store_true',  help='Runs vtp example.')
 
 
 	args = parser.parse_args()

@@ -6,6 +6,7 @@
 //#include <string>
 #include <fstream>
 #include <chrono>
+#include <ctime>
 
 
 void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
@@ -141,6 +142,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			DlibVector x;
 			#pragma omp critical (getRandomValues)
 			{
+				std::cout << "random iteration: " << it << " begins." << std::endl;
 				// random initialization
 				srand( it );
 				x.set_size(number_Targets * number_optVar);
@@ -160,9 +162,9 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			catch (dlib::bobyqa_failure & err)
 			{
 				// DEBUG message
-	#ifdef DEBUG_MSG
+	//#ifdef DEBUG_MSG
 				std::cout << "\t[optimize] WARNING: no convergence during optimization in iteration: " << it << std::endl << err.info << std::endl;
-	#endif
+	//#endif
 			}
 			// write optimization results back
 			#pragma omp critical (updateMinValue)
@@ -181,18 +183,21 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 				{
 					++convergence;
 				}
-				if ( useEarlyStopping )
-				{
-					if ( convergence >= patience )
-					{
-						SearchFinished = true;
-						//std::cout << "" << std::endl;
-						//std::cout << "Search stopped early!" << std::endl;
-					}else{
-						SearchFinished = false;
-					}
-				}
+				//if ( useEarlyStopping )
+				//{
+				//	if ( convergence >= patience )
+				//	{
+				//		SearchFinished = true;
+				//		//std::cout << "" << std::endl;
+				//		//std::cout << "Search stopped early!" << std::endl;
+				//	}else{
+				//		SearchFinished = false;
+				//	}
+				//}
 				++iteration;
+				auto end = std::chrono::system_clock::now();
+				std::time_t end_time = std::chrono::system_clock::to_time_t(end);
+				std::cout << "random iteration: " << it << " ended. System time: " << std::ctime(&end_time) << std::endl;
 			}
 		}
 	}
