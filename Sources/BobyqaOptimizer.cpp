@@ -9,13 +9,13 @@
 #include <ctime>
 
 
-void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt ) const
+void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt) const
 {
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
-	ParameterSet ps  = op.getParameters();
+	ParameterSet ps = op.getParameters();
 	bool optimizeBoundaries = ps.searchSpaceParameters.optimizeBoundaries;//(ps.deltaBoundary != 0);
-	BoundaryVector initialBoundaries  = op.getBoundaries();
+	BoundaryVector initialBoundaries = op.getBoundaries();
 	BoundaryVector tmpBoundaries = initialBoundaries;
 	BoundaryVector optBoundaries;
 	TargetVector   tmpTargets = op.getPitchTargets();
@@ -35,7 +35,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	bool useEarlyStopping = optOpt.useEarlyStopping;
 
 	const long max_f_evals = optOpt.maxCostEvaluations;
-	const double rho_end   = optOpt.rhoEnd;
+	const double rho_end = optOpt.rhoEnd;
 
 	//bool writeLOG = (LOG_PATH != "");
 
@@ -50,17 +50,17 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	std::vector<double> min_bounds;
 	std::vector<double> max_bounds;
-	min_bounds.push_back( ps.searchSpaceParameters.meanSlope - ps.searchSpaceParameters.deltaSlope ); //mmin
-	min_bounds.push_back( ps.searchSpaceParameters.meanOffset - ps.searchSpaceParameters.deltaOffset ); //bmin
-	min_bounds.push_back( ps.searchSpaceParameters.meanTau - ps.searchSpaceParameters.deltaTau ); //tmin
-	max_bounds.push_back( ps.searchSpaceParameters.meanSlope + ps.searchSpaceParameters.deltaSlope ); // mmax
-	max_bounds.push_back( ps.searchSpaceParameters.meanOffset + ps.searchSpaceParameters.deltaOffset ); //bmax
-	max_bounds.push_back( ps.searchSpaceParameters.meanTau + ps.searchSpaceParameters.deltaTau ); //tmax
+	min_bounds.push_back(ps.searchSpaceParameters.meanSlope - ps.searchSpaceParameters.deltaSlope); //mmin
+	min_bounds.push_back(ps.searchSpaceParameters.meanOffset - ps.searchSpaceParameters.deltaOffset); //bmin
+	min_bounds.push_back(ps.searchSpaceParameters.meanTau - ps.searchSpaceParameters.deltaTau); //tmin
+	max_bounds.push_back(ps.searchSpaceParameters.meanSlope + ps.searchSpaceParameters.deltaSlope); // mmax
+	max_bounds.push_back(ps.searchSpaceParameters.meanOffset + ps.searchSpaceParameters.deltaOffset); //bmax
+	max_bounds.push_back(ps.searchSpaceParameters.meanTau + ps.searchSpaceParameters.deltaTau); //tmax
 
 	if (optimizeBoundaries)
 	{
-		min_bounds.push_back( -1*ps.searchSpaceParameters.deltaBoundary ); //boundary_min
-		max_bounds.push_back(    ps.searchSpaceParameters.deltaBoundary ); //boundary_max
+		min_bounds.push_back(-1 * ps.searchSpaceParameters.deltaBoundary); //boundary_min
+		max_bounds.push_back(ps.searchSpaceParameters.deltaBoundary); //boundary_max
 	}
 
 	DlibVector lowerBound, upperBound;
@@ -83,16 +83,16 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	}
 
-//	auto min_slope_offset_tau = std::min(std::min(mmax - mmin, bmax - bmin), tmax - tmin)
-//	double trustRegion = std::for_each(min_bounds.begin(), min_bounds.end(), [&r = x, x = x+1]()-> double {
-//            a = std::min( a, b )
-//            return std::min(a, b);
+	//	auto min_slope_offset_tau = std::min(std::min(mmax - mmin, bmax - bmin), tmax - tmin)
+	//	double trustRegion = std::for_each(min_bounds.begin(), min_bounds.end(), [&r = x, x = x+1]()-> double {
+	//            a = std::min( a, b )
+	//            return std::min(a, b);
 
 
-	double trustRegion = max_bounds.at(0)-min_bounds.at(0);
-	for (unsigned i =1; i < number_optVar; ++i)
+	double trustRegion = max_bounds.at(0) - min_bounds.at(0);
+	for (unsigned i = 1; i < number_optVar; ++i)
 	{
-		trustRegion = std::min(trustRegion, max_bounds.at(i)-min_bounds.at(i));
+		trustRegion = std::min(trustRegion, max_bounds.at(i) - min_bounds.at(i));
 	}
 
 	// optmization setup
@@ -101,7 +101,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	//std::cout << "rho_begint"<< rho_begint << std::endl;
 
 	//const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
-	std::cout << "rho_begin"<< rho_begin << std::endl;
+	std::cout << "rho_begin" << rho_begin << std::endl;
 	//const double rho_end(1e-6); // stopping trust region radius -> accuracy
 	//const long max_f_evals(1e6); // max number of objective function evaluations
 
@@ -113,7 +113,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	// set up OpenMP
 	int numThreads = omp_get_max_threads();
 	omp_set_num_threads(numThreads);
-//std::cout << "BobyqaOptimizer line 84" << std::endl;
+	//std::cout << "BobyqaOptimizer line 84" << std::endl;
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
@@ -124,15 +124,15 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 
 	std::ofstream LOG;
 
-//	if ( writeLOG )
-//	{
-//  		LOG.open ( LOG_PATH );
-//  		LOG << "fmin ftmp tmpMSE tmpSCC time" << "\n";
-//	}
+	//	if ( writeLOG )
+	//	{
+	//  		LOG.open ( LOG_PATH );
+	//  		LOG << "fmin ftmp tmpMSE tmpSCC time" << "\n";
+	//	}
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-#pragma omp parallel for schedule(dynamic)
+	//#pragma omp parallel for schedule(dynamic)
 
 	for (int it = 0; it < RANDOMITERATIONS; ++it)
 	{
@@ -140,23 +140,24 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 		if (!SearchFinished)
 		{
 			DlibVector x;
-			#pragma omp critical (getRandomValues)
+			//		#pragma omp critical (getRandomValues)
 			{
 				std::cout << "random iteration: " << it << " begins." << std::endl;
 				// random initialization
-				srand( it );
+				srand(it);
 				x.set_size(number_Targets * number_optVar);
 				for (unsigned i = 0; i < number_Targets; ++i)
 				{
 					for (unsigned ssp_bound = 0; ssp_bound < number_optVar; ++ssp_bound)
 					{
-						x(number_optVar * i + ssp_bound) = getRandomValue( min_bounds.at(ssp_bound), max_bounds.at(ssp_bound) );
+						x(number_optVar * i + ssp_bound) = getRandomValue(min_bounds.at(ssp_bound), max_bounds.at(ssp_bound));
 					}
 				}
 			}
 			try
 			{
 				// optimization algorithm: BOBYQA
+				std::cout << "x: " << x << std::endl;
 				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
 			}
 			catch (dlib::bobyqa_failure & err)
@@ -164,17 +165,17 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 				// DEBUG message
 	//#ifdef DEBUG_MSG
 				std::cout << "\t[optimize] WARNING: no convergence during optimization in iteration: " << it << std::endl << err.info << std::endl;
-	//#endif
+				//#endif
 			}
 			// write optimization results back
-			#pragma omp critical (updateMinValue)
+		//	#pragma omp critical (updateMinValue)
 			{
-				ftmp_vector.at( it ) = ftmp;
+				ftmp_vector.at(it) = ftmp;
 				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
 				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
 				{
-					if (fmin-ftmp < fmin*epsilon){++convergence;}
-					else {convergence = 0;}
+					if (fmin - ftmp < fmin * epsilon) { ++convergence; }
+					else { convergence = 0; }
 					fmin = ftmp;
 					xtmp = x;
 					//std::cout << "ftmp: " << ftmp << std::endl;
@@ -201,9 +202,9 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			}
 		}
 	}
-			
-				//minMSE = tmpMSE;
-				//minSCC = tmpSCC;
+
+	//minMSE = tmpMSE;
+	//minSCC = tmpSCC;
 
 //				if (optimizeBoundaries)
 //				{
@@ -265,7 +266,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 //				std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - begin).count() << "\n";
 //			}
 //			}
-			
+
 
 			//if ( (boundaryResetCounter >= 20) && (tmpMSE > 1.41) )
 			//{
@@ -275,7 +276,7 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 			//	std::cout << "  reset boundaries " << std::endl;
 			//}
 
-			
+
 
 	if (fmin == 1e6)
 	{
@@ -290,47 +291,52 @@ void BobyqaOptimizer::optimize( OptimizationProblem& op, OptimizerOptions optOpt
 	{
 		optBoundaries = initialBoundaries;
 	}
-std::cout << "" << std::endl;
-//std::cout << "BobyqaOptimizer line 148, xtmp.size: "<< xtmp.size() << std::endl;
-//	//BoundaryVector opt_boundaries = tmpBoundaries;
-//	for (unsigned i =0; i < xtmp.size(); ++i)
-//	{
-//		std::cout << "xtmp at: " << i << " is: " << xtmp(i) << std::endl;
-//	}
-
-	tmpBoundaries.back()  = op.getOriginalF0_Offset();
-	for (unsigned i = 0; i < number_Targets; ++i)
+	else
 	{
-		if ( relativeDelta ){
-			if ( xtmp(number_optVar * i + 3) >= 0)
-			{
-				tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)*( initialBoundaries.at(i+1)-initialBoundaries.at(i) )*0.01;
-			}
-			else
-			{
-				if ( i==0 )
+
+
+		// std::cout << "" << std::endl;
+		 //std::cout << "BobyqaOptimizer line 148, xtmp.size: "<< xtmp.size() << std::endl;
+		//	//BoundaryVector opt_boundaries = tmpBoundaries;
+		//	for (unsigned i =0; i < xtmp.size(); ++i)
+		//	{
+		//		std::cout << "xtmp at: " << i << " is: " << xtmp(i) << std::endl;
+		//	}
+
+		tmpBoundaries.back() = op.getOriginalF0_Offset();
+		for (unsigned i = 0; i < number_Targets; ++i)
+		{
+			if (relativeDelta) {
+				if (xtmp(number_optVar * i + 3) >= 0)
 				{
-					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)*0.1*0.01;
+					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3) * (initialBoundaries.at(i + 1) - initialBoundaries.at(i)) * 0.01;
 				}
 				else
 				{
-					tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)*( initialBoundaries.at(i)-initialBoundaries.at(i-1) ) *0.01;
+					if (i == 0)
+					{
+						tmpBoundaries.at(i) += xtmp(number_optVar * i + 3) * 0.1 * 0.01;
+					}
+					else
+					{
+						tmpBoundaries.at(i) += xtmp(number_optVar * i + 3) * (initialBoundaries.at(i) - initialBoundaries.at(i - 1)) * 0.01;
+					}
 				}
 			}
+			else
+			{
+				tmpBoundaries.at(i) += xtmp(number_optVar * i + 3) / 1000; //divide by 1000 because delta is ms
+			}
+			if ((i == 0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()))
+			{
+				tmpBoundaries.at(0) = op.getOriginalF0_Onset();
+			}
 		}
-		else
-		{
-			tmpBoundaries.at(i) += xtmp(number_optVar * i + 3)/1000; //divide by 1000 because delta is ms
-		}
-		if ( (i==0) && (tmpBoundaries.at(0) > op.getOriginalF0_Onset()) )
-		{
-			tmpBoundaries.at(0) = op.getOriginalF0_Onset();
-		}
+		std::sort(tmpBoundaries.begin(), tmpBoundaries.end());
+		tmpBoundaries.back() = op.getOriginalF0_Offset();
+		op.setBoundaries(tmpBoundaries);
+		optBoundaries = tmpBoundaries;
 	}
-	std::sort( tmpBoundaries.begin(), tmpBoundaries.end() );
-	tmpBoundaries.back()  = op.getOriginalF0_Offset();
-	op.setBoundaries( tmpBoundaries );
-	optBoundaries = tmpBoundaries;
 	for (unsigned i = 0; i < number_Targets; ++i)
 	{
 		//opt_boundaries.push_back( initialBoundaries[i] + xtmp(4 * i +3)/1000 );
@@ -340,7 +346,7 @@ std::cout << "" << std::endl;
 		pt.offset = xtmp(number_optVar * i + 1);
 		pt.tau = xtmp(number_optVar * i + 2);
 		//pt.duration = ( initialBoundaries[i + 1] + xtmp(4 * (i+1) +3)/1000 ) - ( initialBoundaries[i] + xtmp(4 * i +3)/1000 );//op.getPitchTargets()[i].duration;
-		pt.duration = optBoundaries.at(i + 1)  - optBoundaries.at(i);
+		pt.duration = optBoundaries.at(i + 1) - optBoundaries.at(i);
 		optTargets.push_back(pt);
 
 
@@ -351,21 +357,21 @@ std::cout << "" << std::endl;
 	//op.setOptimum( optBoundaries, optTargets );
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double computationTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-	op.setOptimum( optBoundaries, optTargets, computationTime, ftmp_vector );
-std::cout << "Elapsed time = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
+	op.setOptimum(optBoundaries, optTargets, computationTime, ftmp_vector);
+	std::cout << "Elapsed time = " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "[s]" << std::endl;
 
-//if ( writeLOG )
-//{
-//	//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
-//	LOG.open ( LOG_PATH );
-//  	LOG << "fmin fMSE fSCC time" << "\n";
-//	LOG << fmin << " "  << op.getRootMeanSquareError() << " " << op.getCorrelationCoefficient() << " " << 
-//	std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "\n";
-//	LOG.close();
-//}
+	//if ( writeLOG )
+	//{
+	//	//std::tie(tmpMSE, tmpSCC) = op.getOptStats( tmpBoundaries, tmpTargets );
+	//	LOG.open ( LOG_PATH );
+	//  	LOG << "fmin fMSE fSCC time" << "\n";
+	//	LOG << fmin << " "  << op.getRootMeanSquareError() << " " << op.getCorrelationCoefficient() << " " << 
+	//	std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count() << "\n";
+	//	LOG.close();
+	//}
 
-//std::cout << "BobyqaOptimizer line 168" << std::endl;
-	// DEBUG message
+	//std::cout << "BobyqaOptimizer line 168" << std::endl;
+		// DEBUG message
 #ifdef DEBUG_MSG
 	std::cout << "\t[optimize] mse = " << fmin << std::endl;
 #endif
