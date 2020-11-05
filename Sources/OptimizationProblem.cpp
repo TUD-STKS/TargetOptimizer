@@ -169,7 +169,9 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 {
 	// convert data
 	TargetVector targets;
-	BoundaryVector boundaries = m_bounds;
+	BoundaryVector initialBounds = m_bounds;
+	initialBounds.back() = getOriginalF0_Offset();
+	BoundaryVector boundaries = initialBounds;
 	//boundaries.front() = getOriginalF0_Onset();
 	//boundaries.back()  = getOriginalF0_Offset();
 	bool relativeDelta = true;
@@ -182,13 +184,13 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	//for (unsigned i = 0; i < arg.size() / m_parameters.numberOptVar; ++i)
 	if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
 	{
-		boundaries.back()  = getOriginalF0_Offset();
+		//boundaries.back()  = getOriginalF0_Offset();
 		for (unsigned i = 0; i < number_Targets; ++i)
 		{
 			if ( relativeDelta ){
 				if ( arg(number_optVar * i + 3) >= 0)
 				{
-					boundaries.at(i) += arg(number_optVar * i + 3)*( m_bounds.at(i+1)-m_bounds.at(i) )*0.01;
+					boundaries.at(i) += arg(number_optVar * i + 3)*( initialBounds.at(i+1)-initialBounds.at(i) )*0.01;
 				}
 				else
 				{
@@ -198,7 +200,7 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 					}
 					else
 					{
-						boundaries.at(i) += arg(number_optVar * i + 3)*( m_bounds.at(i)-m_bounds.at(i-1) ) *0.01;
+						boundaries.at(i) += arg(number_optVar * i + 3)*( initialBounds.at(i)-initialBounds.at(i-1) ) *0.01;
 					}
 				}
 			}
@@ -222,50 +224,18 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 		pt.offset = arg(m_parameters.searchSpaceParameters.numberOptVar * i + 1);
 		pt.tau = arg(m_parameters.searchSpaceParameters.numberOptVar * i + 2);
 		pt.duration = ( boundaries.at(i+1) - boundaries.at(i) );
-		//pt.duration = m_bounds[i + 1] - m_bounds[i];// (m_bounds[i] + arg(4 * i +3)/1000);
-//		if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
-//		{
-//			//if ( (i >0) && (number_Targets > 1) )
-//			//{
-//				//boundaries.at(i) += arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
-//			//}
-//			//std::cout << "b: opt bound true " << m_parameters.optimizeBoundaries << std::endl;
-//			//modified_Bound = m_bounds[i] + arg(m_parameters.searchSpaceParameters.numberOptVar * i +3)/1000;
-//			//if ( (i==0) && (modified_Bound > m_originalF0[0].time))
-//			//{
-//			//	modified_Bound = m_originalF0[0].time;
-//			//}
-//			//boundaries.push_back( modified_Bound );
-//			//boundaries.push_back( m_bounds[i] + arg(m_parameters.numberOptVar * i +3)/1000 );
-//			//pt.duration = ( m_bounds[i + 1] + arg(m_parameters.searchSpaceParameters.numberOptVar * (i+1) +3)/1000 ) - boundaries[i];
-//			pt.duration = ( boundaries.at(i+1) - boundaries.at(i) )
-//		}
-//		else{
-//			//std::cout << "b: opt bound false " << m_parameters.optimizeBoundaries << std::endl;
-//			pt.duration = m_bounds[i + 1] - m_bounds[i];
-//		}
+
 		targets.push_back(pt);
 	}
-//	if (m_parameters.searchSpaceParameters.optimizeBoundaries) //(!m_bounds.empty()
-//	{
-//		//modified_Bound = m_bounds.back() + arg(m_parameters.searchSpaceParameters.numberOptVar * number_Targets +3)/1000;
-//		//if ( modified_Bound < m_originalF0.back().time )
-//		//{
-//		//	modified_Bound = m_originalF0.back().time;
-//		//}
-//		//boundaries.push_back( modified_Bound );
-//		std::sort( boundaries.begin(), boundaries.end() );
-//		//boundaries.push_back( m_bounds.back() + arg(m_parameters.numberOptVar * (arg.size() / m_parameters.numberOptVar) +3)/1000 );
-//	}
-//	else
-//	{
-//		boundaries = m_bounds;
-//	}
-	//std::cout << "b: " << boundaries.at(0) << " "<< boundaries.at(1) << " "<< boundaries.at(2) << " "<< boundaries.at(3) 
-	//std::cout << " m: " << m_bounds.at(0) << " "<< m_bounds.at(1) << " " << m_bounds.at(2)<< " " << m_bounds.at(3) << std::endl;
 
-	// create model f0
-	//TamModelF0 tamF0(m_bounds, m_originalF0[0].value);
+	// DEBUG #Hack
+//if (targets.back().duration == 0.0)
+//{
+//	targets.back().duration += 0.001;
+//	targets.end()[-2].duration -= 0.001;
+//	boundaries.end()[-2] -= 0.001;
+//}
+// END DEBUG
 	TamModelF0 tamF0(boundaries, m_originalF0[0].value);
 	tamF0.setPitchTargets(targets);
 
@@ -281,9 +251,15 @@ double OptimizationProblem::costFunction(const TamModelF0& tamF0) const // TODO:
 
 	// calculate error
 	double error = 0.0;
+	//double x = 0.0;
+	//double x_slope = 0.0;
+	//double x_offset = 0.0;
+	//double x_tau = 0.0;
 	for (unsigned i = 0; i < modelF0.size(); ++i)
 	{
 		error += std::pow((m_originalF0[i].value - modelF0[i].value), 2.0);
+		//x = m_originalF0[i].value - modelF0[i].value;
+		//error += x*x;
 	}
 	//std::cout << "error " << error << std::endl;
 
@@ -296,6 +272,14 @@ double OptimizationProblem::costFunction(const TamModelF0& tamF0) const // TODO:
 		penalty += (m_parameters.regularizationParameters.weightSlope * std::pow(targets[i].slope - m_parameters.searchSpaceParameters.meanSlope, 2.0));
 		penalty += (m_parameters.regularizationParameters.weightOffset * std::pow(targets[i].offset - m_parameters.searchSpaceParameters.meanOffset, 2.0));
 		penalty += (m_parameters.regularizationParameters.weightTau * std::pow(targets[i].tau - m_parameters.searchSpaceParameters.meanTau, 2.0));
+
+
+		//x_slope  = targets[i].slope  - m_parameters.searchSpaceParameters.meanSlope;
+		//x_offset = targets[i].offset - m_parameters.searchSpaceParameters.meanOffset;
+		//x_tau    = targets[i].tau    - m_parameters.searchSpaceParameters.meanTau;
+		//penalty += (m_parameters.regularizationParameters.weightSlope * x_slope * x_slope);
+		//penalty += (m_parameters.regularizationParameters.weightOffset * x_offset * x_offset);
+		//penalty += (m_parameters.regularizationParameters.weightTau * x_tau * x_tau);
 	}
 
 	return error + m_parameters.regularizationParameters.lambda * penalty;

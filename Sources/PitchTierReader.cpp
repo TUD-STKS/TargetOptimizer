@@ -57,8 +57,8 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 			throw dlib::error("Wrong PitchTier File Format!");
 		}
 
-		//Sample s = { time,hz2st(value) };
-		Sample s = { time, value };
+		Sample s = { time,hz2st(value) };
+		//Sample s = { time, value };
 		m_f0.push_back(s);
 	}
 
