@@ -229,12 +229,12 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	}
 
 	// DEBUG #Hack
-//if (targets.back().duration == 0.0)
-//{
-//	targets.back().duration += 0.001;
-//	targets.end()[-2].duration -= 0.001;
-//	boundaries.end()[-2] -= 0.001;
-//}
+if (targets.back().duration == 0.0)
+{
+	targets.back().duration += 0.001;
+	targets.end()[-2].duration -= 0.001;
+	boundaries.end()[-2] -= 0.001;
+}
 // END DEBUG
 	TamModelF0 tamF0(boundaries, m_originalF0[0].value);
 	tamF0.setPitchTargets(targets);
