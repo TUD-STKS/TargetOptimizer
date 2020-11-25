@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.8184350159012386 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.8184350159012386 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.27079740499461913 
+            text = "" 
+        intervals [2]:
+            xmin = 0.27079740499461913 
+            xmax = 0.5054111530773895 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.5054111530773895 
+            xmax = 0.6858832669872133 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.6858832669872133 
+            xmax = 0.8874104608531823 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.8874104608531823 
+            xmax = 1.0167488091552226 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.0167488091552226 
+            xmax = 1.4474721839866973 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.4474721839866973 
+            xmax = 1.8184350159012386 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.8184350159012386 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.8184350159012386 
+            text = "geistig-kulturell" 

@@ -1,0 +1,40 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.1876684011870822 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.1876684011870822 
+        intervals: size = 4 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.1828208526652304 
+            text = "" 
+        intervals [2]:
+            xmin = 0.1828208526652304 
+            xmax = 0.33073187209417654 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.33073187209417654 
+            xmax = 0.8907036780722564 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.8907036780722564 
+            xmax = 1.1876684011870822 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "OGT" 
+        xmin = 0 
+        xmax = 1.1876684011870822 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.1876684011870822 
+            text = "August_Monat" 

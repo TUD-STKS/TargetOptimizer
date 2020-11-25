@@ -1,0 +1,60 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.300720312731407 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.300720312731407 
+        intervals: size = 9 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.29124247913470924 
+            text = "" 
+        intervals [2]:
+            xmin = 0.29124247913470924 
+            xmax = 0.47391201847950626 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.47391201847950626 
+            xmax = 0.6927349041529602 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.6927349041529602 
+            xmax = 1.0265079621550015 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.0265079621550015 
+            xmax = 1.2092961925870185 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.2092961925870185 
+            xmax = 1.2902165224265616 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.2902165224265616 
+            xmax = 1.4177046384276188 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.4177046384276188 
+            xmax = 1.913802090196885 
+            text = "7" 
+        intervals [9]:
+            xmin = 1.913802090196885 
+            xmax = 2.300720312731407 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.300720312731407 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.300720312731407 
+            text = "Tageshöchsttemperatur" 

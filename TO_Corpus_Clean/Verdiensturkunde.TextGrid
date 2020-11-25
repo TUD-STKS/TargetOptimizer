@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.9523671386511126 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.9523671386511126 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.2439159093268728 
+            text = "" 
+        intervals [2]:
+            xmin = 0.2439159093268728 
+            xmax = 0.43933200689440355 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.43933200689440355 
+            xmax = 0.8833381659078583 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.8833381659078583 
+            xmax = 1.0431937300531047 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.0431937300531047 
+            xmax = 1.4161900463920176 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.4161900463920176 
+            xmax = 1.6731478028014521 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.6731478028014521 
+            xmax = 1.9523671386511126 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.9523671386511126 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.9523671386511126 
+            text = "Verdiensturkunde" 

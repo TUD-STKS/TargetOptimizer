@@ -1,0 +1,56 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.895285365720291 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.895285365720291 
+        intervals: size = 8 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.42198283329442887 
+            text = "" 
+        intervals [2]:
+            xmin = 0.42198283329442887 
+            xmax = 0.7969631511943263 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.7969631511943263 
+            xmax = 1.0969631511943305 
+            text = "2" 
+        intervals [4]:
+            xmin = 1.0969631511943305 
+            xmax = 1.2869631511943282 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.2869631511943282 
+            xmax = 1.4169631511943308 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.4169631511943308 
+            xmax = 1.7823968699766723 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.7823968699766723 
+            xmax = 2.1892593307861645 
+            text = "" 
+        intervals [8]:
+            xmin = 2.1892593307861645 
+            xmax = 2.895285365720291 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.895285365720291 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.895285365720291 
+            text = "Schwarzweiß-Malerei" 

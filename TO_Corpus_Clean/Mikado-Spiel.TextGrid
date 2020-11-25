@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.5364016174117268 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.5364016174117268 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.18779704274046694 
+            text = "" 
+        intervals [2]:
+            xmin = 0.18779704274046694 
+            xmax = 0.29448464807276764 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.29448464807276764 
+            xmax = 0.58903521062064 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.58903521062064 
+            xmax = 0.7258736609381558 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.7258736609381558 
+            xmax = 1.3333118162729214 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.3333118162729214 
+            xmax = 1.5364016174117268 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.5364016174117268 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.5364016174117268 
+            text = "Mikado-Spiel" 

@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.8112366128310207 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.8112366128310207 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.44905344537014 
+            text = "" 
+        intervals [2]:
+            xmin = 0.44905344537014 
+            xmax = 0.7285397359907897 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.7285397359907897 
+            xmax = 1.0425001065117847 
+            text = "2" 
+        intervals [4]:
+            xmin = 1.0425001065117847 
+            xmax = 1.2850498829534978 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.2850498829534978 
+            xmax = 1.5916229506387047 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.5916229506387047 
+            xmax = 1.8112366128310207 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.8112366128310207 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.8112366128310207 
+            text = "Auspuffflamme" 

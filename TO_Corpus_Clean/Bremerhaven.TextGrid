@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.6447280471132615 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.6447280471132615 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.2598923111350615 
+            text = "" 
+        intervals [2]:
+            xmin = 0.2598923111350615 
+            xmax = 0.43128635167948204 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.43128635167948204 
+            xmax = 0.5690867808826141 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5690867808826141 
+            xmax = 0.8390867808826172 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.8390867808826172 
+            xmax = 1.2447279091839576 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.2447279091839576 
+            xmax = 1.6447280471132615 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.6447280471132615 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.6447280471132615 
+            text = "Bremerhaven" 

@@ -1,0 +1,60 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.2541961323349966 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.2541961323349966 
+        intervals: size = 9 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.28908175838641625 
+            text = "" 
+        intervals [2]:
+            xmin = 0.28908175838641625 
+            xmax = 0.43822815354211286 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.43822815354211286 
+            xmax = 0.5183943409383005 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5183943409383005 
+            xmax = 0.6712693959728924 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.6712693959728924 
+            xmax = 0.9024463084642278 
+            text = "4" 
+        intervals [6]:
+            xmin = 0.9024463084642278 
+            xmax = 1.1392162107738955 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.1392162107738955 
+            xmax = 1.2585333268984513 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.2585333268984513 
+            xmax = 1.856983237460689 
+            text = "7" 
+        intervals [9]:
+            xmin = 1.856983237460689 
+            xmax = 2.2541961323349966 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.2541961323349966 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.2541961323349966 
+            text = "Theodor-Fontane-Platz" 

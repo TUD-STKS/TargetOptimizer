@@ -1,0 +1,56 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.3744949401235473 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.3744949401235473 
+        intervals: size = 8 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.3320025928296033 
+            text = "" 
+        intervals [2]:
+            xmin = 0.3320025928296033 
+            xmax = 0.4046640404934152 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.4046640404934152 
+            xmax = 0.8049378594704422 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.8049378594704422 
+            xmax = 1.1568082149593693 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.1568082149593693 
+            xmax = 1.2608908291805037 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.2608908291805037 
+            xmax = 1.5318983907374246 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.5318983907374246 
+            xmax = 2.1192086902038625 
+            text = "6" 
+        intervals [8]:
+            xmin = 2.1192086902038625 
+            xmax = 2.3744949401235473 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.3744949401235473 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.3744949401235473 
+            text = "Betriebssportgemeinschaft" 

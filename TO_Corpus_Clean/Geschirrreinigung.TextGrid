@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.0254153784679687 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.0254153784679687 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.3836284876791325 
+            text = "" 
+        intervals [2]:
+            xmin = 0.3836284876791325 
+            xmax = 0.47229578704774156 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.47229578704774156 
+            xmax = 0.7856888279195289 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.7856888279195289 
+            xmax = 0.9934002167684639 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.9934002167684639 
+            xmax = 1.1534002167684605 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.1534002167684605 
+            xmax = 1.554648337961055 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.554648337961055 
+            xmax = 2.0254153784679687 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.0254153784679687 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.0254153784679687 
+            text = "Geschirrreinigung" 
