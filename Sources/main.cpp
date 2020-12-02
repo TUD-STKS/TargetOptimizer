@@ -357,19 +357,19 @@ int main(int argc, char* argv[])
 			// process gesture-file output option
 			if (parser.option("g"))
 			{
-				DataIO::saveGesturalScore(fileName + ".ges");
+				DataIO::saveGesturalScore(onset, optTargets, fileName + ".ges");
 			}
 
 			// process csv-file output option
 			if (parser.option("c"))
 			{
-				DataIO::saveCsvFile(fileName + ".csv");
+				DataIO::saveCsvFile(onset, optTargets, fileName + ".csv");
 			}
 
 			// process PitchTarget-file output option
 			if (parser.option("p"))
 			{
-				DataIO::savePitchTier(fileName + "-tam.PitchTier");
+				DataIO::savePitchTier(optF0, fileName + "-tam.PitchTier");
 			}
 
 			// print results

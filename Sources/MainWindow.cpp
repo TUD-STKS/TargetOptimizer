@@ -449,15 +449,15 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 		return;
 	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
 	{
-		DataIO::saveGesturalScore(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveGesturalScore(Data::getInstance().onset, Data::getInstance().pitchTargets, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("csv")))
 	{
-		DataIO::saveCsvFile(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveCsvFile(Data::getInstance().onset, Data::getInstance().pitchTargets, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("PitchTier")))
 	{
-		DataIO::savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::savePitchTier(Data::getInstance().optimalF0, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	//else if (saveFileDialog.GetPath().EndsWith(wxT("TO")))
 	//{
