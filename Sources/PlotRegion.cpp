@@ -11,7 +11,7 @@ PlotRegion::PlotRegion(wxWindow* parent, const BoundaryVector& initialBoundaries
     plot.initAbscissa(PQ_TIME, 0.0, 0.01,
         0.0, 0.0, 0.0, 0.1, 0.1, 0.1,
         1, 1, true, true, true);
-    plot.initLinearOrdinate(PQ_ARBITRARY, 0.0, 0.01,
+    plot.initLinearOrdinate(PQ_PITCH, 0.0, 0.01,
         0.0, 0.0, 50.0, 0.1, 0.1, 100,
         1, 1, true, true, true);
     }
