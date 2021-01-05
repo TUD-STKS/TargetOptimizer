@@ -16,18 +16,18 @@ SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(pare
 	plusMinusFlags.Align(wxRIGHT | wxALIGN_CENTER_VERTICAL).Border(wxLEFT, 5);
 	wxSizerFlags valueFlags;
 	valueFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Expand().Proportion(1).Border(wxALL, 5);
-	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("slope 0.0 [st/s]")) };
+	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("Slope 0.0 [st/s]")) };
 	optionsSizer->Add(label, labelFlags);
 	optionsSizer->Add(plusMinus, plusMinusFlags);
 	deltaSlopeCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.deltaSlope), wxDefaultPosition, wxDefaultSize,  wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.deltaSlope, 1);
 	optionsSizer->Add(deltaSlopeCtrl, valueFlags);
-	label = new wxStaticText(this, wxID_ANY, wxT("offset f0-mean [st]"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Offset mean f0 [st]"));
 	optionsSizer->Add(label, labelFlags);
 	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
 	optionsSizer->Add(plusMinus, plusMinusFlags);
 	deltaOffsetCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.deltaOffset), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.deltaOffset, 1);
 	optionsSizer->Add(deltaOffsetCtrl, valueFlags);
-	label = new wxStaticText(this, wxID_ANY, wxT("tau [ms]"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Tau [ms]"));
 	optionsSizer->Add(label, labelFlags);
 	optionsSizer->AddSpacer(0);
 	meanTauCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.meanTau), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.meanTau, 0.5);
@@ -37,14 +37,14 @@ SearchSpacePage::SearchSpacePage(wxWindow* parent, wxWindowID id) : wxPanel(pare
 	optionsSizer->Add(plusMinus, plusMinusFlags);
 	deltaTauCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.deltaTau), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.deltaTau, 1);
 	optionsSizer->Add(deltaTauCtrl, valueFlags);
-	label = new wxStaticText(this, wxID_ANY, wxT("boundary delta [%]"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Boundary delta [%]"));
 	optionsSizer->Add(label, labelFlags);
 	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
 	optionsSizer->Add(plusMinus, plusMinusFlags);
 	deltaBoundaryCtrl = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.deltaBoundary), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 500, defaults.deltaBoundary, 1);
 	optionsSizer->Add(deltaBoundaryCtrl, valueFlags);
 
-	label = new wxStaticText(this, wxID_ANY, wxT("init bounds"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Init bounds"));
 	optionsSizer->Add(label, labelFlags);
 	plusMinus = new wxStaticText(this, wxID_ANY, wxT("+/-"));
 	optionsSizer->Add(plusMinus, plusMinusFlags);
@@ -72,7 +72,7 @@ SearchSpaceParameters SearchSpacePage::getParameters()
 	{
 		params.numberOptVar = 3;
 	}
-	std::cout << "number of opt var: " << params.numberOptVar << std::endl;
+	std::cout << "Number of opt var: " << params.numberOptVar << std::endl;
 
 
 	return params;
