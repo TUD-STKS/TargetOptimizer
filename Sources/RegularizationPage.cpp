@@ -17,22 +17,22 @@ RegularizationPage::RegularizationPage(wxWindow* parent, wxWindowID id) : wxPane
 	wxSizerFlags valueFlags;
 	valueFlags.Align(wxLEFT | wxALIGN_CENTER_VERTICAL).Expand().Proportion(1).Border(wxALL, 5);
 
-	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("lambda")) };
+	wxStaticText* label{ new wxStaticText(this, wxID_ANY, wxT("Lambda")) };
 	optionsSizer->Add(label, labelFlags);
 	lambda = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.lambda), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.lambda, 0.01);
 	optionsSizer->Add(lambda, valueFlags);
 	
-	label = new wxStaticText(this, wxID_ANY, wxT("weight-slope"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Slope weight"));
 	optionsSizer->Add(label, labelFlags);	
 	weightSlope = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.weightSlope), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.weightSlope, 0.01);
 	optionsSizer->Add(weightSlope, valueFlags);
 	
-	label = new wxStaticText(this, wxID_ANY, wxT("weight-offset"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Offset weight"));
 	optionsSizer->Add(label, labelFlags);
 	weightOffset = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.weightOffset), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.weightOffset, 0.01);
 	optionsSizer->Add(weightOffset, valueFlags);
 	
-	label = new wxStaticText(this, wxID_ANY, wxT("weight-tau"));
+	label = new wxStaticText(this, wxID_ANY, wxT("Tau weight"));
 	optionsSizer->Add(label, labelFlags);
 	weightTau = new wxSpinCtrlDouble(this, wxID_ANY, wxString::Format(wxT("%.2f"), defaults.weightTau), wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxSP_ARROW_KEYS, 0, 100, defaults.weightTau, 0.01);
 	optionsSizer->Add(weightTau, valueFlags);
