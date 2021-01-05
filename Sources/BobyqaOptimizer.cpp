@@ -9,7 +9,7 @@
 #include <ctime>
 
 
-void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt) const
+void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 {
 	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
@@ -197,6 +197,12 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 				//	}
 				//}
 				++iteration;
+#ifdef USE_WXWIDGETS
+				if (waitbar_ != nullptr)
+				{
+					waitbar_->Update(iteration);
+				}
+#endif
 				auto end = std::chrono::system_clock::now();
 				std::time_t end_time = std::chrono::system_clock::to_time_t(end);
 				std::cout << "random iteration: " << it << " ended. System time: " << std::ctime(&end_time) << std::endl;
@@ -284,6 +290,13 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 #endif
 }
 
+#ifdef USE_WXWIDGETS
+void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt, wxGenericProgressDialog* waitbar)
+{
+	waitbar_ = waitbar;
+	return optimize(op, optOpt);
+}
+#endif
 
 
 double BobyqaOptimizer::getRandomValue(const double min, const double max)

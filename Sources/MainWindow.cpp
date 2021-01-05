@@ -410,12 +410,11 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		Data::getInstance().initialBoundaries);
 	
 	BobyqaOptimizer optimizer;
-	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
-	pd.Pulse();
-
+	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), options.optimizerOptions.maxIterations, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
+	
 	try
 	{
-		optimizer.optimize( problem, optimizerOptions );
+		optimizer.optimize( problem, optimizerOptions, &pd);
 	}
 	catch (const std::exception&)
 	{

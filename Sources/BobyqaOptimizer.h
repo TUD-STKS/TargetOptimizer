@@ -2,6 +2,10 @@
 #include "OptimizationProblem.h"
 #include <string>
 
+#ifdef USE_WXWIDGETS
+#include <wx/progdlg.h>
+#endif
+
 struct OptimizerOptions
 {
 	int maxIterations{ 100 };
@@ -9,7 +13,7 @@ struct OptimizerOptions
 	double epsilon{ 0.01 };
 	int patience{ 10 };
 	int maxCostEvaluations{ 100000 };
-	double rhoEnd{ 0.000001 };
+	double rhoEnd{ 0.001 };
 };
 
 // solver for an optimization problem utilizing BOBYQA algorithm
@@ -19,10 +23,16 @@ public:
 	BobyqaOptimizer() = default;
 
 	// public member functions
-	void optimize(OptimizationProblem& op, OptimizerOptions optOpt ) const;
+	void optimize(OptimizationProblem& op, OptimizerOptions optOpt);
+#ifdef USE_WXWIDGETS
+	void optimize(OptimizationProblem& op, OptimizerOptions optOpt, wxGenericProgressDialog* waitbar);
+#endif
 	//void optimize_targets_and_boundaries(OptimizationProblem& op) const;
 
 private:
 	// private member functions
 	static double getRandomValue(const double min, const double max);
+#ifdef USE_WXWIDGETS
+	wxGenericProgressDialog* waitbar_{ nullptr };
+#endif
 };
