@@ -8,10 +8,10 @@
 
 struct OptimizerOptions
 {
-	int maxIterations{ 100 };
-	bool useEarlyStopping{ true };
-	double epsilon{ 0.01 };
-	int patience{ 10 };
+	int maxIterations{ 1000 };
+	bool useEarlyStopping{ false };
+	double epsilon{ 0.1 };  // Minimum relative improvement to update the optimum if early stopping is used
+	int patience{ 15 };  // If after this many iterations the minimum has not improved, the optimization stops. The default value is updated when the number of targets to be found is known according to the following formula: patience = 15 * numberOfTargets
 	int maxCostEvaluations{ 100000 };
 	double rhoEnd{ 0.001 };
 };

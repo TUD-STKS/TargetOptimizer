@@ -23,6 +23,7 @@ public:
 
 public:
 	OptimizationOptions getOptions();
+	void setOptions(OptimizationOptions newOptions);
 
 private:
 	//TODO: Create an OptionsPage class

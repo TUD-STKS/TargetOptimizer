@@ -145,6 +145,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='wxWidgets_Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='wxWidgets_Release|x64'">
+    <VcpkgConfiguration>Release</VcpkgConfiguration>
+  </PropertyGroup>
+  <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='wxWidgets_Debug|x64'">
+    <VcpkgConfiguration>Debug</VcpkgConfiguration>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>
@@ -207,17 +213,17 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_HAS_AUTO_PTR_ETC=1;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions); USE_WXWIDGETS</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_HAS_AUTO_PTR_ETC=1;WIN32;_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);USE_WXWIDGETS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\include\msvc;$(SolutionDir);C:\wxWidgets-3.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\lib\vc_x64_lib\mswud;C:\wxWidgets-3.1.0\include\msvc;C:\wxWidgets-3.1.0\include;$(SolutionDir)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\wxWidgets-3.1.0\lib\vc_x64_lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>wxbase31ud.lib;wxmsw31ud_core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\wxWidgets-3.1.0\lib\vc_x64_lib\mswud;C:\wxWidgets-3.1.0\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxmsw31ud_core.lib;wxmsw31ud_adv.lib;wxbase31ud.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;wxpng.lib;wxzlib.lib;wxjpeg.lib;wxtiff.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableDpiAwareness>true</EnableDpiAwareness>
@@ -308,7 +314,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_HAS_AUTO_PTR_ETC=1;WIN32;_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions);USE_WXWIDGETS</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\include\msvc;$(SolutionDir);C:\wxWidgets-3.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\lib\vc_x64_lib\mswu;C:\wxWidgets-3.1.0\include\msvc;C:\wxWidgets-3.1.0\include;$(SolutionDir)</AdditionalIncludeDirectories>
       <OpenMPSupport>true</OpenMPSupport>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -318,8 +324,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\wxWidgets-3.1.0\lib\vc_x64_lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>wxbase31u.lib;wxmsw31u_core.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\wxWidgets-3.1.0\lib\vc_x64_lib\mswu;C:\wxWidgets-3.1.0\lib\vc_x64_lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>wxmsw31u_core.lib;wxmsw31u_adv.lib;wxbase31u.lib;comctl32.lib;rpcrt4.lib;winmm.lib;advapi32.lib;wsock32.lib;wxpng.lib;wxzlib.lib;wxjpeg.lib;wxtiff.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ResourceCompile>
       <AdditionalIncludeDirectories>C:\wxWidgets-3.1.0\include</AdditionalIncludeDirectories>
