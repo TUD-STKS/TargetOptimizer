@@ -13,6 +13,7 @@ class OptimizerPage :
 public:
 	OptimizerPage(wxWindow* parent, wxWindowID id);
 	OptimizerOptions getParameters() const;
+	void setParameters(OptimizerOptions newOptions);
 
 private:
 	void OnChangeValue(wxSpinEvent& event);

@@ -1,10 +1,14 @@
+#include "BobyqaOptimizer.h"
+
 #include <omp.h>
 #include <dlib/optimization.h>
 #include <dlib/threads.h>
-#include "BobyqaOptimizer.h"
+#include <iostream> //eclude again
+//#include <string>
 #include <fstream>
 #include <chrono>
 #include <ctime>
+
 
 
 void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
@@ -141,28 +145,33 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			{
 				ftmp_vector.at(it) = ftmp;
 				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
-				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 by error
+				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 on error
 				{
-					if (fmin - ftmp < fmin * epsilon) { ++convergence; }
-					else { convergence = 0; }
-					fmin = ftmp;
-					xtmp = x;
+					if (useEarlyStopping)
+					{ 
+						if (ftmp < fmin - fmin * epsilon)
+						{
+							convergence = 0;
+							fmin = ftmp;
+							xtmp = x;
+						}
+					}
+					else
+					{
+						fmin = ftmp;
+						xtmp = x;
+					}
+					//std::cout << "ftmp: " << ftmp << std::endl;
 				}
-				else
+				++convergence;
+
+				if (useEarlyStopping && convergence >= patience)
 				{
-					++convergence;
+					SearchFinished = true;
+					std::cout << "" << std::endl;
+					std::cout << "Search stopped early!" << std::endl;
 				}
-				//if ( useEarlyStopping )
-				//{
-				//	if ( convergence >= patience )
-				//	{
-				//		SearchFinished = true;
-				//		//std::cout << "" << std::endl;
-				//		//std::cout << "Search stopped early!" << std::endl;
-				//	}else{
-				//		SearchFinished = false;
-				//	}
-				//}
+
 				++iteration;
 #ifdef USE_WXWIDGETS
 				if (waitbar_ != nullptr)

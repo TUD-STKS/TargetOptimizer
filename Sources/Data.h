@@ -4,8 +4,7 @@
 // global constants
 const unsigned FILTERORDER(5);			// TAM
 //const unsigned RANDOMITERATIONS(20);		// BOBYQA
-const unsigned SAMPLERATE(400); 		// Hz
-
+const double SAMPLERATE{ 44100.0 / 110.0 }; 		// Hz
 // vector of syllable bounds
 using BoundaryVector = std::vector<double>;
 

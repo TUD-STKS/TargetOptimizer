@@ -10,33 +10,32 @@ TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 {
 	using namespace std;
 	ifstream inputFile;
-	try {
-		inputFile.open(inputFilename);
-		inputFile.exceptions(inputFile.failbit);
-		if (inputFile.is_open()) {
-			string line;
-			// header
-			for (int lineCnt = 1; lineCnt <= 2; lineCnt++) {
-				getline(inputFile, line);
-			}
-			// empty lines
+	inputFile.open(inputFilename);
+	if (inputFile.is_open()) {	
+		string line;
+		// header
+		for (int lineCnt = 1; lineCnt <= 2; lineCnt++) {
 			getline(inputFile, line);
-			while (line == "") {
-				getline(inputFile, line);
-			}
-			vector<string> lineElements = split(trim(line));
-			if (lineElements.size() == 3 && lineElements[0] == "xmin") {
-				TextGrid tg = LongTextGridFactory(inputFile, lineElements);
-				return tg;
-			}
-			else if (lineElements.size() == 1 && lineElements[0] != "") {
-				TextGrid tg = ShortTextGridFactory(inputFile, lineElements);
-				return tg;
-			}
+		}
+		// empty lines
+		getline(inputFile, line);
+		while (line == "") {
+			getline(inputFile, line);
+		}
+		vector<string> lineElements = split(trim(line));
+		if (lineElements.size() == 3 && lineElements[0] == "xmin") {
+			TextGrid tg = LongTextGridFactory(inputFile, lineElements);
+			return tg;
+		}
+		else if (lineElements.size() == 1 && lineElements[0] != "") {
+			TextGrid tg = ShortTextGridFactory(inputFile, lineElements);
+			return tg;
 		}
 	}
-	catch (const ios_base::failure& e) {
-		cerr << "Exception opening/reading/closing file! " << e.what() << endl;
+	else
+	{
+		TextGrid tg;
+		return tg;
 	}
 }
 

@@ -45,9 +45,18 @@ RegularizationParameters RegularizationPage::getParameters()
 	RegularizationParameters params;
 	params.lambda = lambda->GetValue();
 	params.weightSlope = weightSlope->GetValue();
+	params.weightOffset = weightOffset->GetValue();
 	params.weightTau = weightTau->GetValue();
 
 	return params;
+}
+
+void RegularizationPage::setParameters(RegularizationParameters newParams)
+{
+	lambda->SetValue(newParams.lambda);
+	weightSlope->SetValue(newParams.weightSlope);
+	weightOffset->SetValue(newParams.weightOffset);
+	weightTau->SetValue(newParams.weightTau);
 }
 
 #endif
