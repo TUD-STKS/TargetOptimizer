@@ -78,4 +78,14 @@ SearchSpaceParameters SearchSpacePage::getParameters()
 	return params;
 }
 
+void SearchSpacePage::setParameters(SearchSpaceParameters newParams)
+{
+	deltaSlopeCtrl->SetValue(newParams.deltaSlope);
+	deltaOffsetCtrl->SetValue(newParams.deltaOffset);
+	deltaTauCtrl->SetValue(newParams.deltaTau);
+	meanTauCtrl->SetValue(newParams.meanTau);
+	deltaBoundaryCtrl->SetValue(newParams.deltaBoundary);
+	initBoundsCtrl->SetValue(newParams.initBounds);
+}
+
 #endif

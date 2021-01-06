@@ -4,10 +4,23 @@
 #include <iostream>
 #include "TextGridReader.h"
 
+#if defined(__GNUC__)
+// The GCC considers the C++17 filesystem header experimental
+#include <experimental/filesystem>
+namespace std::filesystem = std::experimental::filesystem
+#else
+#include <filesystem>
+#endif
+
 
 TextGridReader::TextGridReader(const std::string& textGridFile)
 {
 	tg = TextGrid::readTextGridFile(textGridFile);
+
+	if (tg.intervalTiers.empty() && tg.pointTiers.empty())
+	{
+		throw std::runtime_error("[read_data_file] TextGrid input file not found or corrupted!");
+	}
 }
 
 std::vector<double> TextGridReader::getBounds() const

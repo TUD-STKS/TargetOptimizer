@@ -220,10 +220,13 @@ void MainWindow::OnClear(wxCommandEvent& event)
 void MainWindow::OnHelp(wxCommandEvent& event)
 {
 	wxMessageBox(wxT(
-		"(1) Load Praat-TextGrid file (Praat -> Save as short text file...).\n"
-		"(2) Load Praat-PitchTier file (Praat -> Save as PitchTier spreadsheet file...).\n"
+
+		"(0) Step (1) and (2) can be done by selecting multiple files at once. \n"
+		"(1) Load Praat-TextGrid file.\n"
+		"(2) Load Praat-PitchTier file.\n"
 		"(3) Choose options and start optimization.\n"
-		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
+		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"
+		"(5) Press \"Init Bounds\" to reset boundaries to original.\n"), wxT("Help"));
 }
 
 
@@ -349,6 +352,13 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 			isPitchTierLoaded = true;
 		}
 	}
+
+	// Set the patience value to the default according to the number of targets
+	auto opts = optimizationOptions->getOptions();
+	opts.optimizerOptions.patience = 15 * (Data::getInstance().initialBoundaries.size() - 1);
+	optimizationOptions->setOptions(opts);
+
+
 	updateWidgets();
 }
 
@@ -444,16 +454,13 @@ void MainWindow::updateWidgets()
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable((isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
 	this->GetMenuBar()->Enable(IDM_OPTIMIZE, (isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
 
-
 	// Init bounds available after pitchtier is loaded
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_INIT_BOUNDS))->Enable( isPitchTierLoaded );
 	this->GetMenuBar()->Enable(IDM_INIT_BOUNDS, isPitchTierLoaded);
 	
-
 	// Saving files is only available after optimization
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_AS))->Enable(isOptimized);
 	this->GetMenuBar()->Enable(IDM_SAVE_AS, isOptimized);
-
 
 	// The pitch target display is only available after optimization
 	targetOptions->boundaryPage->Enable(isTextGridLoaded);

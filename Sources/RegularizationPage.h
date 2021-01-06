@@ -10,6 +10,7 @@ class RegularizationPage :
 public:
 	RegularizationPage(wxWindow *parent, wxWindowID id);
 	RegularizationParameters getParameters();
+	void setParameters(RegularizationParameters newParams);
 private:
 	wxSpinCtrlDouble* lambda;
 	wxSpinCtrlDouble* weightSlope;

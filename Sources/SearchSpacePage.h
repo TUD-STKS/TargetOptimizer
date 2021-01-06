@@ -13,6 +13,7 @@ public:
 	SearchSpacePage(wxWindow *parent, wxWindowID id);
 	
 	SearchSpaceParameters getParameters();
+	void setParameters(SearchSpaceParameters newParams);
 private:
 	wxSpinCtrlDouble *deltaSlopeCtrl;
 	wxSpinCtrlDouble *deltaOffsetCtrl;
