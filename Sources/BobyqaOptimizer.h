@@ -6,7 +6,6 @@
 #include <wx/progdlg.h>
 #endif
 
-
 struct OptimizerOptions
 {
 	int maxIterations{ 1000 };

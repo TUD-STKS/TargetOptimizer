@@ -249,10 +249,13 @@ void MainWindow::OnClear(wxCommandEvent& event)
 void MainWindow::OnHelp(wxCommandEvent& event)
 {
 	wxMessageBox(wxT(
-		"(1) Load Praat-TextGrid file (Praat -> Save as short text file...).\n"
-		"(2) Load Praat-PitchTier file (Praat -> Save as PitchTier spreadsheet file...).\n"
+
+		"(0) Step (1) and (2) can be done by selecting multiple files at once. \n"
+		"(1) Load Praat-TextGrid file.\n"
+		"(2) Load Praat-PitchTier file.\n"
 		"(3) Choose options and start optimization.\n"
-		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
+		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"
+		"(5) Press \"Init Bounds\" to reset boundaries to original.\n"), wxT("Help"));
 }
 
 
