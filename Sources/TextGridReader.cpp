@@ -7,9 +7,10 @@
 #if defined(__GNUC__)
 // The GCC considers the C++17 filesystem header experimental
 #include <experimental/filesystem>
-namespace std::filesystem = std::experimental::filesystem
+using namespace std::experimental::filesystem;
 #else
 #include <filesystem>
+using namespace std::filesystem;
 #endif
 
 

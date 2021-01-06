@@ -14,9 +14,10 @@
 #if defined(__GNUC__)
 // The GCC considers the C++17 filesystem header experimental
 #include <experimental/filesystem>
-namespace std::filesystem = std::experimental::filesystem
+using namespace std::experimental::filesystem;
 #else
 #include <filesystem>
+using namespace std::filesystem;
 #endif
 
 class TargetOptimizerGui : public wxApp
@@ -46,7 +47,7 @@ int main(int argc, char* argv[])
 #ifdef USE_WXWIDGETS
 		// If using the GUI redirect console output to log file
 		std::cout << "When using the graphical user interface, all output to stdout is re-routed to a log file 'TargetOptimizer.log'."
-			<< "Look for it in " << std::filesystem::current_path().string() << std::endl;
+			<< "Look for it in " << current_path().string() << std::endl;
 		std::ofstream outFile("TargetOptimizer.log");
 		std::cout.rdbuf(outFile.rdbuf());
 
