@@ -1,12 +1,15 @@
 #include "BobyqaOptimizer.h"
+
 #include <omp.h>
 #include <dlib/optimization.h>
 #include <dlib/threads.h>
+
 #include <iostream> //eclude again
 //#include <string>
 #include <fstream>
 #include <chrono>
 #include <ctime>
+
 
 
 void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
