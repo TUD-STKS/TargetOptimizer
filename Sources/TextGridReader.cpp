@@ -3,11 +3,17 @@
 #include <dlib/error.h>
 #include <iostream>
 #include "TextGridReader.h"
+#include <filesystem>
 
 
 TextGridReader::TextGridReader(const std::string& textGridFile)
 {
 	tg = TextGrid::readTextGridFile(textGridFile);
+
+	if (tg.intervalTiers.empty() && tg.pointTiers.empty())
+	{
+		throw std::runtime_error("[read_data_file] TextGrid input file not found or corrupted!");
+	}
 }
 
 std::vector<double> TextGridReader::getBounds() const

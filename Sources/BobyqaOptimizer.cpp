@@ -1,7 +1,7 @@
+#include "BobyqaOptimizer.h"
 #include <omp.h>
 #include <dlib/optimization.h>
 #include <dlib/threads.h>
-#include "BobyqaOptimizer.h"
 #include <iostream> //eclude again
 //#include <string>
 #include <fstream>
