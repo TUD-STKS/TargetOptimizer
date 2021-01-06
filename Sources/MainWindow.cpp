@@ -378,6 +378,13 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 			isPitchTierLoaded = true;
 		}
 	}
+
+	// Set the patience value to the default according to the number of targets
+	auto opts = optimizationOptions->getOptions();
+	opts.optimizerOptions.patience = 15 * (Data::getInstance().initialBoundaries.size() - 1);
+	optimizationOptions->setOptions(opts);
+
+
 	updateWidgets();
 }
 
@@ -478,16 +485,13 @@ void MainWindow::updateWidgets()
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable((isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
 	this->GetMenuBar()->Enable(IDM_OPTIMIZE, (isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
 
-
 	// Init bounds available after pitchtier is loaded
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_INIT_BOUNDS))->Enable( isPitchTierLoaded );
 	this->GetMenuBar()->Enable(IDM_INIT_BOUNDS, isPitchTierLoaded);
 	
-
 	// Saving files is only available after optimization
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_AS))->Enable(isOptimized);
 	this->GetMenuBar()->Enable(IDM_SAVE_AS, isOptimized);
-
 
 	// The pitch target display is only available after optimization
 	//static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);

@@ -74,6 +74,16 @@ OptimizerOptions OptimizerPage::getParameters() const
 	return opts;
 }
 
+void OptimizerPage::setParameters(OptimizerOptions newOptions)
+{
+	maxIterations->SetValue(newOptions.maxIterations);
+	maxCostEvaluations->SetValue(newOptions.maxCostEvaluations);
+	rhoEnd->SetValue(newOptions.rhoEnd);
+	useEarlyStopping->SetValue(newOptions.useEarlyStopping);
+	epsilon->SetValue(newOptions.epsilon);
+	patience->SetValue(newOptions.patience);
+}
+
 void OptimizerPage::OnChangeValue(wxSpinEvent& event)
 {
 	useEarlyStopping->SetValue(true);

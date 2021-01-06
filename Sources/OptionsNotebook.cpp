@@ -24,4 +24,11 @@ OptimizationOptions OptionsNotebook::getOptions()
 	return OptimizationOptions{ params, opts };
 }
 
+void OptionsNotebook::setOptions(OptimizationOptions newOptions)
+{
+	regularizationPage->setParameters(newOptions.problemParams.regularizationParameters);
+	searchSpacePage->setParameters(newOptions.problemParams.searchSpaceParameters);
+	optimizerPage->setParameters(newOptions.optimizerOptions);
+}
+
 #endif // USE_WXWIDGETS
