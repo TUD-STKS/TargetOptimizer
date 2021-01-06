@@ -41,7 +41,6 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 	std::getline(fin, line);
 	std::getline(fin, line);
 
-	// following lines
 	while (std::getline(fin, line))
 	{
 		tokens = dlib::split(line, "\t");
@@ -57,8 +56,8 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 			throw dlib::error("Wrong PitchTier File Format!");
 		}
 
-		Sample s = { time,hz2st(value) };
-		//Sample s = { time, value };
+		Sample s = { time,hz2st(value) }; // With Hz to St conversion
+		//Sample s = { time, value }; // Without Hz to St conversion
 		m_f0.push_back(s);
 	}
 

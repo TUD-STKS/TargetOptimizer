@@ -39,10 +39,7 @@ static const int IDP_SEARCH_OPTIONS = wxNewId();
 static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
 
 
-//typedef void (wxEvtHandler::*MyEventFunction)(MyEvent&);
-//#define MyEventHandler(func) wxEVENT_HANDLER_CAST(MyEventFunction, func)
-//wxDEFINE_EVENT(EVT_GRID_CELL_CHANGED, MyEvent);
-//#define EVT_GRID(id, func) wx__DECLARE_EVT1(EVT_GRID_CELL_CHANGED, id, MyEventHandler(func))
+
 
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(IDM_CLEAR, OnClear)
@@ -122,10 +119,6 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	button = new wxButton(this, IDB_INIT_BOUNDS, wxT("Init Bounds"));
 	actionsSizer->Add(button, buttonFlags);
 
-	//button = new wxButton(this, IDB_SAVE_CSV, wxT("Save as CSV"));
-	//actionsSizer->Add(button, buttonFlags);
-	//button = new wxButton(this, IDB_SAVE_PITCHTIER, wxT("Save as PitchTier"));
-	//actionsSizer->Add(button, buttonFlags);
 
 	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize Targets"));
 	actionsSizer->Add(button, buttonFlags);
@@ -141,32 +134,10 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	// Targets
 	wxStaticBoxSizer* targetsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
 
-	//// The notebook with optimization options
-	//targetOptions = new OptionsNotebook(this, wxID_ANY);
-	//targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
-	//resultsTable = new wxGrid(this, IDC_TARGET_DISPLAY);
-	//resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-	//resultsTable->EnableEditing(false);
-	//resultsTable->CreateGrid(4, 1);
-	//resultsTable->SetRowLabelValue(0, wxT("Slope [st/s]"));
-	//resultsTable->SetRowLabelValue(1, wxT("Offset [st]"));
-	//resultsTable->SetRowLabelValue(2, wxT("Tau [ms]"));
-	//resultsTable->SetRowLabelValue(3, wxT("Duration [s]"));
-	//resultsTable->SetColLabelValue(0, wxEmptyString);
-	//resultsTable->SetRowLabelSize(wxGRID_AUTOSIZE);
-	//resultsTable->SetRowLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
-	//resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
-	//resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
-	//resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
-	//targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
 
-
-	//wxStaticBoxSizer* optionsSizer2 = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
 	//// The notebook with optimization options
 	targetOptions = new TargetsNotebook(this, wxID_ANY);
 	targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
-	//bottomSizer->Add(optionsSizer2, wxSizerFlags().Border(wxALL, 5).Expand());
-
 
 
 	bottomSizer->Add(targetsSizer, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
@@ -398,8 +369,7 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 
 void MainWindow::OnOptimize(wxCommandEvent& event)
 {
-	//for (int i = 0; i<2;++i)
-	//{
+
 	auto options = optimizationOptions->getOptions();
 	auto parameters = options.problemParams;
 	auto optimizerOptions = options.optimizerOptions;
@@ -446,7 +416,7 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	wxMessageBox(msg.str(), wxT("Information"));
 	isOptimized = true;
 	updateWidgets();
-	//}
+
 }
 
 void MainWindow::OnSaveAs(wxCommandEvent& event)
@@ -468,10 +438,6 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 	{
 		DataIO::savePitchTier(Data::getInstance().optimalF0, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
-	//else if (saveFileDialog.GetPath().EndsWith(wxT("TO")))
-	//{
-	//	DataIO::saveTOFile(std::string(saveFileDialog.GetPath().utf8_str()));
-	//}
 	else
 	{
 		wxMessageBox(wxT("Please use one of the supported file types!"), wxT("Unsupported file format"), wxICON_ERROR);
@@ -497,12 +463,10 @@ void MainWindow::updateWidgets()
 	this->GetMenuBar()->Enable(IDM_SAVE_AS, isOptimized);
 
 	// The pitch target display is only available after optimization
-	//static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
 	targetOptions->boundaryPage->Enable(isTextGridLoaded);
 
 	if (!Data::getInstance().optimalBoundaries.empty())
 	{
-		//std::cout << Data::getInstance().syllableBoundaries.at(0) << std::endl;
 		targetOptions->boundaryPage->setEntries( Data::getInstance().optimalBoundaries );
 	}
 	else if (!Data::getInstance().initialBoundaries.empty())
@@ -518,20 +482,6 @@ void MainWindow::updateWidgets()
 	if (!Data::getInstance().pitchTargets.empty())
 	{
 		targetOptions->resultPage->setEntries( Data::getInstance().pitchTargets );
-//		// Resize result table to correct number of columns
-//		int colDifference = Data::getInstance().pitchTargets.size() - resultsTable->GetNumberCols();
-//		if (colDifference > 0) { resultsTable->InsertCols(0, colDifference); }
-//		if (colDifference < 0) { resultsTable->DeleteCols(0, -1*colDifference); }
-//		int col = 0;
-//		for (const auto& target : Data::getInstance().pitchTargets)
-//		{
-//			resultsTable->SetColLabelValue(col, wxT("Target ") + wxString::Format(wxT("%i"), col));
-//			resultsTable->SetCellValue(wxGridCellCoords(0, col), wxString::Format(wxT("%.3f"), target.slope));
-//			resultsTable->SetCellValue(wxGridCellCoords(1, col), wxString::Format(wxT("%.3f"), target.offset));
-//			resultsTable->SetCellValue(wxGridCellCoords(2, col), wxString::Format(wxT("%.3f"), target.tau));
-//			resultsTable->SetCellValue(wxGridCellCoords(3, col), wxString::Format(wxT("%.3f"), target.duration));
-//			col++;
-//		}
 	}
 
 }

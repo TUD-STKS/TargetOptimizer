@@ -67,7 +67,6 @@ public:
 
 	// operator called by optimizer
 	double operator() (const DlibVector& arg) const;
-	//BoundaryVector m_bounds;
 
 
 private:
@@ -82,7 +81,6 @@ private:
 	BoundaryVector m_bounds;
 	double m_computationTime;
 	std::vector<double> m_optimizationSolutions;
-	//BoundaryVector m_bounds;
 
 	// store result
 	TamModelF0 m_modelOptimalF0;

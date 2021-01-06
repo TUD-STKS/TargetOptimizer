@@ -5,7 +5,7 @@
 
 ResultPage::ResultPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
 {
-	//wxFlexGridSizer* resultsSizer{ new wxFlexGridSizer(3) };
+
 	wxBoxSizer* resultsSizer{ new wxBoxSizer(wxVERTICAL) };
 	resultsTable = new wxGrid(this, IDC_RESULT_TABLE);
 	resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
@@ -28,10 +28,6 @@ ResultPage::ResultPage(wxWindow* parent, wxWindowID id) : wxPanel(parent, id)
 ResultParameters ResultPage::getParameters()
 {
 	ResultParameters params;
-	//params.slopeDelta = slopeDeltaCtrl->GetValue();
-	//params.offsetDelta = offsetDeltaCtrl->GetValue();
-	//params.tauDelta = tauDeltaCtrl->GetValue();
-	//params.boundaryDelta = boundaryDeltaCtrl->GetValue();
 	return params;
 }
 

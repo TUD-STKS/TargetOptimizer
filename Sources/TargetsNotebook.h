@@ -21,9 +21,7 @@ public:
     ResultPage *resultPage;
 
 private:
-	//TODO: Create an OptionsPage class
-//    BoundaryPage *boundaryPage;
-//    ResultPage* resultPage;
+
 };
 
 // Because it is templated, the constructor has to be in the header file
