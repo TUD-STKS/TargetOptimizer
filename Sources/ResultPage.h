@@ -29,12 +29,7 @@ public:
 	
 	wxGrid *resultsTable;
 private:
-	//wxSpinCtrlDouble *slopeDeltaCtrl;
-	//wxSpinCtrlDouble *offsetDeltaCtrl;
-	//wxSpinCtrlDouble *tauDeltaCtrl;
-	//wxSpinCtrlDouble *boundaryDeltaCtrl;
 
-    //wxGrid *resultsTable;
 };
 
 #endif

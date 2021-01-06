@@ -28,7 +28,6 @@ public:
 	// Decorator design pattern: When the GUI is used, update an optional progress dialog after every iteration
 	void optimize(OptimizationProblem& op, OptimizerOptions optOpt, wxGenericProgressDialog* waitbar);
 #endif
-	//void optimize_targets_and_boundaries(OptimizationProblem& op) const;
 
 private:
 	// private member functions

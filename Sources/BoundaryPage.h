@@ -2,7 +2,6 @@
 #ifdef USE_WXWIDGETS
 
 #include <wx/wx.h>
-//#include <wx/spinctrl.h>
 #include <wx/grid.h>
 #include <vector>
 #include "Data.h"
@@ -30,12 +29,7 @@ public:
 
 	wxGrid *boundaryTable;
 private:
-	//wxSpinCtrlDouble *slopeDeltaCtrl;
-	//wxSpinCtrlDouble *offsetDeltaCtrl;
-	//wxSpinCtrlDouble *tauDeltaCtrl;
-	//wxSpinCtrlDouble *boundaryDeltaCtrl;
 
-	//wxGrid *boundaryTable;
 };
 
 #endif

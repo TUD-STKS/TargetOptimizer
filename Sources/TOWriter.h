@@ -8,7 +8,6 @@ public:
 
 	// public member functions
 	void writeLOG(const Sample& onset, const TargetVector& optTargets, const BoundaryVector& optBoundaries) const;
-	//void writeLOG(const Sample& onset, const TargetVector& targets) const;
 
 private:
 	// data members

@@ -2,8 +2,6 @@
 #include <dlib/optimization.h>
 #include <dlib/threads.h>
 #include "BobyqaOptimizer.h"
-#include <iostream> //eclude again
-//#include <string>
 #include <fstream>
 #include <chrono>
 #include <ctime>
@@ -11,10 +9,9 @@
 
 void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 {
-	//std::cout << "omp cancel " << omp_get_cancellation()  << std::endl;
 	unsigned number_Targets = op.getPitchTargets().size();
 	ParameterSet ps = op.getParameters();
-	bool optimizeBoundaries = ps.searchSpaceParameters.optimizeBoundaries;//(ps.deltaBoundary != 0);
+	bool optimizeBoundaries = ps.searchSpaceParameters.optimizeBoundaries;
 	BoundaryVector initialBoundaries = op.getBoundaries();
 	initialBoundaries.back() = op.getOriginalF0_Offset();
 	BoundaryVector tmpBoundaries = initialBoundaries;
@@ -25,10 +22,8 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 	int number_optVar = ps.searchSpaceParameters.numberOptVar; // Optimize the 3 target parameters by default
 
 	double tmpMSE = 1e6;
-	//double minMSE = 1e6;
 	double tmpSCC = 0;
-	//double minSCC = 0;
-	//double minMSE = 1e6; //this is the mse corresponding to
+
 
 	const unsigned RANDOMITERATIONS = optOpt.maxIterations;
 	const int patience = optOpt.patience;
@@ -38,17 +33,13 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 	const long max_f_evals = optOpt.maxCostEvaluations;
 	const double rho_end = optOpt.rhoEnd;
 
-	//bool writeLOG = (LOG_PATH != "");
 
 	bool relativeDelta = true;
 
 
-	//srand(1);
 
 
 	// precalculate search space bounds (ssp_bounds)
-
-
 	std::vector<double> min_bounds;
 	std::vector<double> max_bounds;
 	min_bounds.push_back(ps.searchSpaceParameters.meanSlope - ps.searchSpaceParameters.deltaSlope); //mmin
@@ -75,19 +66,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			lowerBound(number_optVar * i + ssp_bound) = min_bounds.at(ssp_bound);
 			upperBound(number_optVar * i + ssp_bound) = max_bounds.at(ssp_bound);
 		}
-		//lowerBound(number_optVar * i + 0) = mmin;
-		//lowerBound(number_optVar * i + 1) = bmin;
-		//lowerBound(number_optVar * i + 2) = tmin;
-		//upperBound(number_optVar * i + 0) = mmax;
-		//upperBound(number_optVar * i + 1) = bmax;
-		//upperBound(number_optVar * i + 2) = tmax;
-
 	}
-
-	//	auto min_slope_offset_tau = std::min(std::min(mmax - mmin, bmax - bmin), tmax - tmin)
-	//	double trustRegion = std::for_each(min_bounds.begin(), min_bounds.end(), [&r = x, x = x+1]()-> double {
-	//            a = std::min( a, b )
-	//            return std::min(a, b);
 
 
 	double trustRegion = max_bounds.at(0) - min_bounds.at(0);
@@ -99,12 +78,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 	// optmization setup
 	long npt(2 * lowerBound.size() + 1);	// number of interpolation points
 	const double rho_begin = (trustRegion - 1.0) / 2.0; // initial trust region radius
-	//std::cout << "rho_begint"<< rho_begint << std::endl;
 
-	//const double rho_begin = (std::min(std::min(max_bounds.at(0)-min_bounds.at(0), max_bounds.at(1)-min_bounds.at(1)), max_bounds.at(2)-min_bounds.at(2)) -1.0) /2.0;
-	std::cout << "rho_begin" << rho_begin << std::endl;
-	//const double rho_end(1e-6); // stopping trust region radius -> accuracy
-	//const long max_f_evals(1e6); // max number of objective function evaluations
 
 	// initialize
 	double fmin(1e6);
@@ -114,22 +88,17 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 	// set up OpenMP
 	int numThreads = omp_get_max_threads();
 	omp_set_num_threads(numThreads);
-	//std::cout << "BobyqaOptimizer line 84" << std::endl;
+	
 	bool SearchFinished = false;
 	int boundaryResetCounter = 0;
 	int iteration = 0;
 	int convergence = 0;
 
 	std::vector<double> ftmp_vector(RANDOMITERATIONS, -1.0);
-	//v.size(); //returns RANDOMITERATIONS
+	
 
-	std::ofstream LOG;
+	//std::ofstream LOG;
 
-	//	if ( writeLOG )
-	//	{
-	//  		LOG.open ( LOG_PATH );
-	//  		LOG << "fmin ftmp tmpMSE tmpSCC time" << "\n";
-	//	}
 
 	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
@@ -158,7 +127,6 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			try
 			{
 				// optimization algorithm: BOBYQA
-				//std::cout << "x: " << x << std::endl;
 				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
 			}
 			catch (dlib::bobyqa_failure & err)
@@ -179,7 +147,6 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 					else { convergence = 0; }
 					fmin = ftmp;
 					xtmp = x;
-					//std::cout << "ftmp: " << ftmp << std::endl;
 				}
 				else
 				{
@@ -277,7 +244,6 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 
 
 	// store optimum
-	//op.setOptimum( optBoundaries, optTargets );
 	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
 	double computationTime = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
 	op.setOptimum(optBoundaries, optTargets, computationTime, ftmp_vector);

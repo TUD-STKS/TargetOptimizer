@@ -172,8 +172,6 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	BoundaryVector initialBounds = m_bounds;
 	initialBounds.back() = getOriginalF0_Offset();
 	BoundaryVector boundaries = initialBounds;
-	//boundaries.front() = getOriginalF0_Onset();
-	//boundaries.back()  = getOriginalF0_Offset();
 	bool relativeDelta = true;
 
 
@@ -181,10 +179,9 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	double modified_Bound = 0.0;
 	double number_Targets = arg.size() / m_parameters.searchSpaceParameters.numberOptVar;
 	double number_optVar = m_parameters.searchSpaceParameters.numberOptVar;
-	//for (unsigned i = 0; i < arg.size() / m_parameters.numberOptVar; ++i)
+
 	if ( m_parameters.searchSpaceParameters.optimizeBoundaries == true )
 	{
-		//boundaries.back()  = getOriginalF0_Offset();
 		for (unsigned i = 0; i < number_Targets; ++i)
 		{
 			if ( relativeDelta ){
@@ -229,13 +226,13 @@ double OptimizationProblem::operator() (const DlibVector& arg) const
 	}
 
 	// DEBUG #Hack
-if (targets.back().duration == 0.0)
-{
-	targets.back().duration += 0.001;
-	targets.end()[-2].duration -= 0.001;
-	boundaries.end()[-2] -= 0.001;
-}
-// END DEBUG
+	if (targets.back().duration == 0.0)
+	{
+		targets.back().duration += 0.001;
+		targets.end()[-2].duration -= 0.001;
+		boundaries.end()[-2] -= 0.001;
+	}
+	// END DEBUG
 	TamModelF0 tamF0(boundaries, m_originalF0[0].value);
 	tamF0.setPitchTargets(targets);
 
@@ -251,17 +248,11 @@ double OptimizationProblem::costFunction(const TamModelF0& tamF0) const // TODO:
 
 	// calculate error
 	double error = 0.0;
-	//double x = 0.0;
-	//double x_slope = 0.0;
-	//double x_offset = 0.0;
-	//double x_tau = 0.0;
+
 	for (unsigned i = 0; i < modelF0.size(); ++i)
 	{
 		error += std::pow((m_originalF0[i].value - modelF0[i].value), 2.0);
-		//x = m_originalF0[i].value - modelF0[i].value;
-		//error += x*x;
 	}
-	//std::cout << "error " << error << std::endl;
 
 	// calculate penalty term
 	double penalty = 0.0;
@@ -272,14 +263,6 @@ double OptimizationProblem::costFunction(const TamModelF0& tamF0) const // TODO:
 		penalty += (m_parameters.regularizationParameters.weightSlope * std::pow(targets[i].slope - m_parameters.searchSpaceParameters.meanSlope, 2.0));
 		penalty += (m_parameters.regularizationParameters.weightOffset * std::pow(targets[i].offset - m_parameters.searchSpaceParameters.meanOffset, 2.0));
 		penalty += (m_parameters.regularizationParameters.weightTau * std::pow(targets[i].tau - m_parameters.searchSpaceParameters.meanTau, 2.0));
-
-
-		//x_slope  = targets[i].slope  - m_parameters.searchSpaceParameters.meanSlope;
-		//x_offset = targets[i].offset - m_parameters.searchSpaceParameters.meanOffset;
-		//x_tau    = targets[i].tau    - m_parameters.searchSpaceParameters.meanTau;
-		//penalty += (m_parameters.regularizationParameters.weightSlope * x_slope * x_slope);
-		//penalty += (m_parameters.regularizationParameters.weightOffset * x_offset * x_offset);
-		//penalty += (m_parameters.regularizationParameters.weightTau * x_tau * x_tau);
 	}
 
 	return error + m_parameters.regularizationParameters.lambda * penalty;

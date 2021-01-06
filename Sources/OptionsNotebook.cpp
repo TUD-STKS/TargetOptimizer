@@ -7,8 +7,7 @@ OptimizationOptions OptionsNotebook::getOptions()
 	ParameterSet params;
 	params.searchSpaceParameters = searchSpacePage->getParameters();
 	params.regularizationParameters = regularizationPage->getParameters();
-	
-	// TODO: Make meanTau a tunable parameter in the GUI (?)	
+		
 
 	// TODO: Find a better place for meanF0 calculation
 	//calculate mean f0

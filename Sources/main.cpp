@@ -10,7 +10,7 @@
 
 #ifdef USE_WXWIDGETS
 #include <wx/wx.h>
-#include <filesystem>
+#include <experimental/filesystem>
 
 class TargetOptimizerGui : public wxApp
 {
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 #ifdef USE_WXWIDGETS
 		// If using the GUI redirect console output to log file
 		std::cout << "When using the graphical user interface, all output to stdout is re-routed to a log file 'TargetOptimizer.log'."
-			<< "Look for it in " << std::filesystem::current_path().string() << std::endl;
+			<< "Look for it in " << std::experimental::filesystem::current_path().string() << std::endl;
 		std::ofstream outFile("TargetOptimizer.log");
 		std::cout.rdbuf(outFile.rdbuf());
 
@@ -337,29 +337,6 @@ int main(int argc, char* argv[])
 					LOG << optTargets.at(i).duration << " ";
 				}
 				LOG << "\n";
-
-
-
-				//				for (unsigned i = 0; i < f0.size(); ++i)
-				//				{
-				//					LOG_F0 << "ORI_F0 " << f0.at(i).time << " " << f0.at(i).value << "\n";
-				//				}
-				//				for (unsigned i = 0; i < bounds.size(); ++i)
-				//				{
-				//					LOG_F0 << "ORI_BOUNDS " << bounds.at(i) <<  "\n";
-				//				}
-				//				for (unsigned i = 0; i < optF0.size(); ++i)
-				//				{
-				//					LOG_F0 << "OPT_F0 " << optF0.at(i).time << " " << optF0.at(i).value << "\n";
-				//				}
-				//				for (unsigned i = 0; i < optTargets.size(); ++i)
-				//				{
-				//					LOG_F0 << "OPT_TARGETS " << optTargets.at(i).slope << " " << optTargets.at(i).offset << " " << optTargets.at(i).tau << " " << optTargets.at(i).duration << " " <<  "\n";
-				//				}
-				//				for (unsigned i = 0; i < optBoundaries.size(); ++i)
-				//				{
-				//					LOG_F0 << "OPT_BOUNDS " << optBoundaries.at(i) <<  "\n";
-				//				}
 				LOG.close();
 			}
 
