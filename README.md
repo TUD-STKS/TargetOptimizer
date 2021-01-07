@@ -9,23 +9,23 @@ Hence, it is similar to PENTAtrainer, but differs in the following ways:
 
 The motivation for these differences are described in Birkholz P, Schmager P, Xu Y (2018). Estimation of Pitch Targets from Speech Signals by Joint Regularized Optimization. In: Proc. of the 26th European Signal Processing Conference (EUSIPCO 2018), pp. 2089-2093, Rome, Italy. [pdf](http://www.vocaltractlab.de/publications/birkholz-2018-eusipco.pdf)
 
-TargetOptimizer 2.0 is an extension of TargetOptimizer. The performance in terms of minimizing RMSE during estimation of pitch targets has been greatly improved by:
+**TargetOptimizer 2.0** is an extension of TargetOptimizer. The performance in terms of minimizing RMSE during estimation of pitch targets has been greatly improved by:
 - Making the boundaries a free, fully optimizable parameter (using syllable boundaries as target boundaries does not always lead to optimal estimation result)
 - Tuning all free parameters on a test corpus to find optimal default values
 
 Various additions in terms of functionality have been implemented, such as increasing overall performance by adding features like early-stopping during parameter optimization or adding the possibility to work on contours different from pitch contours.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Benchmark results and added features are described in HIER REFERENZ ZUM ESSV-PAPER EINFÜGEN!
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Benchmark results and added features are described in _**HIER REFERENZ ZUM ESSV-PAPER EINFÜGEN!**_
+
 
 The software can be executed as a command line tool (without a GUI, to support batch processing) or as an application with a GUI.
 
 ## Build for Windows using Visual Studio 2019+
 Simply open the solution TargetOptimizer.sln and build in dependency of desired use case:
 1. Command line tool ("Release")
-2a. GUI ("wxWidgets_Release") when using wxWidgets
-2b. GUI ("wxWidgets_VCPKG_Release") -> when using VCPKG and wxWidgets
+2. GUI ("wxWidgets_Release") when using wxWidgets
+3. GUI ("wxWidgets_VCPKG_Release") -> when using VCPKG and wxWidgets
 
 ## Build for Linux using GCC:
 Navigate inside the Sources folder and run one of the following commands.
@@ -43,12 +43,14 @@ Run TargetOptimizer -h for instructions.
 
 ## Using TargetOptimizer 2.0
 A screenshot of the GUI is shown below (for the German word "Betriebssportgemeinschaft").
+
 ![Screenshot Target Optimizer 2.0](doc/TargetOptimizer_GUI.png)
 
 Following steps are necessary to successfully extract targets for an utterance:
 1. Input the boundaries (which can be loaded in terms of a Praat TextGrid file or manually initialized by selecting the amount of desired boundaries and pressing "Init bounds")
 2. Input the contour to work on (which can be loaded in terms of a Praat PitchTier file)
 3. Carefully think about the parameters you want to change (as mentioned above, default values are generally well suited)
+
 	--> Detailed description of all tunable parameters can be found in the manual, which is provided in the folder "docs".
 4. Press "Optimize"
 5. Export the results as a CSV file, a gestural score for VocalTractLab, or as a Praat PitchTier file with the model f0 contour
