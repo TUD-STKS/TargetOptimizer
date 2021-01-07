@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.6127547173310006 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.6127547173310006 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.25822462573822236 
+            text = "" 
+        intervals [2]:
+            xmin = 0.25822462573822236 
+            xmax = 0.5816275659826289 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.5816275659826289 
+            xmax = 0.7790339120779635 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.7790339120779635 
+            xmax = 0.9523436588385437 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.9523436588385437 
+            xmax = 1.166628737702709 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.166628737702709 
+            xmax = 1.4629776318462433 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.4629776318462433 
+            xmax = 1.6127547173310006 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.6127547173310006 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.6127547173310006 
+            text = "Hauseigentümer" 

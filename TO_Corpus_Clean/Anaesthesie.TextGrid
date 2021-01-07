@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.3661689525510212 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.3661689525510212 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.21872268442970721 
+            text = "" 
+        intervals [2]:
+            xmin = 0.21872268442970721 
+            xmax = 0.3057491133949952 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.3057491133949952 
+            xmax = 0.5443699670094873 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5443699670094873 
+            xmax = 0.7124788751272462 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.7124788751272462 
+            xmax = 1.1163831480788673 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.1163831480788673 
+            xmax = 1.3661689525510212 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.3661689525510212 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.3661689525510212 
+            text = "Anästhesie" 

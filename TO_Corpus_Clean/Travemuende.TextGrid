@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.8456067243458598 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.8456067243458598 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.45711134940612297 
+            text = "" 
+        intervals [2]:
+            xmin = 0.45711134940612297 
+            xmax = 0.7222835881885708 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.7222835881885708 
+            xmax = 0.8548697075797946 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.8548697075797946 
+            xmax = 1.1782807090854917 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.1782807090854917 
+            xmax = 1.4360182122011445 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.4360182122011445 
+            xmax = 1.8456067243458598 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.8456067243458598 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.8456067243458598 
+            text = "Travemünde" 

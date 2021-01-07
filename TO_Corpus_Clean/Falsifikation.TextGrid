@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.9113095546227967 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.9113095546227967 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.20559077782431245 
+            text = "" 
+        intervals [2]:
+            xmin = 0.20559077782431245 
+            xmax = 0.44902566912254116 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.44902566912254116 
+            xmax = 0.5991965436247 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5991965436247 
+            xmax = 0.755690402316425 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.755690402316425 
+            xmax = 0.9279917214820515 
+            text = "4" 
+        intervals [6]:
+            xmin = 0.9279917214820515 
+            xmax = 1.6081620698736359 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.6081620698736359 
+            xmax = 1.9113095546227967 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.9113095546227967 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.9113095546227967 
+            text = "Falsifikation" 

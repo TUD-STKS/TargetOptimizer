@@ -1,0 +1,56 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.062309052794845 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.062309052794845 
+        intervals: size = 8 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.4094523974899218 
+            text = "" 
+        intervals [2]:
+            xmin = 0.4094523974899218 
+            xmax = 0.5783097658351721 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.5783097658351721 
+            xmax = 0.7405844888429769 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.7405844888429769 
+            xmax = 1.0320073413890682 
+            text = "3" 
+        intervals [5]:
+            xmin = 1.0320073413890682 
+            xmax = 1.1803971499348975 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.1803971499348975 
+            xmax = 1.3663108181129928 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.3663108181129928 
+            xmax = 1.6434800490203614 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.6434800490203614 
+            xmax = 2.062309052794845 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.062309052794845 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.062309052794845 
+            text = "Kugelschreibermine" 

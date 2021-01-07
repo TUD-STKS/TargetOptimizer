@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.7343803615928621 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.7343803615928621 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.22241974309519463 
+            text = "" 
+        intervals [2]:
+            xmin = 0.22241974309519463 
+            xmax = 0.45479529572611455 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.45479529572611455 
+            xmax = 0.5609421531007328 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5609421531007328 
+            xmax = 0.7359410260696961 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.7359410260696961 
+            xmax = 0.8851203931907818 
+            text = "4" 
+        intervals [6]:
+            xmin = 0.8851203931907818 
+            xmax = 1.3002432280117375 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.3002432280117375 
+            xmax = 1.7343803615928621 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.7343803615928621 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.7343803615928621 
+            text = "Kosmetologie" 

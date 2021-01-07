@@ -1,0 +1,60 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.0548796751035923 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.0548796751035923 
+        intervals: size = 9 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.4487650158601859 
+            text = "" 
+        intervals [2]:
+            xmin = 0.4487650158601859 
+            xmax = 0.6204130540124702 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.6204130540124702 
+            xmax = 0.7546724105870304 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.7546724105870304 
+            xmax = 0.8838333105828085 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.8838333105828085 
+            xmax = 1.0416723666448924 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.0416723666448924 
+            xmax = 1.2798134382014439 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.2798134382014439 
+            xmax = 1.425969193459828 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.425969193459828 
+            xmax = 1.799593425183911 
+            text = "7" 
+        intervals [9]:
+            xmin = 1.799593425183911 
+            xmax = 2.0548796751035923 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.0548796751035923 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.0548796751035923 
+            text = "Badewannenhalterung" 

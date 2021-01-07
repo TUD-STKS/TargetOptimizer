@@ -1,0 +1,64 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.3933011446509767 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.3933011446509767 
+        intervals: size = 10 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.38015774277165093 
+            text = "" 
+        intervals [2]:
+            xmin = 0.38015774277165093 
+            xmax = 0.5305903610652081 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.5305903610652081 
+            xmax = 0.7938474430789313 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.7938474430789313 
+            xmax = 0.9561563207114503 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.9561563207114503 
+            xmax = 1.0768982906575957 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.0768982906575957 
+            xmax = 1.2293102855076512 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.2293102855076512 
+            xmax = 1.5292858144893415 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.5292858144893415 
+            xmax = 1.8152057462299211 
+            text = "7" 
+        intervals [9]:
+            xmin = 1.8152057462299211 
+            xmax = 2.122059504111313 
+            text = "8" 
+        intervals [10]:
+            xmin = 2.122059504111313 
+            xmax = 2.3933011446509767 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.3933011446509767 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.3933011446509767 
+            text = "Unfallversicherungsträger" 

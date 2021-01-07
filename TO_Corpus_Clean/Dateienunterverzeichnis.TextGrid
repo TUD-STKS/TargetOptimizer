@@ -1,0 +1,64 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.470173376475959 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.470173376475959 
+        intervals: size = 10 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.324950844076632 
+            text = "" 
+        intervals [2]:
+            xmin = 0.324950844076632 
+            xmax = 0.4291414794351702 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.4291414794351702 
+            xmax = 0.6702100083039433 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.6702100083039433 
+            xmax = 0.8030019945452196 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.8030019945452196 
+            xmax = 1.0123825597464098 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.0123825597464098 
+            xmax = 1.1829913705587103 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.1829913705587103 
+            xmax = 1.3443847076827176 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.3443847076827176 
+            xmax = 1.7611472491168705 
+            text = "7" 
+        intervals [9]:
+            xmin = 1.7611472491168705 
+            xmax = 2.1717809296475785 
+            text = "8" 
+        intervals [10]:
+            xmin = 2.1717809296475785 
+            xmax = 2.470173376475959 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.470173376475959 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.470173376475959 
+            text = "Dateienunterverzeichnis" 

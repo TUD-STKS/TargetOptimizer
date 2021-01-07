@@ -1,0 +1,56 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.984164503230101 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.984164503230101 
+        intervals: size = 8 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.2675804705609828 
+            text = "" 
+        intervals [2]:
+            xmin = 0.2675804705609828 
+            xmax = 0.5384284999264324 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.5384284999264324 
+            xmax = 0.6958816367107268 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.6958816367107268 
+            xmax = 0.892801713101413 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.892801713101413 
+            xmax = 1.058428499926432 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.058428499926432 
+            xmax = 1.2653088576071276 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.2653088576071276 
+            xmax = 1.6411236049005247 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.6411236049005247 
+            xmax = 1.984164503230101 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.984164503230101 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.984164503230101 
+            text = "Reiseaktentasche" 

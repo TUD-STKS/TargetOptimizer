@@ -1,0 +1,64 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 2.4131008535761467 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 2.4131008535761467 
+        intervals: size = 10 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.3912857839478008 
+            text = "" 
+        intervals [2]:
+            xmin = 0.3912857839478008 
+            xmax = 0.4631328516154909 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.4631328516154909 
+            xmax = 0.6016777854740383 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.6016777854740383 
+            xmax = 0.8716777854740414 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.8716777854740414 
+            xmax = 1.011677785474042 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.011677785474042 
+            xmax = 1.1277182275415853 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.1277182275415853 
+            xmax = 1.4816777854740408 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.4816777854740408 
+            xmax = 1.7623673252728125 
+            text = "7" 
+        intervals [9]:
+            xmin = 1.7623673252728125 
+            xmax = 2.0860153458665494 
+            text = "8" 
+        intervals [10]:
+            xmin = 2.0860153458665494 
+            xmax = 2.4131008535761467 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 2.4131008535761467 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 2.4131008535761467 
+            text = "Analog-digital-Wandler" 

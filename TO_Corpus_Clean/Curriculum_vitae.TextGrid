@@ -1,0 +1,56 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.9928459105576977 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.9928459105576977 
+        intervals: size = 8 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.2703994084346242 
+            text = "" 
+        intervals [2]:
+            xmin = 0.2703994084346242 
+            xmax = 0.39839681874608246 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.39839681874608246 
+            xmax = 0.5396175838698127 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5396175838698127 
+            xmax = 0.7265139103979017 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.7265139103979017 
+            xmax = 1.005974529162124 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.005974529162124 
+            xmax = 1.1745636596199063 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.1745636596199063 
+            xmax = 1.7014234069490435 
+            text = "6" 
+        intervals [8]:
+            xmin = 1.7014234069490435 
+            xmax = 1.9928459105576977 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.9928459105576977 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.9928459105576977 
+            text = "Curriculum_vitae" 

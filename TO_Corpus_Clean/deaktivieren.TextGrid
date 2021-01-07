@@ -1,0 +1,52 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.7739479707383694 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.7739479707383694 
+        intervals: size = 7 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.2113554026605513 
+            text = "" 
+        intervals [2]:
+            xmin = 0.2113554026605513 
+            xmax = 0.31405529579758706 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.31405529579758706 
+            xmax = 0.5209222234021809 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.5209222234021809 
+            xmax = 0.6911106177435542 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.6911106177435542 
+            xmax = 0.9324375627344708 
+            text = "4" 
+        intervals [6]:
+            xmin = 0.9324375627344708 
+            xmax = 1.293472758925347 
+            text = "5" 
+        intervals [7]:
+            xmin = 1.293472758925347 
+            xmax = 1.7739479707383694 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.7739479707383694 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.7739479707383694 
+            text = "deaktivieren" 

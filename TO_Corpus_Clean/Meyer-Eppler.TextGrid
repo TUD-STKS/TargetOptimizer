@@ -1,0 +1,48 @@
+File type = "ooTextFile"
+Object class = "TextGrid"
+
+xmin = 0 
+xmax = 1.530355469923812 
+tiers? <exists> 
+size = 2 
+item []: 
+    item [1]:
+        class = "IntervalTier" 
+        name = "Position" 
+        xmin = 0 
+        xmax = 1.530355469923812 
+        intervals: size = 6 
+        intervals [1]:
+            xmin = 0 
+            xmax = 0.3038379312368029 
+            text = "" 
+        intervals [2]:
+            xmin = 0.3038379312368029 
+            xmax = 0.4635438693048961 
+            text = "1" 
+        intervals [3]:
+            xmin = 0.4635438693048961 
+            xmax = 0.6126634788607408 
+            text = "2" 
+        intervals [4]:
+            xmin = 0.6126634788607408 
+            xmax = 0.8873157076902256 
+            text = "3" 
+        intervals [5]:
+            xmin = 0.8873157076902256 
+            xmax = 1.1793368762842462 
+            text = "4" 
+        intervals [6]:
+            xmin = 1.1793368762842462 
+            xmax = 1.530355469923812 
+            text = "" 
+    item [2]:
+        class = "IntervalTier" 
+        name = "ORT" 
+        xmin = 0 
+        xmax = 1.530355469923812 
+        intervals: size = 1 
+        intervals [1]:
+            xmin = 0 
+            xmax = 1.530355469923812 
+            text = "Meyer-Eppler" 
