@@ -31,6 +31,11 @@ TextGrid TextGrid::readTextGridFile(const std::string& inputFilename)
 			TextGrid tg = ShortTextGridFactory(inputFile, lineElements);
 			return tg;
 		}
+		else
+		{
+			TextGrid tg;
+			return tg;
+		}
 	}
 	else
 	{
