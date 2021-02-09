@@ -8,6 +8,8 @@
 #include "MainWindow.h"
 #include "BobyqaOptimizer.h"
 
+#include "Icon/bullseye.xpm"
+
 
 /* Menu IDs */
 static const int IDM_OPEN = wxNewId();
@@ -65,6 +67,8 @@ wxEND_EVENT_TABLE()
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size)
 	: wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
+	SetIcon(wxIcon(bullseye_xpm));
+	
 	this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
 	// The top level sizer for the main window

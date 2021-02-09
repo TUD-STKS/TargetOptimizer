@@ -177,4 +177,7 @@
   <ItemGroup>
     <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TargetOptimizer.rc" />
+  </ItemGroup>
 </Project>
