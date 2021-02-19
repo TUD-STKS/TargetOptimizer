@@ -8,12 +8,16 @@
 #include "MainWindow.h"
 #include "BobyqaOptimizer.h"
 
+#include "Icon/bullseye.xpm"
+
 
 /* Menu IDs */
 static const int IDM_OPEN = wxNewId();
 static const int IDM_OPTIMIZE = wxNewId();
 static const int IDM_SAVE_AS = wxNewId();
 static const int IDM_CLEAR = wxNewId();
+
+static const int IDM_INIT_BOUNDS = wxNewId();
 
 /* Buit-in IDs in use */
 // wxID_EXIT
@@ -25,18 +29,25 @@ static const int IDB_OPEN = wxNewId();
 static const int IDB_OPTIMIZE = wxNewId();
 static const int IDB_SAVE_AS = wxNewId();
 static const int IDB_CLEAR = wxNewId();
+static const int IDB_INIT_BOUNDS = wxNewId();
 
 /* Control IDs */
-static const int IDC_TARGET_DISPLAY = wxNewId();
+//static const int IDC_TARGET_DISPLAY = wxNewId();
+//static const int IDC_BOUNDARY_TABLE = wxNewId();
+//static const int IDC_RESULT_TABLE = wxNewId();
 
 /* */
 static const int IDP_SEARCH_OPTIONS = wxNewId();
 static const int IDP_REGULARIZATION_OPTIONS = wxNewId();
 
+
+
+
 wxBEGIN_EVENT_TABLE(MainWindow, wxFrame)
 EVT_MENU(IDM_CLEAR, OnClear)
 EVT_MENU(IDM_OPEN, OnOpen)
 EVT_MENU(IDM_OPTIMIZE, OnOptimize)
+EVT_MENU(IDM_INIT_BOUNDS, OnInitBounds)
 EVT_MENU(IDM_SAVE_AS, OnSaveAs)
 
 EVT_MENU(wxID_HELP, OnHelp)
@@ -46,12 +57,18 @@ EVT_MENU(wxID_EXIT, OnQuit)
 EVT_BUTTON(IDB_CLEAR, OnClear)
 EVT_BUTTON(IDB_OPEN, OnOpen)
 EVT_BUTTON(IDB_OPTIMIZE, OnOptimize)
+EVT_BUTTON(IDB_INIT_BOUNDS, OnInitBounds)
 EVT_BUTTON(IDB_SAVE_AS, OnSaveAs)
+
+EVT_GRID_CMD_CELL_CHANGED(IDC_BOUNDARY_TABLE, OnBoundaryCellChanged)
+
 wxEND_EVENT_TABLE()
 
 MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& size)
 	: wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
+	SetIcon(wxIcon(bullseye_xpm));
+	
 	this->SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
 	// The top level sizer for the main window
@@ -64,9 +81,11 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	wxMenuBar* menuBar(new wxMenuBar());
 	// File menu
 	wxMenu* menu(new wxMenu());
+
 	menu->Append(IDM_OPEN, wxT("&Open File(s)..."));
 	menu->Append(IDM_OPTIMIZE, wxT("Optimize &Targets"));
 	menu->Append(IDM_SAVE_AS, wxT("&Save as..."));
+	menu->Append(IDM_INIT_BOUNDS, wxT("&Init Bounds"));
 	menu->Append(IDM_CLEAR, wxT("&Clear"));
 	menu->AppendSeparator();
 	menu->Append(wxID_EXIT, wxT("&Quit"));
@@ -101,6 +120,10 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 	wxSizerFlags buttonFlags;
 	buttonFlags.Expand().Border(wxALL, 5);
 	actionsSizer->Add(button, buttonFlags);
+	button = new wxButton(this, IDB_INIT_BOUNDS, wxT("Init Bounds"));
+	actionsSizer->Add(button, buttonFlags);
+
+
 	button = new wxButton(this, IDB_OPTIMIZE, wxT("Optimize Targets"));
 	actionsSizer->Add(button, buttonFlags);
 	button = new wxButton(this, IDB_SAVE_AS, wxT("Save as..."));
@@ -110,24 +133,16 @@ MainWindow::MainWindow(const wxString& title, const wxPoint& pos, const wxSize& 
 
 	bottomSizer->Add(actionsSizer, wxSizerFlags().Border(wxALL, 5).Expand());
 
+	
+
 	// Targets
 	wxStaticBoxSizer* targetsSizer = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Targets"));
-	resultsTable = new wxGrid(this, IDC_TARGET_DISPLAY);
-	resultsTable->SetLabelBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-	resultsTable->EnableEditing(false);
-	resultsTable->CreateGrid(4, 1);
-	resultsTable->SetRowLabelValue(0, wxT("Slope [st/s]"));
-	resultsTable->SetRowLabelValue(1, wxT("Offset [st]"));
-	resultsTable->SetRowLabelValue(2, wxT("Tau [ms]"));
-	resultsTable->SetRowLabelValue(3, wxT("Duration [s]"));
-	resultsTable->SetColLabelValue(0, wxEmptyString);
-	resultsTable->SetRowLabelSize(wxGRID_AUTOSIZE);
-	resultsTable->SetRowLabelAlignment(wxALIGN_LEFT, wxALIGN_CENTER);
-	resultsTable->SetColLabelSize(wxGRID_AUTOSIZE);
-	resultsTable->SetColLabelAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
-	resultsTable->SetDefaultCellAlignment(wxALIGN_RIGHT, wxALIGN_CENTER);
 
-	targetsSizer->Add(resultsTable, wxSizerFlags(1).Expand().Border(wxALL, 5));
+
+	//// The notebook with optimization options
+	targetOptions = new TargetsNotebook(this, wxID_ANY);
+	targetsSizer->Add(targetOptions, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
+
 
 	bottomSizer->Add(targetsSizer, wxSizerFlags(1).Align(wxCENTER).Border(wxALL, 5).Expand());
 
@@ -143,12 +158,12 @@ void MainWindow::clear()
 	// Reset data
 	Data::getInstance().reset();
 	isTextGridLoaded = false;
+	isBoundariesInit = false;
 	isPitchTierLoaded = false;
 	isOptimized = false;
 
-	resultsTable->DeleteCols(0, resultsTable->GetNumberCols());
-	resultsTable->InsertCols(0, 1);
-	resultsTable->SetColLabelValue(0, wxEmptyString);
+	targetOptions->ResetTargetTables();
+
 	this->SetTitle("Target Optimizer");
 }
 
@@ -167,6 +182,39 @@ void MainWindow::OnAbout(wxCommandEvent& event)
 	wxAboutBox(info);
 }
 
+void MainWindow::OnBoundaryCellChanged(wxGridEvent& event)
+{
+	double Cell;
+	auto Cell_Str = targetOptions->boundaryPage->boundaryTable->GetCellValue( event.GetRow(), event.GetCol() );
+	Cell_Str.ToDouble(&Cell);
+
+	if ( !Cell_Str.ToDouble(&Cell) || (Cell < 0) ) 
+	{
+		wxMessageBox(wxT("Error: The cell entries must be positive numbers!"), wxT("Parameter error"), wxICON_ERROR);
+		if (isOptimized)
+		{
+			targetOptions->boundaryPage->setEntries(Data::getInstance().optimalBoundaries);
+		}
+		else
+		{
+			targetOptions->boundaryPage->setEntries(Data::getInstance().initialBoundaries);
+		}
+		
+		return;
+	}
+
+	if (isOptimized)
+	{
+		Data::getInstance().optimalBoundaries.at(event.GetCol()) = Cell;
+	}
+	else
+	{
+		Data::getInstance().initialBoundaries.at(event.GetCol()) = Cell;
+	}
+	
+	updateWidgets();
+}
+
 void MainWindow::OnClear(wxCommandEvent& event)
 {
 	this->clear();
@@ -176,11 +224,61 @@ void MainWindow::OnClear(wxCommandEvent& event)
 void MainWindow::OnHelp(wxCommandEvent& event)
 {
 	wxMessageBox(wxT(
-		"(1) Load Praat-TextGrid file (Praat -> Save as short text file...).\n"
-		"(2) Load Praat-PitchTier file (Praat -> Save as PitchTier spreadsheet file...).\n"
+
+		"(0) Step (1) and (2) can be done by selecting multiple files at once. \n"
+		"(1) Load Praat-TextGrid file.\n"
+		"(2) Load Praat-PitchTier file.\n"
 		"(3) Choose options and start optimization.\n"
-		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"), wxT("Help"));
+		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"
+		"(5) Press \"Init Bounds\" to reset boundaries to original.\n"), wxT("Help"));
 }
+
+
+void MainWindow::OnInitBounds(wxCommandEvent& event)
+{
+	std::cout << "begin fo time: " << Data::getInstance().originalF0.at(0).time << 
+	" end time: " << Data::getInstance().originalF0.back().time << std::endl;
+
+	auto problemParams = optimizationOptions->getOptions().problemParams;
+	std::cout << "number of init bounds: " << problemParams.searchSpaceParameters.initBounds << std::endl;
+
+	if (problemParams.searchSpaceParameters.initBounds > 1)
+	{
+		double pitch_start = Data::getInstance().originalF0.at(0).time;
+		double pitch_end = Data::getInstance().originalF0.back().time;
+		double pitch_interval = pitch_end - pitch_start;
+		double step = pitch_interval / (problemParams.searchSpaceParameters.initBounds - 1);
+
+
+		std::vector<double> initBoundaries;
+		for (int i = 0; i < problemParams.searchSpaceParameters.initBounds; ++i)
+		{
+			initBoundaries.push_back(pitch_start + i * step);
+		}
+		Data::getInstance().pitchTargets.clear();
+		Data::getInstance().optimalF0.clear();
+		Data::getInstance().initialBoundaries = initBoundaries;
+		Data::getInstance().optimalBoundaries.clear();
+		initBoundaries.clear();
+		isBoundariesInit = true;
+	}
+	else if( (problemParams.searchSpaceParameters.initBounds <= 1) && (!isTextGridLoaded) )
+	{
+		wxMessageBox(wxT("Error: There must be at least two boundaries!"), wxT("Parameter error"), wxICON_ERROR);
+	}
+	else if(isTextGridLoaded) // Initialize with TextGrid boundaries again
+	{
+		Data::getInstance().pitchTargets.clear();
+		Data::getInstance().optimalF0.clear();
+		Data::getInstance().initialBoundaries = tg.getBounds();		
+		Data::getInstance().optimalBoundaries.clear();
+	}
+	
+	isOptimized = false;
+	updateWidgets();
+
+}
+
 
 void MainWindow::OnOpen(wxCommandEvent& event)
 {
@@ -216,7 +314,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 	{
 		if (filepath.EndsWith("TextGrid"))
 		{
-			auto tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
+			tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
 			wxArrayString choices;
 			for (const auto& tierName : tg.getIntervalTierNames())
 			{
@@ -230,14 +328,15 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 			{
 				if (intervalChoiceDialog.ShowModal() == wxID_OK)
 				{
-					Data::getInstance().syllableBoundaries = tg.getBounds(std::string(intervalChoiceDialog.GetStringSelection().utf8_str()));
+					tg.syllableBoundaryTierName = std::string(intervalChoiceDialog.GetStringSelection().utf8_str());
 				}
 				else
 				{
-					Data::getInstance().syllableBoundaries = tg.getBounds();
+
 				}
+				Data::getInstance().initialBoundaries = tg.getBounds();
 			}
-			catch (std::runtime_error & e)
+			catch (std::runtime_error &e)
 			{
 				wxMessageBox(wxString(e.what()), wxT("Error"), wxICON_ERROR);
 			}
@@ -257,6 +356,13 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 			isPitchTierLoaded = true;
 		}
 	}
+
+	// Set the patience value to the default according to the number of targets
+	auto opts = optimizationOptions->getOptions();
+	opts.optimizerOptions.patience = OptimizerOptions::recommendedPatience(Data::getInstance().initialBoundaries.size() - 1);
+	optimizationOptions->setOptions(opts);
+
+
 	updateWidgets();
 }
 
@@ -267,23 +373,32 @@ void MainWindow::OnQuit(wxCommandEvent& event)
 
 void MainWindow::OnOptimize(wxCommandEvent& event)
 {
-	auto options = optimizationOptions->getOptions();
 
-	if (options.deltaOffset == 0 || options.deltaSlope == 0 || options.deltaTau == 0)
+	auto options = optimizationOptions->getOptions();
+	auto parameters = options.problemParams;
+	auto optimizerOptions = options.optimizerOptions;
+
+	if (parameters.searchSpaceParameters.deltaOffset == 0 || parameters.searchSpaceParameters.deltaSlope == 0 || parameters.searchSpaceParameters.deltaTau == 0)
 	{
 		wxMessageBox(wxT("Error: 0 is not a valid search space parameter!"), wxT("Parameter error"), wxICON_ERROR);
 		return;
 	}
+	if ( Data::getInstance().initialBoundaries.size() <= 1 )
+	{
+		wxMessageBox(wxT("Error: There must be at least two boundaries!"), wxT("Parameter error"), wxICON_ERROR);
+		return;
+	}
 
-	OptimizationProblem problem(options,
+	OptimizationProblem problem(parameters,
 		Data::getInstance().originalF0,
-		Data::getInstance().syllableBoundaries);
+		Data::getInstance().initialBoundaries);
+	
 	BobyqaOptimizer optimizer;
-	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), 100, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
-	pd.Pulse();
+	wxProgressDialog pd(wxT("Please wait"), wxT("Optimizing targets..."), options.optimizerOptions.maxIterations, this, wxPD_APP_MODAL | wxPD_AUTO_HIDE | wxPD_SMOOTH);
+	
 	try
 	{
-		optimizer.optimize(problem);
+		optimizer.optimize( problem, optimizerOptions, &pd);
 	}
 	catch (const std::exception&)
 	{
@@ -291,11 +406,13 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 		wxMessageBox(wxT("Something went wrong during the optimization. Did you choose matching TextGrid and PitchTier files?"), wxT("Error"), wxICON_ERROR);
 		return;
 	}
+	
 	pd.Close();
 
 	Data::getInstance().pitchTargets = problem.getPitchTargets();
 	Data::getInstance().optimalF0 = problem.getModelF0();
 	Data::getInstance().onset = problem.getOnset();
+	Data::getInstance().optimalBoundaries = problem.getBoundaries();
 
 
 	std::ostringstream msg;
@@ -303,26 +420,27 @@ void MainWindow::OnOptimize(wxCommandEvent& event)
 	wxMessageBox(msg.str(), wxT("Information"));
 	isOptimized = true;
 	updateWidgets();
+
 }
 
 void MainWindow::OnSaveAs(wxCommandEvent& event)
 {
 	wxString defaultName = this->GetTitle().AfterFirst('-').Trim();
 	wxFileDialog saveFileDialog(this, wxT("Save as..."), "", defaultName,
-		wxT("Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier|All supported files (*.ges, *.csv, *.PitchTier)|*.ges; *.csv; *.PitchTier"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
+		wxT("Gestural Score file (*.ges)|*.ges|CSV file (*.csv)|*.csv|PitchTier file (*.PitchTier)|*.PitchTier|All supported files (*.ges, *.csv, *.PitchTier, *.TO)|*.ges; *.csv; *.PitchTier; *.TO"), wxFD_SAVE | wxFD_OVERWRITE_PROMPT | wxFD_CHANGE_DIR);
 	if (saveFileDialog.ShowModal() == wxID_CANCEL)
 		return;
 	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
 	{
-		DataIO::saveGesturalScore(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveGesturalScore(Data::getInstance().onset, Data::getInstance().pitchTargets, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("csv")))
 	{
-		DataIO::saveCsvFile(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveCsvFile(Data::getInstance().onset, Data::getInstance().pitchTargets, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("PitchTier")))
 	{
-		DataIO::savePitchTier(std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::savePitchTier(Data::getInstance().optimalF0, std::string(saveFileDialog.GetPath().utf8_str()));
 	}
 	else
 	{
@@ -332,42 +450,42 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 
 void MainWindow::updateWidgets()
 {
-	// Clear is only available when any of the files are loaded
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_CLEAR))->Enable(isTextGridLoaded || isPitchTierLoaded);
-	this->GetMenuBar()->Enable(IDM_CLEAR, isTextGridLoaded || isPitchTierLoaded);
+	// Clear is only available when any of the files are loaded or boundaries are initialized
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_CLEAR))->Enable(isTextGridLoaded || isPitchTierLoaded || isBoundariesInit);
+	this->GetMenuBar()->Enable(IDM_CLEAR, isTextGridLoaded || isPitchTierLoaded || isBoundariesInit);
 
 	// Optimization is only available if all necessary files are loaded
-	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable(isTextGridLoaded && isPitchTierLoaded);
-	this->GetMenuBar()->Enable(IDM_OPTIMIZE, isTextGridLoaded && isPitchTierLoaded);
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_OPTIMIZE))->Enable((isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
+	this->GetMenuBar()->Enable(IDM_OPTIMIZE, (isBoundariesInit || isTextGridLoaded) && isPitchTierLoaded);
 
+	// Init bounds available after pitchtier is loaded
+	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_INIT_BOUNDS))->Enable( isPitchTierLoaded );
+	this->GetMenuBar()->Enable(IDM_INIT_BOUNDS, isPitchTierLoaded);
+	
 	// Saving files is only available after optimization
 	static_cast<wxButton*>(wxWindow::FindWindowById(IDB_SAVE_AS))->Enable(isOptimized);
 	this->GetMenuBar()->Enable(IDM_SAVE_AS, isOptimized);
 
 	// The pitch target display is only available after optimization
-	static_cast<wxGrid*>(wxWindow::FindWindowById(IDC_TARGET_DISPLAY))->Enable(isOptimized);
+	targetOptions->boundaryPage->Enable(isTextGridLoaded);
+
+	if (!Data::getInstance().optimalBoundaries.empty())
+	{
+		targetOptions->boundaryPage->setEntries( Data::getInstance().optimalBoundaries );
+	}
+	else if (!Data::getInstance().initialBoundaries.empty())
+	{
+		targetOptions->boundaryPage->setEntries(Data::getInstance().initialBoundaries);
+	}
+
+	targetOptions->resultPage->Enable(isOptimized);
 
 	plotRegion->Refresh();
 
 	// Add optimized targets to table
 	if (!Data::getInstance().pitchTargets.empty())
 	{
-		// Resize result table to correct number of columns
-		int colDifference = Data::getInstance().pitchTargets.size() - resultsTable->GetNumberCols();
-		if (colDifference > 0) { resultsTable->InsertCols(0, colDifference); }
-		if (colDifference < 0) { resultsTable->DeleteCols(0, -1 * colDifference); }
-
-		int col = 0;
-		for (const auto& target : Data::getInstance().pitchTargets)
-		{
-			resultsTable->SetColLabelValue(col, wxT("Target ") + wxString::Format(wxT("%i"), col));
-			resultsTable->SetCellValue(wxGridCellCoords(0, col), wxString::Format(wxT("%.3f"), target.slope));
-			resultsTable->SetCellValue(wxGridCellCoords(1, col), wxString::Format(wxT("%.3f"), target.offset));
-			resultsTable->SetCellValue(wxGridCellCoords(2, col), wxString::Format(wxT("%.3f"), target.tau));
-			resultsTable->SetCellValue(wxGridCellCoords(3, col), wxString::Format(wxT("%.3f"), target.duration));
-
-			col++;
-		}
+		targetOptions->resultPage->setEntries( Data::getInstance().pitchTargets );
 	}
 
 }

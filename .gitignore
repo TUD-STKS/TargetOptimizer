@@ -7,8 +7,17 @@
 /.vs/TargetOptimizer/v16
 /x64
 /TargetOptimizer.vcxproj.user
+/TargetOptimizer.vcproj
+/TargetOptimizer.vcproj.filters
 /dlib/out
 /.vs
 /TargetOptimizer.aps
 /RCb12296
 /RCa12296
+/LOG
+/TO_Hyper.zip
+/TO_Hyper.out
+/LOG_0.csv
+/LOG.zip
+/TargetOptimizer.log
+/2_Aesthetik_short_sonder.TextGrid

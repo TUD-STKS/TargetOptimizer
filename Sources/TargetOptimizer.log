@@ -1,0 +1,402 @@
+Number of opt var: 4
+random iteration: 0 begins.
+random iteration: 2 begins.
+random iteration: 1 begins.
+random iteration: 3 begins.
+Iteration nr: 3 fmin: 1e+06 ftmp: 25.3232
+random iteration: 3 ended. System time: Wed Jan  6 14:25:05 2021
+
+random iteration: 4 begins.
+Iteration nr: 0 fmin: 25.3232 ftmp: 28.1344
+random iteration: 0 ended. System time: Wed Jan  6 14:25:05 2021
+
+random iteration: 5 begins.
+Iteration nr: 1 fmin: 25.3232 ftmp: 28.1344
+random iteration: 1 ended. System time: Wed Jan  6 14:25:05 2021
+
+random iteration: 6 begins.
+Iteration nr: 6 fmin: 25.3232 ftmp: 14.1321
+random iteration: 6 ended. System time: Wed Jan  6 14:25:06 2021
+
+random iteration: 7 begins.
+Iteration nr: 5 fmin: 14.1321 ftmp: 6.1529
+random iteration: 5 ended. System time: Wed Jan  6 14:25:06 2021
+
+random iteration: 8 begins.
+Iteration nr: 4 fmin: 6.1529 ftmp: 6.58405
+random iteration: 4 ended. System time: Wed Jan  6 14:25:07 2021
+
+random iteration: 9 begins.
+Iteration nr: 2 fmin: 6.1529 ftmp: 6.44701
+random iteration: 2 ended. System time: Wed Jan  6 14:25:08 2021
+
+random iteration: 10 begins.
+Iteration nr: 8 fmin: 6.1529 ftmp: 25.4887
+random iteration: 8 ended. System time: Wed Jan  6 14:25:08 2021
+
+random iteration: 11 begins.
+Iteration nr: 9 fmin: 6.1529 ftmp: 11.86
+random iteration: 9 ended. System time: Wed Jan  6 14:25:08 2021
+
+random iteration: 12 begins.
+Iteration nr: 12 fmin: 6.1529 ftmp: 27.299
+random iteration: 12 ended. System time: Wed Jan  6 14:25:09 2021
+
+random iteration: 13 begins.
+Iteration nr: 13 fmin: 6.1529 ftmp: 132.908
+random iteration: 13 ended. System time: Wed Jan  6 14:25:09 2021
+
+random iteration: 14 begins.
+Iteration nr: 14 fmin: 6.1529 ftmp: 76.7749
+random iteration: 14 ended. System time: Wed Jan  6 14:25:09 2021
+
+random iteration: 15 begins.
+Iteration nr: 11 fmin: 6.1529 ftmp: 6.43266
+random iteration: 11 ended. System time: Wed Jan  6 14:25:09 2021
+
+random iteration: 16 begins.
+Iteration nr: 16 fmin: 6.1529 ftmp: 63.1599
+random iteration: 16 ended. System time: Wed Jan  6 14:25:09 2021
+
+random iteration: 17 begins.
+Iteration nr: 10 fmin: 6.1529 ftmp: 17.7733
+random iteration: 10 ended. System time: Wed Jan  6 14:25:10 2021
+
+random iteration: 18 begins.
+Iteration nr: 17 fmin: 6.1529 ftmp: 7.38948
+random iteration: 17 ended. System time: Wed Jan  6 14:25:10 2021
+
+random iteration: 19 begins.
+Iteration nr: 7 fmin: 6.1529 ftmp: 6.58408
+random iteration: 7 ended. System time: Wed Jan  6 14:25:10 2021
+
+random iteration: 20 begins.
+Iteration nr: 18 fmin: 6.1529 ftmp: 6.58404
+random iteration: 18 ended. System time: Wed Jan  6 14:25:11 2021
+
+random iteration: 21 begins.
+Iteration nr: 19 fmin: 6.1529 ftmp: 6.1528
+random iteration: 19 ended. System time: Wed Jan  6 14:25:12 2021
+
+random iteration: 22 begins.
+Iteration nr: 15 fmin: 6.1528 ftmp: 7.3826
+random iteration: 15 ended. System time: Wed Jan  6 14:25:12 2021
+
+random iteration: 23 begins.
+Iteration nr: 20 fmin: 6.1528 ftmp: 6.54698
+random iteration: 20 ended. System time: Wed Jan  6 14:25:13 2021
+
+random iteration: 24 begins.
+Iteration nr: 23 fmin: 6.1528 ftmp: 11.1812
+random iteration: 23 ended. System time: Wed Jan  6 14:25:13 2021
+
+random iteration: 25 begins.
+Iteration nr: 21 fmin: 6.1528 ftmp: 7.10961
+random iteration: 21 ended. System time: Wed Jan  6 14:25:13 2021
+
+random iteration: 26 begins.
+Iteration nr: 22 fmin: 6.1528 ftmp: 6.94233
+random iteration: 22 ended. System time: Wed Jan  6 14:25:14 2021
+
+random iteration: 27 begins.
+Iteration nr: 25 fmin: 6.1528 ftmp: 28.1345
+random iteration: 25 ended. System time: Wed Jan  6 14:25:15 2021
+
+random iteration: 28 begins.
+Iteration nr: 28 fmin: 6.1528 ftmp: 385.619
+random iteration: 28 ended. System time: Wed Jan  6 14:25:15 2021
+
+random iteration: 29 begins.
+Iteration nr: 26 fmin: 6.1528 ftmp: 25.7472
+random iteration: 26 ended. System time: Wed Jan  6 14:25:15 2021
+
+random iteration: 30 begins.
+Iteration nr: 27 fmin: 6.1528 ftmp: 6.15286
+random iteration: 27 ended. System time: Wed Jan  6 14:25:15 2021
+
+random iteration: 31 begins.
+Iteration nr: 24 fmin: 6.1528 ftmp: 24.4589
+random iteration: 24 ended. System time: Wed Jan  6 14:25:16 2021
+
+random iteration: 32 begins.
+Iteration nr: 29 fmin: 6.1528 ftmp: 14.4484
+random iteration: 29 ended. System time: Wed Jan  6 14:25:16 2021
+
+random iteration: 33 begins.
+Iteration nr: 32 fmin: 6.1528 ftmp: 6.08414
+random iteration: 32 ended. System time: Wed Jan  6 14:25:17 2021
+
+random iteration: 34 begins.
+Iteration nr: 31 fmin: 6.08414 ftmp: 7.38261
+random iteration: 31 ended. System time: Wed Jan  6 14:25:17 2021
+
+random iteration: 35 begins.
+Iteration nr: 35 fmin: 6.08414 ftmp: 27.5338
+random iteration: 35 ended. System time: Wed Jan  6 14:25:17 2021
+
+random iteration: 36 begins.
+Iteration nr: 34 fmin: 6.08414 ftmp: 6.54699
+random iteration: 34 ended. System time: Wed Jan  6 14:25:18 2021
+
+random iteration: 37 begins.
+Iteration nr: 33 fmin: 6.08414 ftmp: 27.3688
+random iteration: 33 ended. System time: Wed Jan  6 14:25:18 2021
+
+random iteration: 38 begins.
+Iteration nr: 30 fmin: 6.08414 ftmp: 27.227
+random iteration: 30 ended. System time: Wed Jan  6 14:25:18 2021
+
+random iteration: 39 begins.
+Iteration nr: 36 fmin: 6.08414 ftmp: 24.4589
+random iteration: 36 ended. System time: Wed Jan  6 14:25:19 2021
+
+random iteration: 40 begins.
+Iteration nr: 37 fmin: 6.08414 ftmp: 6.08413
+random iteration: 37 ended. System time: Wed Jan  6 14:25:19 2021
+
+random iteration: 41 begins.
+Iteration nr: 39 fmin: 6.08413 ftmp: 26.9933
+random iteration: 39 ended. System time: Wed Jan  6 14:25:20 2021
+
+random iteration: 42 begins.
+Iteration nr: 38 fmin: 6.08413 ftmp: 6.54698
+random iteration: 38 ended. System time: Wed Jan  6 14:25:22 2021
+
+random iteration: 43 begins.
+Iteration nr: 41 fmin: 6.08413 ftmp: 6.1528
+random iteration: 41 ended. System time: Wed Jan  6 14:25:22 2021
+
+random iteration: 44 begins.
+Iteration nr: 43 fmin: 6.08413 ftmp: 14.757
+random iteration: 43 ended. System time: Wed Jan  6 14:25:23 2021
+
+random iteration: 45 begins.
+Iteration nr: 42 fmin: 6.08413 ftmp: 25.0662
+random iteration: 42 ended. System time: Wed Jan  6 14:25:24 2021
+
+random iteration: 46 begins.
+Iteration nr: 46 fmin: 6.08413 ftmp: 60.7965
+random iteration: 46 ended. System time: Wed Jan  6 14:25:24 2021
+
+random iteration: 47 begins.
+Iteration nr: 40 fmin: 6.08413 ftmp: 7.89937
+random iteration: 40 ended. System time: Wed Jan  6 14:25:24 2021
+
+random iteration: 48 begins.
+Iteration nr: 47 fmin: 6.08413 ftmp: 24.611
+random iteration: 47 ended. System time: Wed Jan  6 14:25:25 2021
+
+random iteration: 49 begins.
+Iteration nr: 44 fmin: 6.08413 ftmp: 25.6961
+random iteration: 44 ended. System time: Wed Jan  6 14:25:26 2021
+
+random iteration: 50 begins.
+Iteration nr: 45 fmin: 6.08413 ftmp: 7.04094
+random iteration: 45 ended. System time: Wed Jan  6 14:25:26 2021
+
+random iteration: 51 begins.
+Iteration nr: 48 fmin: 6.08413 ftmp: 49.4024
+random iteration: 48 ended. System time: Wed Jan  6 14:25:28 2021
+
+random iteration: 52 begins.
+Iteration nr: 49 fmin: 6.08413 ftmp: 24.9612
+random iteration: 49 ended. System time: Wed Jan  6 14:25:32 2021
+
+random iteration: 53 begins.
+Iteration nr: 50 fmin: 6.08413 ftmp: 25.2436
+random iteration: 50 ended. System time: Wed Jan  6 14:25:33 2021
+
+random iteration: 54 begins.
+Iteration nr: 52 fmin: 6.08413 ftmp: 14.159
+random iteration: 52 ended. System time: Wed Jan  6 14:25:34 2021
+
+random iteration: 55 begins.
+Iteration nr: 51 fmin: 6.08413 ftmp: 13.8239
+random iteration: 51 ended. System time: Wed Jan  6 14:25:35 2021
+
+random iteration: 56 begins.
+Iteration nr: 53 fmin: 6.08413 ftmp: 6.94242
+random iteration: 53 ended. System time: Wed Jan  6 14:25:39 2021
+
+random iteration: 57 begins.
+Iteration nr: 55 fmin: 6.08413 ftmp: 24.3184
+random iteration: 55 ended. System time: Wed Jan  6 14:25:40 2021
+
+random iteration: 58 begins.
+Iteration nr: 56 fmin: 6.08413 ftmp: 7.10963
+random iteration: 56 ended. System time: Wed Jan  6 14:25:40 2021
+
+random iteration: 59 begins.
+Iteration nr: 54 fmin: 6.08413 ftmp: 27.4019
+random iteration: 54 ended. System time: Wed Jan  6 14:25:41 2021
+
+random iteration: 60 begins.
+Iteration nr: 59 fmin: 6.08413 ftmp: 14.4939
+random iteration: 59 ended. System time: Wed Jan  6 14:25:44 2021
+
+random iteration: 61 begins.
+Iteration nr: 58 fmin: 6.08413 ftmp: 6.08413
+random iteration: 58 ended. System time: Wed Jan  6 14:25:44 2021
+
+random iteration: 62 begins.
+Iteration nr: 57 fmin: 6.08413 ftmp: 6.1528
+random iteration: 57 ended. System time: Wed Jan  6 14:25:45 2021
+
+random iteration: 63 begins.
+Iteration nr: 60 fmin: 6.08413 ftmp: 14.9069
+random iteration: 60 ended. System time: Wed Jan  6 14:25:47 2021
+
+random iteration: 64 begins.
+Iteration nr: 61 fmin: 6.08413 ftmp: 28.2332
+random iteration: 61 ended. System time: Wed Jan  6 14:25:48 2021
+
+random iteration: 65 begins.
+Iteration nr: 62 fmin: 6.08413 ftmp: 7.10961
+random iteration: 62 ended. System time: Wed Jan  6 14:25:49 2021
+
+random iteration: 66 begins.
+Iteration nr: 63 fmin: 6.08413 ftmp: 15.8298
+random iteration: 63 ended. System time: Wed Jan  6 14:25:52 2021
+
+random iteration: 67 begins.
+Iteration nr: 65 fmin: 6.08413 ftmp: 49.4839
+random iteration: 65 ended. System time: Wed Jan  6 14:25:54 2021
+
+random iteration: 68 begins.
+Iteration nr: 68 fmin: 6.08413 ftmp: 92.4944
+random iteration: 68 ended. System time: Wed Jan  6 14:25:54 2021
+
+random iteration: 69 begins.
+Iteration nr: 64 fmin: 6.08413 ftmp: 27.6487
+random iteration: 64 ended. System time: Wed Jan  6 14:25:55 2021
+
+random iteration: 70 begins.
+Iteration nr: 69 fmin: 6.08413 ftmp: 6.58405
+random iteration: 69 ended. System time: Wed Jan  6 14:25:58 2021
+
+random iteration: 71 begins.
+Iteration nr: 67 fmin: 6.08413 ftmp: 6.58405
+random iteration: 67 ended. System time: Wed Jan  6 14:26:00 2021
+
+random iteration: 72 begins.
+Iteration nr: 66 fmin: 6.08413 ftmp: 6.58411
+random iteration: 66 ended. System time: Wed Jan  6 14:26:01 2021
+
+random iteration: 73 begins.
+Iteration nr: 71 fmin: 6.08413 ftmp: 25.6973
+random iteration: 71 ended. System time: Wed Jan  6 14:26:02 2021
+
+random iteration: 74 begins.
+Iteration nr: 73 fmin: 6.08413 ftmp: 26.5849
+random iteration: 73 ended. System time: Wed Jan  6 14:26:02 2021
+
+random iteration: 75 begins.
+Iteration nr: 74 fmin: 6.08413 ftmp: 724.693
+random iteration: 74 ended. System time: Wed Jan  6 14:26:02 2021
+
+random iteration: 76 begins.
+Iteration nr: 70 fmin: 6.08413 ftmp: 24.8749
+random iteration: 70 ended. System time: Wed Jan  6 14:26:02 2021
+
+random iteration: 77 begins.
+Iteration nr: 72 fmin: 6.08413 ftmp: 10.8982
+random iteration: 72 ended. System time: Wed Jan  6 14:26:03 2021
+
+random iteration: 78 begins.
+Iteration nr: 76 fmin: 6.08413 ftmp: 6.44702
+random iteration: 76 ended. System time: Wed Jan  6 14:26:08 2021
+
+random iteration: 79 begins.
+Iteration nr: 77 fmin: 6.08413 ftmp: 27.3149
+random iteration: 77 ended. System time: Wed Jan  6 14:26:08 2021
+
+random iteration: 80 begins.
+Iteration nr: 75 fmin: 6.08413 ftmp: 6.15281
+random iteration: 75 ended. System time: Wed Jan  6 14:26:09 2021
+
+random iteration: 81 begins.
+Iteration nr: 78 fmin: 6.08413 ftmp: 28.5618
+random iteration: 78 ended. System time: Wed Jan  6 14:26:11 2021
+
+random iteration: 82 begins.
+Iteration nr: 80 fmin: 6.08413 ftmp: 25.3231
+random iteration: 80 ended. System time: Wed Jan  6 14:26:13 2021
+
+random iteration: 83 begins.
+Iteration nr: 81 fmin: 6.08413 ftmp: 11.8117
+random iteration: 81 ended. System time: Wed Jan  6 14:26:14 2021
+
+random iteration: 84 begins.
+Iteration nr: 79 fmin: 6.08413 ftmp: 6.54699
+random iteration: 79 ended. System time: Wed Jan  6 14:26:16 2021
+
+random iteration: 85 begins.
+Iteration nr: 83 fmin: 6.08413 ftmp: 24.9482
+random iteration: 83 ended. System time: Wed Jan  6 14:26:17 2021
+
+random iteration: 86 begins.
+Iteration nr: 86 fmin: 6.08413 ftmp: 72.7311
+random iteration: 86 ended. System time: Wed Jan  6 14:26:18 2021
+
+random iteration: 87 begins.
+Iteration nr: 84 fmin: 6.08413 ftmp: 7.40379
+random iteration: 84 ended. System time: Wed Jan  6 14:26:18 2021
+
+random iteration: 88 begins.
+Iteration nr: 82 fmin: 6.08413 ftmp: 6.1528
+random iteration: 82 ended. System time: Wed Jan  6 14:26:19 2021
+
+random iteration: 89 begins.
+Iteration nr: 85 fmin: 6.08413 ftmp: 6.43267
+random iteration: 85 ended. System time: Wed Jan  6 14:26:20 2021
+
+random iteration: 90 begins.
+Iteration nr: 87 fmin: 6.08413 ftmp: 13.7184
+random iteration: 87 ended. System time: Wed Jan  6 14:26:22 2021
+
+random iteration: 91 begins.
+Iteration nr: 89 fmin: 6.08413 ftmp: 14.1321
+random iteration: 89 ended. System time: Wed Jan  6 14:26:23 2021
+
+random iteration: 92 begins.
+Iteration nr: 92 fmin: 6.08413 ftmp: 31.3825
+random iteration: 92 ended. System time: Wed Jan  6 14:26:23 2021
+
+random iteration: 93 begins.
+Iteration nr: 90 fmin: 6.08413 ftmp: 7.89918
+random iteration: 90 ended. System time: Wed Jan  6 14:26:27 2021
+
+random iteration: 94 begins.
+Iteration nr: 91 fmin: 6.08413 ftmp: 14.9069
+random iteration: 91 ended. System time: Wed Jan  6 14:26:27 2021
+
+random iteration: 95 begins.
+Iteration nr: 88 fmin: 6.08413 ftmp: 25.1624
+random iteration: 88 ended. System time: Wed Jan  6 14:26:29 2021
+
+random iteration: 96 begins.
+Iteration nr: 93 fmin: 6.08413 ftmp: 7.10961
+random iteration: 93 ended. System time: Wed Jan  6 14:26:29 2021
+
+random iteration: 97 begins.
+Iteration nr: 97 fmin: 6.08413 ftmp: 30.7159
+random iteration: 97 ended. System time: Wed Jan  6 14:26:30 2021
+
+random iteration: 98 begins.
+Iteration nr: 96 fmin: 6.08413 ftmp: 6.43266
+random iteration: 96 ended. System time: Wed Jan  6 14:26:33 2021
+
+random iteration: 99 begins.
+Iteration nr: 98 fmin: 6.08413 ftmp: 27.6745
+random iteration: 98 ended. System time: Wed Jan  6 14:26:34 2021
+
+Iteration nr: 94 fmin: 6.08413 ftmp: 6.44702
+random iteration: 94 ended. System time: Wed Jan  6 14:26:35 2021
+
+Iteration nr: 95 fmin: 6.08413 ftmp: 15.8298
+random iteration: 95 ended. System time: Wed Jan  6 14:26:35 2021
+
+Iteration nr: 99 fmin: 6.08413 ftmp: 14.9316
+random iteration: 99 ended. System time: Wed Jan  6 14:26:36 2021
+
+Elapsed time = 92[s]

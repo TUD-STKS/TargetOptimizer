@@ -1,34 +1,33 @@
 #ifdef USE_WXWIDGETS
 #include "OptionsNotebook.h"
+#include <iostream> //exclude again
 
-ParameterSet OptionsNotebook::getOptions()
+OptimizationOptions OptionsNotebook::getOptions()
 {
 	ParameterSet params;
-	auto searchParams = searchSpacePage->getParameters();
-	auto regularizationParams = regularizationPage->getParameters();
+	params.searchSpaceParameters = searchSpacePage->getParameters();
+	params.regularizationParameters = regularizationPage->getParameters();
+		
 
-	params.deltaOffset = searchParams.offsetDelta;
-	params.deltaSlope = searchParams.slopeDelta;
-	params.deltaTau = searchParams.tauDelta;
-	params.lambda = regularizationParams.lambda;
-	params.weightOffset = regularizationParams.weightOffset;
-	params.weightSlope = regularizationParams.weightSlope;
-	params.weightTau = regularizationParams.weightTau;
-	params.meanSlope = 0.0;
-	// TODO: Make meanTau a tunable parameter in the GUI (?)
-	params.meanTau = 15.0;
-	
 	// TODO: Find a better place for meanF0 calculation
 	//calculate mean f0
-	params.meanOffset = 0.0;
+	params.searchSpaceParameters.meanOffset = 0.0;
 	for (unsigned i = 0; i < Data::getInstance().originalF0.size(); ++i)
 	{
-		params.meanOffset += Data::getInstance().originalF0[i].value;
+		params.searchSpaceParameters.meanOffset += Data::getInstance().originalF0[i].value;
 	}
-	params.meanOffset /= Data::getInstance().originalF0.size();
+	params.searchSpaceParameters.meanOffset /= Data::getInstance().originalF0.size();
 
+	OptimizerOptions opts = optimizerPage->getParameters();
+	
+	return OptimizationOptions{ params, opts };
+}
 
-	return params;
+void OptionsNotebook::setOptions(OptimizationOptions newOptions)
+{
+	regularizationPage->setParameters(newOptions.problemParams.regularizationParameters);
+	searchSpacePage->setParameters(newOptions.problemParams.searchSpaceParameters);
+	optimizerPage->setParameters(newOptions.optimizerOptions);
 }
 
 #endif // USE_WXWIDGETS

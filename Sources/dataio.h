@@ -17,23 +17,29 @@ namespace DataIO
 		return TextGridReader(std::string(filename));
 	}
 
-	inline void saveGesturalScore(std::string filename)
+	inline void saveGesturalScore(Sample onset, TargetVector pitchTargets, std::string filename)
 	{
 		GestureWriter gwriter(filename);
-		gwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+		gwriter.writeTargets(onset, pitchTargets);
 	}
 
 
-	inline void saveCsvFile(std::string filename)
+	inline void saveCsvFile(Sample onset, TargetVector pitchTargets, std::string filename)
 	{
 		CsvWriter cwriter(filename);
-		cwriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
+		cwriter.writeTargets(onset, pitchTargets);
 	}
 
-	inline void savePitchTier(std::string filename)
+	inline void savePitchTier(TimeSignal optimalF0, std::string filename)
 	{
 		PitchTierWriter pwriter(filename);
-		pwriter.writeF0(Data::getInstance().optimalF0);
+		pwriter.writeF0(optimalF0);
+	}
+
+	inline void saveTOFile(std::string filename)
+	{
+		//TOWriter twriter(filename);
+		//twriter.writeTargets(Data::getInstance().onset, Data::getInstance().pitchTargets);
 	}
 }
 

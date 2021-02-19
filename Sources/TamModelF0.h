@@ -10,10 +10,12 @@ public:
 
 	// public member functions
 	void setPitchTargets(const TargetVector& targets);
+	void setBoundaries(const BoundaryVector& boundaries);
 	TimeSignal calculateF0(const double samplingPeriod) const;
 	TimeSignal calculateF0(const SampleTimes& times) const;
 
 	TargetVector getPitchTargets() const;
+	BoundaryVector getBoundaries() const;
 	Sample getOnset() const;
 
 private:
@@ -23,4 +25,5 @@ private:
 	// data members
 	Sample m_onset;
 	TargetVector m_targets;
+	BoundaryVector m_bounds;
 };

@@ -38,6 +38,7 @@ enum PhysicalQuantityIndex
     PQ_TEMPERATURE,
     PQ_RATIO,
     PQ_VELOCITY,
+    PQ_ARBITRARY,
     NUM_PHYSICAL_QUANTITIES
 };
 
@@ -59,7 +60,8 @@ const PhysicalQuantity physicalQuantity[NUM_PHYSICAL_QUANTITIES] =
   "volume velocity",  "dV/dt",  "m^3/s",  "cm^3/s",     1000000.0,
   "temperature",      "T",      "K",      "-",          1.0,
   "ratio",            "",       "",       "",           1.0,
-  "velocity",         "v",      "m/s",    "cm/s",       100.0
+  "velocity",         "v",      "m/s",    "cm/s",       100.0,
+  "arbitrary",        "arb",    "arb",    "arb",        1.0
 };
 
 // ****************************************************************************

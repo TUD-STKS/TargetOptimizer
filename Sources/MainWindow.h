@@ -5,6 +5,7 @@
 #include <wx/grid.h>
 #include "PlotRegion.h"
 #include "OptionsNotebook.h"
+#include "TargetsNotebook.h"
 #include "Data.h"
 #include "dataio.h"
 #include "OptimizationProblem.h"
@@ -19,8 +20,10 @@ public:
 private:
     void clear();
     void OnAbout(wxCommandEvent& event);
+    void OnBoundaryCellChanged(wxGridEvent& event);
     void OnClear(wxCommandEvent& event);
     void OnHelp(wxCommandEvent& event);
+    void OnInitBounds(wxCommandEvent& event);   
     void OnOpen(wxCommandEvent& event);
     void OnOptimize(wxCommandEvent& event);
     void OnSaveAs(wxCommandEvent& event);
@@ -31,19 +34,23 @@ private:
 private:
     //TODO: Replace flags with proper progress manager
     bool isTextGridLoaded{ false };
+    bool isBoundariesInit{ false };
     bool isPitchTierLoaded{ false };
     bool isOptimized{ false };
 
     // The picture area containing the plots ("figure" in MATLAB parlance)
     PlotRegion* plotRegion{
         new PlotRegion(this,
-        Data::getInstance().syllableBoundaries,
+        Data::getInstance().initialBoundaries,
         Data::getInstance().originalF0,
+        Data::getInstance().optimalBoundaries,
         Data::getInstance().pitchTargets,
         Data::getInstance().optimalF0
         )};
     OptionsNotebook *optimizationOptions;
-    wxGrid *resultsTable;
+    OptionsNotebook *optimizationOptions2;
+    TargetsNotebook *targetOptions;
+    TextGridReader tg;
 
     wxDECLARE_EVENT_TABLE();
 };

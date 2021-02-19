@@ -11,22 +11,25 @@ class PlotRegion :
 {
 public:
 	PlotRegion(wxWindow* parent, 
-		const BoundaryVector& boundaries, 
+		const BoundaryVector& initialBoundaries, 
 		const TimeSignal& originalF0, 
-		const TargetVector& targets,
+		const BoundaryVector& optimalBoundaries, 
+		const TargetVector& targets, 
 		const TimeSignal& optimalF0);
 
 private:
 	void draw(wxDC& dc) override;
-	void drawBoundaries(wxDC& dc);
-	void drawOptimalF0(wxDC& dc);
+	void drawInitialBoundaries(wxDC& dc);
+	void drawOptimalBoundaries(wxDC& dc);
+	void drawOptimalF0(wxDC& dc);	
 	void drawOriginalF0(wxDC& dc);
 	void drawTargets(wxDC& dc);	
 	void setAxesLimits();
 
 private:
-	const BoundaryVector& m_boundaries;
+	const BoundaryVector& m_initialBoundaries;
 	const TimeSignal& m_origF0;
+	const BoundaryVector& m_optimalBoundaries;
 	const TimeSignal& m_optimalF0;
 	const TargetVector& m_targets;
 	Graph plot;

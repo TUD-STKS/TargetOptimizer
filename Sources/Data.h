@@ -3,9 +3,8 @@
 
 // global constants
 const unsigned FILTERORDER(5);			// TAM
-const unsigned RANDOMITERATIONS(5);		// BOBYQA
-const unsigned SAMPLERATE(200); 		// Hz
-
+//const unsigned RANDOMITERATIONS(20);		// BOBYQA
+const double SAMPLERATE{ 44100.0 / 110.0 }; 		// Hz
 // vector of syllable bounds
 using BoundaryVector = std::vector<double>;
 
@@ -50,7 +49,8 @@ public:
 	}
 	void reset()
 	{
-		syllableBoundaries.clear();
+		initialBoundaries.clear();
+		optimalBoundaries.clear();
 		pitchTargets.clear();
 		optimalF0.clear();
 		originalF0.clear();
@@ -58,7 +58,8 @@ public:
 
 
 public:
-	BoundaryVector syllableBoundaries;
+	BoundaryVector initialBoundaries;
+	BoundaryVector optimalBoundaries;
 	std::vector<PitchTarget> pitchTargets;
 	Sample onset;
 	TimeSignal optimalF0;

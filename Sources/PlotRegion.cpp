@@ -2,9 +2,9 @@
 #include <algorithm>
 #include "PlotRegion.h"
 
-PlotRegion::PlotRegion(wxWindow* parent, const BoundaryVector& bounds, const TimeSignal& originalF0, const TargetVector& targets, const TimeSignal& optimalF0) :
+PlotRegion::PlotRegion(wxWindow* parent, const BoundaryVector& initialBoundaries, const TimeSignal& originalF0, const BoundaryVector& optimalBoundaries, const TargetVector& targets, const TimeSignal& optimalF0) :
     BasicPicture(parent), 
-    m_boundaries(bounds), m_origF0(originalF0), m_targets(targets), m_optimalF0(optimalF0)
+    m_initialBoundaries(initialBoundaries), m_origF0(originalF0), m_optimalBoundaries(optimalBoundaries), m_targets(targets), m_optimalF0(optimalF0)
 {
     // Plot needs some margin to paint the axes and labels
     plot.init(this, 60, 0, 0, 40);
@@ -26,10 +26,12 @@ void PlotRegion::draw(wxDC& dc)
     // Set the axes limits
     setAxesLimits();
 
-    // Draw the syllable boundaries
-    drawBoundaries(dc);
+    // Draw the initial boundaries
+    drawInitialBoundaries(dc);
     // Draw the F0 pitch marks
     drawOriginalF0(dc);
+    // Draw the optimal Boundaries
+    drawOptimalBoundaries(dc);
     // Draw the pitch targets
     drawTargets(dc);
     // Draw F0 as produced by the Target Approximation Model
@@ -42,16 +44,24 @@ void PlotRegion::draw(wxDC& dc)
     
  }
 
-void PlotRegion::drawBoundaries(wxDC& dc)
+void PlotRegion::drawInitialBoundaries(wxDC& dc)
 {
     int maxX, maxY, height, width;
     plot.getDimensions(maxX, maxY, height, width);
 
-    dc.SetPen(wxPen(*wxRED, 3, wxPENSTYLE_DOT));
+    if (m_optimalBoundaries.empty())
+    {
+        dc.SetPen(wxPen(*wxBLACK, 3, wxPENSTYLE_DOT));
+    }
+    else
+    {
+        dc.SetPen(wxPen(*wxLIGHT_GREY, 3, wxPENSTYLE_DOT));
+    }
+    
 
-    if (!m_boundaries.empty())
+    if (!m_initialBoundaries.empty())
     {  
-        for (const auto& boundary : m_boundaries)
+        for (const auto& boundary : m_initialBoundaries)
         {
             wxPoint p0, p1;
             p0.x = plot.getXPos(boundary);
@@ -63,6 +73,29 @@ void PlotRegion::drawBoundaries(wxDC& dc)
             dc.DrawLine(p0, p1);
         }
     }    
+}
+
+void PlotRegion::drawOptimalBoundaries(wxDC& dc)
+{
+    int maxX, maxY, height, width;
+    plot.getDimensions(maxX, maxY, height, width);
+
+    dc.SetPen(wxPen(*wxRED, 3, wxPENSTYLE_DOT));
+
+    if (!m_optimalBoundaries.empty())
+    {
+        for (const auto& boundary : m_optimalBoundaries)
+        {
+            wxPoint p0, p1;
+            p0.x = plot.getXPos(boundary);
+            p0.y = 0;
+
+            p1.x = plot.getXPos(boundary);
+            p1.y = p0.y + height;
+
+            dc.DrawLine(p0, p1);
+        }
+    }
 }
 
 void PlotRegion::drawOptimalF0(wxDC& dc)
@@ -106,7 +139,7 @@ void PlotRegion::drawTargets(wxDC& dc)
     {
         dc.SetPen(wxPen(*wxBLACK, 3, wxPENSTYLE_LONG_DASH));
         // Draw the targets as lines from one boundary to the next one
-        double begin = *std::min(m_boundaries.begin(), m_boundaries.end());
+        double begin = *std::min(m_optimalBoundaries.begin(), m_optimalBoundaries.end());
         double end = begin;
         wxPoint p0, p1;
         for (const auto& target : m_targets)
@@ -128,12 +161,19 @@ void PlotRegion::setAxesLimits()
     /* Determine the largest data point to be plotted */
     double maxTimeBoundary = 0.1;
     double minTimeBoundary = 0.0;
-    if (!m_boundaries.empty())
+    if (!m_initialBoundaries.empty())
     {
         // Largest boundary
-        maxTimeBoundary = *std::max_element(m_boundaries.begin(), m_boundaries.end());
+        maxTimeBoundary = *std::max_element(m_initialBoundaries.begin(), m_initialBoundaries.end());
         // Smallest boundary
-        minTimeBoundary = *std::min_element(m_boundaries.begin(), m_boundaries.end());
+        minTimeBoundary = *std::min_element(m_initialBoundaries.begin(), m_initialBoundaries.end());
+    }
+    if (!m_optimalBoundaries.empty())
+    {
+        // Largest boundary
+        maxTimeBoundary = std::max(maxTimeBoundary, *std::max_element(m_optimalBoundaries.begin(), m_optimalBoundaries.end()));
+        // Smallest boundary
+        minTimeBoundary = std::min(minTimeBoundary, *std::min_element(m_optimalBoundaries.begin(), m_optimalBoundaries.end()));
     }
     
     double maxTimeOriginalF0 = 0.1;
@@ -187,8 +227,11 @@ void PlotRegion::setAxesLimits()
     /* Set the limits */
     plot.abscissa.positiveLimit = std::max({ maxTimeBoundary, maxTimeOriginalF0, maxTimeOptimalF0 }) + 0.1;
     plot.abscissa.negativeLimit = std::min({ minTimeBoundary, minTimeOriginalF0, minTimeOptimalF0 }) - 0.1;
-    plot.linearOrdinate.positiveLimit = std::max({ maxOriginalF0, maxOptimalF0 }) + 6;
-    plot.linearOrdinate.negativeLimit = std::min({ minOriginalF0, minOptimalF0 }) - 6;
+    double y_axis_limit_pos = std::max({ maxOriginalF0, maxOptimalF0 });
+    double y_axis_limit_neg = std::min({ minOriginalF0, minOptimalF0 });
+    double y_axis_limit_abs = std::abs( y_axis_limit_pos - y_axis_limit_neg );
+    plot.linearOrdinate.positiveLimit = y_axis_limit_pos + 0.1 * y_axis_limit_abs;
+    plot.linearOrdinate.negativeLimit = y_axis_limit_neg - 0.1 * y_axis_limit_abs;
 }
 
 #endif // USE_WXWIDGETS

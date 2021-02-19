@@ -1,0 +1,8 @@
+<gestural_score>
+	<gesture_sequence type="f0-gestures" unit="st">
+		<gesture value="91.746519" slope="0.000000" duration_s="0.256000" time_constant_s="0.010000" neutral="0" />
+		<gesture value="89.169935" slope="-0.160248" duration_s="0.054232" time_constant_s="0.017467" neutral="0" />
+		<gesture value="94.750019" slope="0.183071" duration_s="0.424563" time_constant_s="0.021240" neutral="0" />
+		<gesture value="87.576252" slope="-1.010260" duration_s="0.164707" time_constant_s="0.015156" neutral="0" />
+	</gesture_sequence>
+</gestural_score>
