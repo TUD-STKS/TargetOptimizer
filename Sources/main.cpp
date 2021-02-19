@@ -204,13 +204,9 @@ int main(int argc, char* argv[])
 				optOpt.useEarlyStopping = false;
 			}
 			optOpt.epsilon = get_option(parser, "epsilon", 0.01);
-			optOpt.patience = get_option(parser, "patience", 10);
+			//optOpt.patience is handled below
 			optOpt.maxCostEvaluations = get_option(parser, "maxCostEvaluations", 1e6);
 			optOpt.rhoEnd = get_option(parser, "rhoEnd", 1e-6);
-
-
-
-
 
 			if (parameters.searchSpaceParameters.initBounds != 0)
 			{
@@ -229,6 +225,9 @@ int main(int argc, char* argv[])
 				bounds = initBoundaries;
 				initBoundaries.clear();
 			}
+
+			// Either use the explicitly supplied patience or use the recommended patience based on the number of targets
+			optOpt.patience = get_option(parser, "patience", OptimizerOptions::recommendedPatience(bounds.size() - 1));
 
 			// main functionality
 			OptimizationProblem problem(parameters, f0, bounds);

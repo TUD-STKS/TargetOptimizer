@@ -359,7 +359,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 
 	// Set the patience value to the default according to the number of targets
 	auto opts = optimizationOptions->getOptions();
-	opts.optimizerOptions.patience = 15 * (Data::getInstance().initialBoundaries.size() - 1);
+	opts.optimizerOptions.patience = OptimizerOptions::recommendedPatience(Data::getInstance().initialBoundaries.size() - 1);
 	optimizationOptions->setOptions(opts);
 
 
