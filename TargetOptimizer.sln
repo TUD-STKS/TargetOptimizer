@@ -11,6 +11,8 @@ Global
 		Release|x64 = Release|x64
 		wxWidgets_Debug|x64 = wxWidgets_Debug|x64
 		wxWidgets_Release|x64 = wxWidgets_Release|x64
+		wxWidgets_VCPKG_Debug|x64 = wxWidgets_VCPKG_Debug|x64
+		wxWidgets_VCPKG_Release|x64 = wxWidgets_VCPKG_Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.Debug|x64.ActiveCfg = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_Debug|x64.Build.0 = wxWidgets_Debug|x64
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_Release|x64.ActiveCfg = wxWidgets_Release|x64
 		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_Release|x64.Build.0 = wxWidgets_Release|x64
+		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_VCPKG_Debug|x64.ActiveCfg = wxWidgets_VCPKG_Debug|x64
+		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_VCPKG_Debug|x64.Build.0 = wxWidgets_VCPKG_Debug|x64
+		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_VCPKG_Release|x64.ActiveCfg = wxWidgets_VCPKG_Release|x64
+		{266A9FD9-9635-464C-9ACB-8A15629008C9}.wxWidgets_VCPKG_Release|x64.Build.0 = wxWidgets_VCPKG_Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
