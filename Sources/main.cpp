@@ -47,7 +47,7 @@ int main(int argc, char* argv[])
 #ifdef USE_WXWIDGETS
 		// If using the GUI redirect console output to log file
 		std::cout << "When using the graphical user interface, all output to stdout is re-routed to a log file 'TargetOptimizer.log'. "
-			<< "Look for it in " << std::filesystem::current_path().string() << "!" << std::endl;
+			<< "Look for it in " << current_path().string() << "!" << std::endl;
 		std::ofstream outFile("TargetOptimizer.log");
 		std::cout.rdbuf(outFile.rdbuf());
 
@@ -72,9 +72,10 @@ int main(int argc, char* argv[])
 			// command line options
 			parser.add_option("h", "Display this help message.");
 			parser.set_group_name("Output Options");
-			parser.add_option("g", "Choose for VTL gesture file.");
-			parser.add_option("c", "Choose for csv table file.");
-			parser.add_option("p", "Choose for PitchTier file.");
+			parser.add_option("g", "Choose for VTL gesture file.", 1);
+			parser.add_option("c", "Choose for csv table file.", 1);
+			parser.add_option("p", "Choose for PitchTier file.", 1);
+			parser.add_option("log", "Outputs f0, targets, boundaries, etc. to a single text file.", 1);
 			parser.set_group_name("Additional Parameter Options");
 			parser.add_option("tg", "Specify a TextGrid file.", 1);
 			parser.add_option("lambda", "Specify regularization parameter.", 1);
@@ -91,7 +92,6 @@ int main(int argc, char* argv[])
 			parser.add_option("rhoEnd", "Specify the rho_end parameter.", 1);
 			parser.add_option("epsilon", "Specify the epsilon for early stopping", 1);
 			parser.add_option("patience", "Specify the patience for early stopping", 1);
-			parser.add_option("log", "Outputs f0, targets, boundaries, etc. to a single text file.");
 			parser.add_option("useEarlyStopping", "Stop the search early if fmin-ftmp < epsilon for x times (x=patience).");
 			parser.add_option("utterance", "Name of the utterance to optimize.", 1);
 
@@ -115,15 +115,15 @@ int main(int argc, char* argv[])
 			// process help option
 			if (parser.option("h"))
 			{
-				std::cout << "Usage: TargetOptimizer <PitchTier-file> <LOG-name> { <options> | <arg> }\n";
+				std::cout << "Usage: TargetOptimizer <PitchTier-file> <options> | <arg> }\n";
 				parser.print_options();
 				return EXIT_SUCCESS;
 			}
 
 			// check number of default arguments
-			if (parser.number_of_arguments() != 2)
+			if (parser.number_of_arguments() < 1)
 			{
-				std::cout << "Error in command line:\n   You must specify a PitchTier file and the LOG name.\n";
+				std::cout << "Error in command line:\n   You must specify a PitchTier file.\n";
 				std::cout << "\nTry the -h option for more information." << std::endl;
 				return EXIT_FAILURE;
 			}
@@ -152,10 +152,19 @@ int main(int argc, char* argv[])
 			std::string fileName = ptreader.getFileName();
 
 
-			std::string LOG_PATH = parser[1];
+			std::string LOG_PATH = TextGrid = get_option(parser, "log", "");
+			if ( parser.option("log") )
+			{
+				std::cout << "log path: " << LOG_PATH << std::endl;
+			}
+			//std::string LOG_PATH = parser[1];
 			std::string UTTERANCE = get_option(parser, "utterance", "default_str");
 
-			std::cout << "log path: " << LOG_PATH << std::endl;
+			std::string gesFileName = get_option(parser, "g", "default.ges" );
+			std::string csvFileName = get_option(parser, "c", "default.csv" );
+			std::string  ptFileName = get_option(parser, "p", "default-tam.PitchTier" );
+
+			
 
 
 			//calculate mean f0
@@ -351,19 +360,19 @@ int main(int argc, char* argv[])
 			// process gesture-file output option
 			if (parser.option("g"))
 			{
-				DataIO::saveGesturalScore(onset, optTargets, fileName + ".ges");
+				DataIO::saveGesturalScore(onset, optTargets, gesFileName);
 			}
 
 			// process csv-file output option
 			if (parser.option("c"))
 			{
-				DataIO::saveCsvFile(onset, optTargets, fileName + ".csv");
+				DataIO::saveCsvFile(onset, optTargets, csvFileName);
 			}
 
 			// process PitchTarget-file output option
 			if (parser.option("p"))
 			{
-				DataIO::savePitchTier(optF0, fileName + "-tam.PitchTier");
+				DataIO::savePitchTier(optF0, ptFileName);
 			}
 
 			// print results
