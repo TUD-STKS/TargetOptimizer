@@ -16,7 +16,7 @@ The motivation for these differences are described in Birkholz P, Schmager P, Xu
 Various additions in terms of functionality have been implemented, such as increasing overall performance by adding features like early-stopping during parameter optimization or adding the possibility to work on contours different from pitch contours.
 
 
-Benchmark results and added features are described in _**HIER REFERENZ ZUM ESSV-PAPER EINFÜGEN!**_
+Benchmark results and added features are described in Paul Konstantin Krug, Simon Stone, Alexander Wilbrandt, and Peter Birkholz (2021). Targetoptimizer 2.0: Enhanced estimation of articulatory targets. [pdf](http://www.essv.de/essv2021/pdfs/08_krug.pdf)
 
 
 The software can be executed as a command line tool (without a GUI, to support batch processing) or as an application with a GUI.
@@ -42,18 +42,18 @@ Run TargetOptimizer from the command line:
 Run TargetOptimizer -h for instructions.
 
 ## Using TargetOptimizer 2.0
+Be aware that only a short introdruction can be given at this place. For a more detailed description on how to use TO2 please refer to the manual!
+
 A screenshot of the GUI is shown below (for the German word "Betriebssportgemeinschaft").
 
 ![Screenshot Target Optimizer 2.0](doc/TargetOptimizer_GUI.png)
 
-Following steps are necessary to successfully extract targets for an utterance:
-1. Input the boundaries (which can be loaded in terms of a Praat TextGrid file or manually initialized by selecting the amount of desired boundaries and pressing "Init bounds")
-2. Input the contour to work on (which can be loaded in terms of a Praat PitchTier file)
+Following steps are necessary to successfully extract targets for an utterance (Step 1 and 2 can be done simultaneously if a TextGrid file is used):
+1. Input the boundaries (which can be loaded in terms of a Praat TextGrid file by pressing "Open File(s)" or manually initialized by selecting the amount of desired boundaries and pressing "Init bounds")
+2. Input the contour to work on (which can be loaded in terms of a Praat PitchTier file by pressing "Open File(s)")
 3. Carefully think about the parameters you want to change (as mentioned above, default values are generally well suited)
-
-	--> Detailed description of all tunable parameters can be found in the manual, which is provided in the folder "docs".
-4. Press "Optimize"
-5. Export the results as a CSV file, a gestural score for VocalTractLab, or as a Praat PitchTier file with the model f0 contour
+4. Press "Optimize Targets"
+5. Export the results as a CSV file, a gestural score for VocalTractLab, or as a Praat PitchTier file with the model f0 contour by pressing "Save as..."
 
 # TargetOptimizer Benchmarks
 Required: python 3.x, pandas, numpy, matplotlib
