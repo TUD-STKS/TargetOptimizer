@@ -226,11 +226,10 @@ void MainWindow::OnHelp(wxCommandEvent& event)
 	wxMessageBox(wxT(
 
 		"(0) Step (1) and (2) can be done by selecting multiple files at once. \n"
-		"(1) Load Praat-TextGrid file.\n"
+		"(1) Load Praat-TextGrid file. (This is optional. Bounds can also be initialized by setting the desired number of bounds and pressing \"Init Bounds\") \n"
 		"(2) Load Praat-PitchTier file.\n"
 		"(3) Choose options and start optimization.\n"
-		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n"
-		"(5) Press \"Init Bounds\" to reset boundaries to original.\n"), wxT("Help"));
+		"(4) Save targets as VTL gesture or CSV file. Save modeled f0 as PitchTier file.\n", wxT("Help")));
 }
 
 
