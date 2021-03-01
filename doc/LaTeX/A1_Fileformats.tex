@@ -1,0 +1,14 @@
+\chapter{File formats}\label{ff}
+\begin{itemize}
+    \item \textbf{PitchTier file (*.PitchTier)}\\
+    PitchTier is one of the types of objects in Praat that represents a time-stamped pitch contour, i.e., it contains a number of (time, pitch) points, without voiced/unvoiced information. The PitchTier objects are used for two purposes: for manipulating the pitch curve of an existing sound and for synthesizing a new sound.\\
+    For more information about PitchTier, please refer to \ding{43} \href{https://www.fon.hum.uva.nl/praat/manual/PitchTier.html}{PitchTier}.
+
+    \item \textbf{TextGrid file (*.TextGrid)}\\
+    TextGrid is one of the types of objects in Praat, which is used for annotation (segmentation and labelling). A TextGrid object includes two kinds of tiers: an interval tier is a connected sequence of labeled intervals, with boundaries in between; A point tier is a sequence of labeled points. It is important that the TextGrid file is encoded in UTF-8.\\
+    For more information about TextGrid, please refer to \ding{43} \href{https://www.fon.hum.uva.nl/praat/manual/TextGrid_file_formats.html}{TextGrid}.
+
+    \item \textbf{Gestural score file (*.ges)}\\
+    A gestural score file is an XML file that defines a gestural score. The gestural score is an organized pattern of articulatory gestures for the realization of an utterance. The root element of the file is \textsl{gestural\_score}. There are eight tiers of gestures in a gestural score, each of which is represented by one \textsl{gesture\_sequence} element. Each gesture sequence comprises a set of successive gestures of the same type. The start time of a gesture is implicitly given by the sum of durations of the previous gestures of the sequence.\\
+    For more information about gestural score, please refer to \ding{43} \href{https://www.vocaltractlab.de/download-vocaltractlab/VTL2.3-manual.pdf}{VTL2.3-manual}.
+\end{itemize}

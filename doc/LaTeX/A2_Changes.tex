@@ -1,0 +1,11 @@
+\chapter{Major Changes from version 1.0 to 2.0}
+\begin{itemize}
+	\item I/O routines are enhanced which makes the software much more flexible and robust against undefined behavior induced by wrong file types.
+	\item We tuned all free parameters on a test corpus to find optimal default values.
+	\item We developed a new GUI based on the wxWidgets C++ library.
+	\item We have extended a command line functionality.
+	\item The position of target boundaries is now a fully optimizable parameter, which can be freely moved up to 100\% of syllable long. 
+	\item The amount of bounds can be manually set according to the utterance without loading the corresponding TextGrid file.
+	\item The time constant $\tau$ can be manually adjusted.
+	\item Optimizer options such as: restrain the maximal iteration and cost function, use the early-stopping etc. are added to avoid over-fitting and reduce the computational overload.
+\end{itemize}

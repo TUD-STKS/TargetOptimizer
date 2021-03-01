@@ -1,0 +1,59 @@
+\chapter{Introduction}
+
+This chapter will give a short introduction to getting TargetOptimizer 2.0 up and running and what to use it for. For more details please refer to \autoref{chap:overview} and \autoref{chap:synthesis}.
+
+\section{Purpose}
+TargetOptimizer 2.0 (TO2) is a free and open-source PC software to estimate pitch targets parameters of the Target Approximation Model (TAM) from the $f_{0}$-contour of spoken utterances.\\
+TO2 allows not only the reproduction of natural pitch contours with a small error but also yields more ``natural" pitch targets in the sense of TAM, which can be used as an intonation model for text-to-speech synthesis. This simplifies the copy-synthesis of natural utterances using articulatory speech synthesizer.
+
+\section{Downloads}
+TO2 is distributed as free and open source software under the GNU General Public License (GPL). It is written in C++ and developed for both Windows and Linux platform.
+The software is free of charge and available at \ding{43} \href{https://www.vocaltractlab.de/index.php?page=targetoptimizer-download}{VocalTractLab-website} or as a clone from \ding{43} \href{https://github.com/TUD-STKS/TargetOptimizer}{git repository}. Binaries for Windows OS and C++ sources of the software are included, together with some example files.
+
+\section{Installation}
+To install the software in Windows, simply unzip the downloaded file into a folder of your choice. The archive contains an executable (.exe) to start the Graphical User Interface (GUI), some dynamic link libraries (*.dll) and the example files.
+
+
+\section{Execution}
+The software can be executed as an application including a GUI or as a command line tool to support batch processing. To execute the software on Windows, simply run the application file ``TargetOptimizer.exe" to start the GUI, or type ``TargetOptimizer.exe -h" on the command line options for instructions. On Linux you have to build the project by yourself. For more information see \autoref{sec:build}.\\
+In addition, you can use the TargetOptimizer functions in the API within your own software. Some Matlab and Python code examples demonstrate how to use it. In \autoref{chap:synthesis} it is shown how to use TO2 as a part of an articulatory synthesis pipeline.
+
+\section{Build instructions}\label{sec:build}
+Both the GUI and API version can be further developed and compiled by yourself. The GUI version contains a project file for Visual Studio 2019 in Windows, but it can also be compiled under Linux or Mac. The only external library required is the cross-platform GUI library \ding{43}  \href{www.wxwidgets.org}{wxWidgets}.\\ 
+The following indicates how to compile the source code of the software:
+\begin{itemize}
+	\item Windows: \\
+	Simply open the solution ``TargetOptimizer.sln" and build in dependency of desired use case:
+	\begin{itemize}
+		\item ``Release" - for command line tool				
+		\item ``wxWidgets\_Release" - for GUI version using wxWidgets
+		\item ``wxWidgets\_VCPKG\_Release" - for GUI version using \ding{43}  \href{https://www.wxwidgets.org/blog/2019/01/wxwidgets-and-vcpkg/}{VCPKG and wxWidgets} 
+	\end{itemize}
+	Note: ``TargetOptimizer.exe" can always be found in the sub-folder ``x64" in dependency on your chosen build configuration.
+	\item Linux: \\
+	Navigate inside the source folder and run one of the following commands:
+	\begin{itemize}
+		\item For the command-line-only version:
+	\end{itemize}
+	\begin{lstlisting}[mathescape=true]
+	g++ -std=c++14 -O3 -I.. ../dlib/all/source.cpp -fopenmp -lpthread -lX11 $^\ast$.cpp -o TargetOptimizer
+	\end{lstlisting}
+	\begin{itemize}
+	    \item For the GUI version (requires wxWidgets):
+	\end{itemize}
+	\begin{lstlisting}[mathescape=true]
+	g++ -std=c++17 -O3 -D USE_WXWIDGETS -I.. ../dlib/all/source.cpp -fopenmp -fpermissive -lpthread -lX11 $^\ast$.cpp `wx-config --cxxflags --libs std` -o TargetOptimizer -w -lstdc++fs
+	\end{lstlisting}
+\end{itemize}
+
+\section{Use and license information}
+As stated before, the offered software is free and open-source under the GNU General Public License.\\ 
+You can refer the software by citing the most recent paper
+
+\begin{itemize}
+\item[\ding{71}]
+Paul Konstantin Krug, Simon Stone, Alexander Wilbrandt, Peter Birkholz. TargetOptimizer 2.0: Enhanced estimation of articulatory targets. \cite{TO2}
+\end{itemize}
+
+This paper also includes more specific information on the changes between the TargetOptimizer 1.0 and 2.0.\\
+Note that the software comes with no warranty of any kind. There was no extensive test of the software, but the parts of the programs made available are considered relatively stable. The whole software is under continual development and may undergo substantial changes in future versions. Please feel free to report any bugs by using the \ding{41} \href{https://github.com/TUD-STKS/TargetOptimizer/issues/new}{issue tracker of the git repository}.
