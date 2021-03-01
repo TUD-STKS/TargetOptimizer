@@ -54,3 +54,7 @@ Following steps are necessary to successfully extract targets for an utterance (
 3. Carefully think about the parameters you want to change (as mentioned above, default values are generally well suited)
 4. Press "Optimize Targets"
 5. Export the results as a CSV file, a gestural score for VocalTractLab, or as a Praat PitchTier file with the model f0 contour by pressing "Save as..."
+
+## How to cite:
+If you use the TargetOptimizer in a publication, we would appreciate if you cite the following paper:
+>Krug, P., Stone, S., Wilbrandt, A. and Birkholz, P., 2021. TargetOptimizer 2.0: Enhanced Estimation of Articulatory Targets. In: Studientexte zur Sprachkommunikation: Elektronische Sprachsignalverarbeitung 2021. TUDPress, Dresden, Germany.
