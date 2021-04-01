@@ -39,7 +39,7 @@ void CsvWriter::writeTargets(const Sample& onset, const TargetVector& targets) c
 	TargetVector t = convert2VtlFormat(onset, targets);
 
 	// write header
-	fout << "target-No.,slope[st/s],offset[st],tau[s],duration[s]" << std::endl;
+	fout << "target-No.,slope[st/s],offset[st],tau[ms],duration[s]" << std::endl;
 
 	// write optimal targets
 	for (unsigned i = 0; i < t.size(); ++i)
