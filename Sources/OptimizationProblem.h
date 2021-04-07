@@ -33,6 +33,26 @@ struct ParameterSet
 {
 	RegularizationParameters regularizationParameters;
 	SearchSpaceParameters searchSpaceParameters;
+
+	friend std::ostream& operator<<(std::ostream& os, ParameterSet& ps)
+	{
+		using namespace std;
+		return		os << "Reg. Parameters:" << "\n"
+			<< ps.regularizationParameters.lambda << "\n"
+			<< ps.regularizationParameters.weightSlope << "\n"
+			<< ps.regularizationParameters.weightOffset << "\n"
+			<< ps.regularizationParameters.weightTau << "\n"
+			<< "Search Space Parameters:" << "\n"
+			<< ps.searchSpaceParameters.deltaSlope << "\n"
+			<< ps.searchSpaceParameters.deltaOffset << "\n"
+			<< ps.searchSpaceParameters.deltaTau << "\n"
+			<< ps.searchSpaceParameters.deltaBoundary << "\n"
+			<< ps.searchSpaceParameters.optimizeBoundaries << "\n"
+			<< ps.searchSpaceParameters.numberOptVar << "\n"
+			<< ps.searchSpaceParameters.meanSlope << "\n"
+			<< ps.searchSpaceParameters.meanOffset << "\n"
+			<< ps.searchSpaceParameters.meanTau;
+	}
 };
 
 // dlib linear algebra column vector for optimization tasks
@@ -54,6 +74,7 @@ public:
 	TargetVector getPitchTargets() const;
 	BoundaryVector getBoundaries() const;
 	Sample getOnset() const;
+	TimeSignal getOriginalF0() const;
 	double getOriginalF0_Onset() const;
 	double getOriginalF0_Offset() const;
 	double getComputationTime() const;
@@ -67,6 +88,7 @@ public:
 
 	// operator called by optimizer
 	double operator() (const DlibVector& arg) const;
+	friend std::ostream& operator<<(std::ostream& os, OptimizationProblem& op);
 
 
 private:

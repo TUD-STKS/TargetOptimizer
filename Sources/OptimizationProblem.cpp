@@ -51,6 +51,11 @@ Sample OptimizationProblem::getOnset() const
 	return m_modelOptimalF0.getOnset();
 }
 
+TimeSignal OptimizationProblem::getOriginalF0() const
+{
+	return m_originalF0;
+}
+
 std::vector<double> OptimizationProblem::getOptimizationSolutions() const
 {
 	return m_optimizationSolutions;
@@ -266,4 +271,22 @@ double OptimizationProblem::costFunction(const TamModelF0& tamF0) const // TODO:
 	}
 
 	return error + m_parameters.regularizationParameters.lambda * penalty;
+}
+
+std::ostream& operator<<(std::ostream& os, OptimizationProblem& op)
+{
+	using namespace std;
+	auto tmp = op.getParameters();
+	os << tmp << endl;
+	os << "Orig. F0: " << endl;
+	for (auto f0val:op.getOriginalF0())
+	{
+		os << f0val.time << "\t" << f0val.value << endl;
+	}
+	os << "Boundaries: " << endl;
+	for (auto bound : op.getBoundaries())
+	{
+		os << bound << endl;
+	}
+	return os;
 }

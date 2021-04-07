@@ -116,7 +116,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			DlibVector x;
 			#pragma omp critical (getRandomValues)
 			{
-				std::cout << "random iteration: " << it << " begins." << std::endl;
+				//std::cout << "random iteration: " << it << " begins." << std::endl;
 				// random initialization
 				srand(it);
 				x.set_size(number_Targets * number_optVar);
@@ -130,6 +130,24 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			}
 			try
 			{
+				#pragma omp critical (printProblem)
+				{
+					std::cout << "Random Iteration: " << it << "\n"
+						<< "Opt.Problem:\n" << op
+						<< "X:\n" << x
+						<< "NPT: " << npt << "\n"
+						<< "Lower Bound:\n" << lowerBound
+						<< "upperBound:\n" << upperBound
+						<< "rho Begin: " << rho_begin << "\n"
+						<< "rho End: " << rho_end << "\n"
+						<< "Max Evals: " << max_f_evals << std::endl;
+					std::cout << "FTMP-Vector:" << std::endl;
+					for (auto item:ftmp_vector)
+					{
+						std::cout << item << ", ";
+					}
+					std::cout << "\n" << std::endl;
+				}
 				// optimization algorithm: BOBYQA
 				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
 			}
@@ -144,7 +162,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			#pragma omp critical (updateMinValue)
 			{
 				ftmp_vector.at(it) = ftmp;
-				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
+				//std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
 				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 on error
 				{
 					if (useEarlyStopping)
