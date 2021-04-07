@@ -91,6 +91,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 
 	// set up OpenMP
 	int numThreads = omp_get_max_threads();
+	//int numThreads = 1;
 	omp_set_num_threads(numThreads);
 	
 	bool SearchFinished = false;
@@ -127,6 +128,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 						x(number_optVar * i + ssp_bound) = getRandomValue(min_bounds.at(ssp_bound), max_bounds.at(ssp_bound));
 					}
 				}
+				//x = { -30.6477,71.3183,21.258,17.0465,34.9371,68.1646,18.3143,-60.0248,27.4032,68.401,19.8929,-25.754,-46.2788,75.714,19.9903,47.7492,44.4764,82.8225,15.8038,70.0349,42.4463,90.4501,15.9491,69.1186 };
 			}
 			try
 			{
@@ -134,7 +136,8 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 				{
 					std::cout << "Random Iteration: " << it << "\n"
 						<< "Opt.Problem:\n" << op
-						<< "X:\n" << x
+						//<< "X:\n" << x
+						<< "Length of X: " << x.size() << "\n"
 						<< "NPT: " << npt << "\n"
 						<< "Lower Bound:\n" << lowerBound
 						<< "upperBound:\n" << upperBound
