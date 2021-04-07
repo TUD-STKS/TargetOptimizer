@@ -51,10 +51,8 @@ TimeSignal CdlpFilter::response(const SampleTimes& sampleTimes, const TargetVect
 
 			if (sampleIndex >= sampleTimes.size())
 			{
-				break;
-				std::ostringstream msg;
-				msg << "[calc_f0] Sample index exceeds sample time vector! " << sampleTimes.size();
-				throw dlib::error(msg.str());
+				// Has to return f0 here (not break) for pitch target end being later than f0 end
+				return f0;
 			}
 		}
 

@@ -14,7 +14,7 @@ public:
 	
 public:
 	std::vector<std::string> getIntervalTierNames() const;
-	std::string syllableBoundaryTierName{ "Syllables" };
+	std::string syllableBoundaryTierName{ "Position" };
 
 private:
 	// data members

@@ -91,7 +91,6 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 
 	// set up OpenMP
 	int numThreads = omp_get_max_threads();
-	//int numThreads = 1;
 	omp_set_num_threads(numThreads);
 	
 	bool SearchFinished = false;
@@ -117,7 +116,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			DlibVector x;
 			#pragma omp critical (getRandomValues)
 			{
-				//std::cout << "random iteration: " << it << " begins." << std::endl;
+				std::cout << "random iteration: " << it << " begins." << std::endl;
 				// random initialization
 				srand(it);
 				x.set_size(number_Targets * number_optVar);
@@ -128,12 +127,13 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 						x(number_optVar * i + ssp_bound) = getRandomValue(min_bounds.at(ssp_bound), max_bounds.at(ssp_bound));
 					}
 				}
-				//x = { -30.6477,71.3183,21.258,17.0465,34.9371,68.1646,18.3143,-60.0248,27.4032,68.401,19.8929,-25.754,-46.2788,75.714,19.9903,47.7492,44.4764,82.8225,15.8038,70.0349,42.4463,90.4501,15.9491,69.1186 };
 			}
 			try
 			{
 				#pragma omp critical (printProblem)
 				{
+					// DEBUG message
+#ifdef DEBUG_MSG
 					std::cout << "Random Iteration: " << it << "\n"
 						<< "Opt.Problem:\n" << op
 						//<< "X:\n" << x
@@ -150,6 +150,7 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 						std::cout << item << ", ";
 					}
 					std::cout << "\n" << std::endl;
+#endif
 				}
 				// optimization algorithm: BOBYQA
 				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
@@ -157,9 +158,9 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			catch (dlib::bobyqa_failure & err)
 			{
 				// DEBUG message
-				//#ifdef DEBUG_MSG
+				#ifdef DEBUG_MSG
 				std::cout << "\t[optimize] WARNING: no convergence during optimization in iteration: " << it << std::endl << err.info << std::endl;
-				//#endif
+				#endif
 			}
 			// write optimization results back
 			#pragma omp critical (updateMinValue)
