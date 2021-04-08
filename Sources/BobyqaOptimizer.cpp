@@ -130,21 +130,45 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			}
 			try
 			{
+				#pragma omp critical (printProblem)
+				{
+					// DEBUG message
+#ifdef DEBUG_MSG
+					std::cout << "Random Iteration: " << it << "\n"
+						<< "Opt.Problem:\n" << op
+						//<< "X:\n" << x
+						<< "Length of X: " << x.size() << "\n"
+						<< "NPT: " << npt << "\n"
+						<< "Lower Bound:\n" << lowerBound
+						<< "upperBound:\n" << upperBound
+						<< "rho Begin: " << rho_begin << "\n"
+						<< "rho End: " << rho_end << "\n"
+						<< "Max Evals: " << max_f_evals << std::endl;
+					std::cout << "FTMP-Vector:" << std::endl;
+					for (auto item:ftmp_vector)
+					{
+						std::cout << item << ", ";
+					}
+					std::cout << "\n" << std::endl;
+#endif
+				}
 				// optimization algorithm: BOBYQA
 				ftmp = dlib::find_min_bobyqa(op, x, npt, lowerBound, upperBound, rho_begin, rho_end, max_f_evals);
 			}
 			catch (dlib::bobyqa_failure & err)
 			{
 				// DEBUG message
-				//#ifdef DEBUG_MSG
+				#ifdef DEBUG_MSG
 				std::cout << "\t[optimize] WARNING: no convergence during optimization in iteration: " << it << std::endl << err.info << std::endl;
-				//#endif
+				#endif
 			}
 			// write optimization results back
 			#pragma omp critical (updateMinValue)
 			{
 				ftmp_vector.at(it) = ftmp;
+				#ifdef DEBUG_MSG
 				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
+				#endif
 				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 on error
 				{
 					if (useEarlyStopping)

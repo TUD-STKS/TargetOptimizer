@@ -51,10 +51,8 @@ TimeSignal CdlpFilter::response(const SampleTimes& sampleTimes, const TargetVect
 
 			if (sampleIndex >= sampleTimes.size())
 			{
-				break;
-				std::ostringstream msg;
-				msg << "[calc_f0] Sample index exceeds sample time vector! " << sampleTimes.size();
-				throw dlib::error(msg.str());
+				// We have calculated the f0 for all points of interest, so return
+				return f0;
 			}
 		}
 
