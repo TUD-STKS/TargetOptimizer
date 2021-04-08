@@ -51,7 +51,7 @@ TimeSignal CdlpFilter::response(const SampleTimes& sampleTimes, const TargetVect
 
 			if (sampleIndex >= sampleTimes.size())
 			{
-				// Has to return f0 here (not break) for pitch target end being later than f0 end
+				// We have calculated the f0 for all points of interest, so return
 				return f0;
 			}
 		}
