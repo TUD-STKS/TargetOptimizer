@@ -166,7 +166,9 @@ void BobyqaOptimizer::optimize(OptimizationProblem& op, OptimizerOptions optOpt)
 			#pragma omp critical (updateMinValue)
 			{
 				ftmp_vector.at(it) = ftmp;
-				//std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
+				#ifdef DEBUG_MSG
+				std::cout << "Iteration nr: " << it << " fmin: " << fmin << " ftmp: " << ftmp << std::endl;
+				#endif
 				if (ftmp < fmin && ftmp > 0.0)	// opt returns 0 on error
 				{
 					if (useEarlyStopping)
