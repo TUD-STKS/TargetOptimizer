@@ -9,7 +9,7 @@ Hence, it is similar to PENTAtrainer, but differs in the following ways:
 
 The motivation for these differences are described in Birkholz P, Schmager P, Xu Y (2018). Estimation of Pitch Targets from Speech Signals by Joint Regularized Optimization. In: Proc. of the 26th European Signal Processing Conference (EUSIPCO 2018), pp. 2089-2093, Rome, Italy. [pdf](http://www.vocaltractlab.de/publications/birkholz-2018-eusipco.pdf)
 
-**TargetOptimizer 2.0** is an extension of TargetOptimizer. The performance in terms of minimizing RMSE during estimation of pitch targets has been greatly improved by:
+**TargetOptimizer 2.0.1** is an extension of TargetOptimizer. The performance in terms of minimizing RMSE during estimation of pitch targets has been greatly improved by:
 - Making the boundaries a free, fully optimizable parameter (using syllable boundaries as target boundaries does not always lead to optimal estimation result)
 - Tuning all free parameters on a test corpus to find optimal default values
 
@@ -41,12 +41,12 @@ For the command-line-only version:
 Run TargetOptimizer from the command line:
 Run TargetOptimizer -h for instructions.
 
-## Using TargetOptimizer 2.0
+## Using TargetOptimizer 2.0.1
 Be aware that only a short introdruction can be given at this place. For a more detailed description on how to use TO2 please refer to the manual!
 
 A screenshot of the GUI is shown below (for the German word "Betriebssportgemeinschaft").
 
-![Screenshot Target Optimizer 2.0](doc/TargetOptimizer_GUI.png)
+![Screenshot Target Optimizer 2.0.1](doc/TargetOptimizer_GUI.png)
 
 Following steps are necessary to successfully extract targets for an utterance (Step 1 and 2 can be done simultaneously if a TextGrid file is used):
 1. Input the boundaries (which can be loaded in terms of a Praat TextGrid file by pressing "Open File(s)" or manually initialized by selecting the amount of desired boundaries and pressing "Init bounds")
