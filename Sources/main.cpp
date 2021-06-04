@@ -42,6 +42,8 @@ bool TargetOptimizerGui::OnInit()
 
 int main(int argc, char* argv[])
 {
+	setlocale(LC_CTYPE, "UTF-8");
+
 	if (argc < 2)
 	{
 #ifdef USE_WXWIDGETS

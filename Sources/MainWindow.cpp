@@ -313,7 +313,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 	{
 		if (filepath.EndsWith("TextGrid"))
 		{
-			tg = DataIO::readTextGridFile(std::string(filepath.utf8_str()));
+			tg = DataIO::readTextGridFile(filepath.ToStdString());
 			wxArrayString choices;
 			for (const auto& tierName : tg.getIntervalTierNames())
 			{
@@ -327,7 +327,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 			{
 				if (intervalChoiceDialog.ShowModal() == wxID_OK)
 				{
-					tg.syllableBoundaryTierName = std::string(intervalChoiceDialog.GetStringSelection().utf8_str());
+					tg.syllableBoundaryTierName = intervalChoiceDialog.GetStringSelection().ToStdString();
 				}
 				else
 				{
@@ -347,7 +347,7 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 		}
 		if (filepath.EndsWith("PitchTier"))
 		{
-			auto ptreader = DataIO::readPitchTierFile(std::string(filepath.utf8_str()));
+			auto ptreader = DataIO::readPitchTierFile(filepath.ToStdString());
 			Data::getInstance().originalF0 = ptreader.getF0();
 			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
 
@@ -431,15 +431,15 @@ void MainWindow::OnSaveAs(wxCommandEvent& event)
 		return;
 	if (saveFileDialog.GetPath().EndsWith(wxT("ges")))
 	{
-		DataIO::saveGesturalScore(Data::getInstance().onset, Data::getInstance().pitchTargets, std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveGesturalScore(Data::getInstance().onset, Data::getInstance().pitchTargets, saveFileDialog.GetPath().ToStdString());
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("csv")))
 	{
-		DataIO::saveCsvFile(Data::getInstance().onset, Data::getInstance().pitchTargets, std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::saveCsvFile(Data::getInstance().onset, Data::getInstance().pitchTargets, saveFileDialog.GetPath().ToStdString());
 	}
 	else if (saveFileDialog.GetPath().EndsWith(wxT("PitchTier")))
 	{
-		DataIO::savePitchTier(Data::getInstance().optimalF0, std::string(saveFileDialog.GetPath().utf8_str()));
+		DataIO::savePitchTier(Data::getInstance().optimalF0, saveFileDialog.GetPath().ToStdString());
 	}
 	else
 	{

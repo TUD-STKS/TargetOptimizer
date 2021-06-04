@@ -26,7 +26,7 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 {
 	// create a file-reading object
 	std::ifstream fin;
-	fin.open(pitchTierFile.c_str()); // open data file
+	fin.open(pitchTierFile); // open data file
 	if (!fin.good())
 	{
 		throw dlib::error("[read_data_file] PitchTier input file not found!");
