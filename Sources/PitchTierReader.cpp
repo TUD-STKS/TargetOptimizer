@@ -47,6 +47,8 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 		if (tokens.size() != 2)
 		{
 			throw dlib::error("Wrong PitchTier File Format!");
+			return;
+			
 		}
 
 		double time = atof(tokens[0].c_str());
@@ -54,6 +56,7 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 		if (time == 0.0 && value == 0.0)
 		{
 			throw dlib::error("Wrong PitchTier File Format!");
+			return;
 		}
 
 		Sample s = { time,hz2st(value) }; // With Hz to St conversion
@@ -64,6 +67,7 @@ void PitchTierReader::readFile(const std::string& pitchTierFile)
 	if (m_f0.size() == 0)
 	{
 		throw dlib::error("Wrong PitchTier File Format!");
+		return;
 	}
 }
 

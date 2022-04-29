@@ -347,9 +347,15 @@ void MainWindow::OnOpen(wxCommandEvent& event)
 		}
 		if (filepath.EndsWith("PitchTier"))
 		{
-			auto ptreader = DataIO::readPitchTierFile(filepath.ToStdString());
-			Data::getInstance().originalF0 = ptreader.getF0();
-			this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
+			try {
+				auto ptreader = DataIO::readPitchTierFile(filepath.ToStdString());
+				Data::getInstance().originalF0 = ptreader.getF0();
+				this->SetTitle(wxT("Target Optimizer - ") + wxFileName(filepath).GetName());
+			}
+			catch(dlib::error& e) {
+				wxMessageBox(wxString(e.what()), wxT("Error"), wxICON_ERROR);
+			}
+			
 
 			isOptimized = false;
 			isPitchTierLoaded = true;
